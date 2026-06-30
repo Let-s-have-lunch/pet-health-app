@@ -18,6 +18,8 @@ export interface User {
     updatedAt: string;
     deletedAt: string | null;
     nickname: string;
+    password: string;
+    birthdate: string | null;
     email: string;
     role: RoleType;
 }
