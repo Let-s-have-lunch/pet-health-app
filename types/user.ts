@@ -1,0 +1,23 @@
+export const Gender = {
+    MALE: "MALE",
+    FEMALE: "FEMALE",
+};
+
+export type GenderType = (typeof Gender)[keyof typeof Gender];
+
+export const Role = {
+    USER: "USER",
+    ADMIN: "ADMIN",
+};
+
+export type RoleType = (typeof Role)[keyof typeof Role];
+
+export interface User {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    nickname: string;
+    email: string;
+    role: RoleType;
+}
