@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 
 function HomeScreen() {
     return (
-            <Text>Initialization 123</Text>
+            <Text>Initialization 1564444</Text>
 
     );
 }
