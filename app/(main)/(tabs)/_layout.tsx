@@ -33,7 +33,6 @@ function MainLayout() {
 
     return (
         <View className={"flex-1"}>
-            {isMobile ? <MainHeaderMobile /> : <MainHeaderDesktop />}
             <View
                 className={twMerge([
                     "flex-1",
