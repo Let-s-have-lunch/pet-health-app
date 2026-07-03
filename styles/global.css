@@ -22,19 +22,23 @@
         /* 5. 보조 컬러 (서브 메뉴나 강조용) */
         --secondary-main: #A9C6D9; /* 파우더 블루 (시원한 포인트 서브) */
         --secondary-contrast: #2C2C2C;
+        --secondary-point: #2D94D7;  /* text 로만 사용 포인트 아이콘으로 */
 
         /* 6. 알림 및 상태 컬러 */
         --success-main: #A3D9C9;   /* 파스텔 그린 */
         --success-contrast: #2C2C2C;
+        --success-point: #35B18C; /* text 로만 사용 */
 
         --error-main: #F2C6C2;     /* 블러시 핑크 */
         --error-contrast: #2C2C2C;
+        --error-point: #CD5B0A;  /* text 로만 사용 */
 
         --warning-main: #E9D2A9;   /* 파스텔 옐로우/베이지 */
         --warning-contrast: #2C2C2C;
 
         --info-main: #C0D6E4;      /* 부드러운 인포 블루 */
         --info-contrast: #2C2C2C;
+
     }
 
     .dark {
@@ -51,13 +55,16 @@
         --primary-contrast: #3A3532;
 
         --secondary-main: #A3BCD6; /* 차분한 더스티 블루 */
-        --secondary-contrast: #FFFFFF;
+        --secondary-contrast: #2C2C2C;
+        --secondary-point: #2D94D7;  /* text 로만 사용 포인트 아이콘으로 */
 
         --success-main: #BACFCD;
         --success-contrast: #2C2C2C;
+        --success-point: #35B18C; /* text 로만 사용 */
 
         --error-main: #E8B7B0;
         --error-contrast: #3A3532;
+        --error-point: #CD5B0A;  /* text 로만 사용 */
 
         --warning-main: #E9D2A9;
         --warning-contrast: #3A3532;
@@ -82,13 +89,16 @@
         --primary-contrast: #3A3532;
 
         --secondary-main: #A3BCD6;
-        --secondary-contrast: #FFFFFF;
+        --secondary-contrast: #2C2C2C;
+        --secondary-point: #2D94D7;  /* text 로만 사용 포인트 아이콘으로 */
 
         --success-main: #BACFCD;
         --success-contrast: #2C2C2C;
+        --success-point: #35B18C; /* text 로만 사용 */
 
         --error-main: #E8B7B0;
         --error-contrast: #3A3532;
+        --error-point: #CD5B0A;  /* text 로만 사용 */
 
         --warning-main: #E9D2A9;
         --warning-contrast: #3A3532;
