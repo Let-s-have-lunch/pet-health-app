@@ -1,6 +1,6 @@
 import { Pressable, View } from "react-native";
 import { twMerge } from "tailwind-merge";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import TextComponent from "@/components/common/text/TextComponents";
 import { USER_NAV_LIST } from "@/constants/menu";
 import { Link, usePathname } from "expo-router";
