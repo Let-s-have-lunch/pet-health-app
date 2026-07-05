@@ -40,14 +40,17 @@ export default {
                 secondary: {
                     main: "var(--secondary-main)",
                     contrast: "var(--secondary-contrast)",
+                    point: "var(--secondary-point)",
                 },
                 error: {
                     main: "var(--error-main)",
                     contrast: "var(--error-contrast)",
+                    point: "var(--error-point)",
                 },
                 success: {
                     main: "var(--success-main)",
                     contrast: "var(--success-contrast)",
+                    point: "var(--success-point)",
                 },
                 warning: {
                     main: "var(--warning-main)",
