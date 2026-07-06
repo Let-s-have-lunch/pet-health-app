@@ -1,7 +1,134 @@
-import { Text } from "react-native";
+import { Modal, Pressable, useWindowDimensions, View } from "react-native";
+import { twMerge } from "tailwind-merge";
+import { Link, usePathname } from "expo-router";
+import TextComponent from "@/components/common/text/TextComponent";
+import { Feather, Ionicons } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { ADMIN_NAV_LIST } from "@/constants/menu";
+
 
 function AdminAsideMobile() {
-    return <Text>AdminAsideMobile</Text>
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const pathname = usePathname();
+    const { user, logout } = useAuthStore();
+
+
+    const { width } = useWindowDimensions();
+    useEffect(() => {
+        if (width >= 768 && isMenuOpen) {
+            setIsMenuOpen(false);
+        }
+    }, [width, isMenuOpen]);
+
+    return (
+        <>
+            {/*    화면 상단에 나와야되는 바 */}
+            <View
+                className={twMerge(
+                    ["h-20", "px-4", "flex-row", "justify-between", "items-center"],
+                    ["bg-background-paper", "border-b", "border-divider"],
+                )}>
+                <Link href={"/admin"} asChild>
+                    <Pressable>
+                        <TextComponent
+                            className={twMerge("text-lg", "font-extrabold", "text-text-default")}>
+                            <Ionicons
+                                name={"shield-half"}
+                                size={22}
+                                className={twMerge(["pr-1", "text-text-default"])}
+                            />
+                            관리자 센터
+                        </TextComponent>
+                    </Pressable>
+                </Link>
+                <Pressable className={"p-2"} onPress={() => setIsMenuOpen(!isMenuOpen)}>
+                    <Feather name={"menu"} size={24} className={"text-text-default"} />
+                </Pressable>
+            </View>
+
+            {/* 화면에 햄버거 아이콘을 누르면 튀어나와야 되는 메뉴 View */}
+            <Modal visible={isMenuOpen} transparent={true} animationType={"slide"}>
+                <View className={twMerge("flex-1", "justify-between", "bg-background-paper")}>
+                    {/* 메뉴 상단 */}
+                    <View>
+                        <View
+                            className={twMerge(
+                                ["h-20", "flex-row", "justify-between", "items-center", "px-4"],
+                                ["border-b", "border-divider"],
+                            )}>
+                            <Link href={"/admin"} asChild onPress={() => setIsMenuOpen(false)}>
+                                <Pressable>
+                                    <TextComponent
+                                        className={twMerge(
+                                            "text-lg",
+                                            "font-extrabold",
+                                            "text-text-default",
+                                        )}>
+                                        <Ionicons
+                                            name={"shield-half"}
+                                            size={22}
+                                            className={twMerge(["pr-1", "text-text-default"])}
+                                        />
+                                        관리자 센터
+                                    </TextComponent>
+                                </Pressable>
+                            </Link>
+                            <Pressable onPress={() => setIsMenuOpen(false)}>
+                                <Feather name={"x"} size={24} className={"text-text-default"} />
+                            </Pressable>
+                        </View>
+                        <View className={twMerge("px-3 py-4 gap-1")}>
+                            {ADMIN_NAV_LIST.map(item => {
+                                const isActive =
+                                    item.path === "/"
+                                        ? pathname === "/"
+                                        : pathname.startsWith(item.path);
+
+                                return (
+                                    <Link
+                                        href={item.path}
+                                        key={item.path}
+                                        asChild
+                                        onPress={() => setIsMenuOpen(false)}>
+                                        <Pressable
+                                            className={twMerge(
+                                                ["flex-row", "items-center", "gap-3"],
+                                                ["p-4", "rounded-xl"],
+                                                isActive
+                                                    ? "bg-primary-main"
+                                                    : "active:bg-background-default",
+                                            )}>
+                                            <Feather
+                                                name={item.icon as any}
+                                                size={20}
+                                                className={
+                                                    isActive
+                                                        ? "text-primary-contrast"
+                                                        : "text-text-secondary"
+                                                }
+                                            />
+                                            <TextComponent
+                                                className={twMerge(
+                                                    "font-bold",
+                                                    isActive
+                                                        ? "text-primary-contrast"
+                                                        : "text-text-secondary",
+                                                )}>
+                                                {item.label}
+                                            </TextComponent>
+                                        </Pressable>
+                                    </Link>
+                                );
+                            })}
+                        </View>
+                    </View>
+
+                    {/* 메뉴 하단 */}
+                </View>
+            </Modal>
+        </>
+    );
 }
 
 export default AdminAsideMobile;
