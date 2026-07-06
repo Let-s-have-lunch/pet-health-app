@@ -16,7 +16,6 @@ export interface DashboardData {
  * 🏡 메인 대시보드 데이터 가져오기 API
  */
 export const getHomeDashboard = async (petId: number, date: string) => {
-    // 백엔드가 4000번에서 돌고 있으니 axiosInstance의 baseURL 설정을 꼭 확인하거나,
     // 안 되어있다면 전체 주소를 적어주셔도 됩니다. 여기서는 인스턴스 기준으로 작성합니다.
     const response = await axiosInstance.get<{ success: boolean; data: DashboardData }>(
         `/home/dashboard`,
