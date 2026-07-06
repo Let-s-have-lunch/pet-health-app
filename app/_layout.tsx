@@ -19,7 +19,7 @@ export default function RootLayout() {
     return (
         <SafeAreaProvider>
             <StatusBar style={theme === "dark" ? "light" : "dark"} />
-            <SafeAreaView className={"flex-1 bg-background-default"}>
+            <SafeAreaView className={"flex-1 "}>
                 <Slot />
             </SafeAreaView>
         </SafeAreaProvider>
