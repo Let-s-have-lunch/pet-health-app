@@ -1,12 +1,8 @@
 import { useWindowDimensions, View } from "react-native";
 import { Slot } from "expo-router";
 import MainHeaderMobile from "@/components/layouts/main/MainHeaderMobile";
-import MainHeaderDesktop from "@/components/layouts/main/MainHeaderDesktop";
 import MainFooter from "@/components/layouts/main/MainFooter";
 import { twMerge } from "tailwind-merge";
-
-
-
 
 function MainLayout() {
     const { width } = useWindowDimensions();
@@ -43,6 +39,7 @@ function MainLayout() {
                     "p-4",
                     "md:py-8",
                     "self-center",
+                    "bg-background-default"
                 ])}>
                 <Slot />
             </View>

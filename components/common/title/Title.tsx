@@ -38,7 +38,7 @@ function Title({ title, showBackButton = false, onBackPress, children, className
                     className={twMerge(
                         "text-secondary-contrast",
                         "font-bold",
-                        "text-[24px]",
+                        "text-xl",
                         "leading-[24px]",
                         "text-center",
                     )}>

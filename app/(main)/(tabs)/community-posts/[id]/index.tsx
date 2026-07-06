@@ -1,5 +1,5 @@
-function CommunityPostDetailPage() {
+function CommunityPostListPage() {
     return <></>
 }
 
-export default CommunityPostDetailPage;
+export default CommunityPostListPage;
