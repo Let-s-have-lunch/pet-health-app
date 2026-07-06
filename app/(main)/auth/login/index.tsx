@@ -12,6 +12,7 @@ import TextComponent from "@/components/common/text/TextComponent";
 import FormContainer from "@/components/layouts/common/FormContainer";
 import InputGroup from "@/components/common/input/InputGroup";
 import Button from "@/components/common/button/Button";
+import ContentContainer from "@/components/layouts/common/ContentContainer";
 
 
 function AuthLoginPage() {
@@ -59,61 +60,61 @@ function AuthLoginPage() {
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             className={twMerge("flex-1", "bg-background-paper")}>
-            <Title title={"로그인"} showBackButton={true} onBackPress={() => router.push("/")} />
-            <TextComponent className={twMerge("font-medium", "text-xl", "text-center", "mt-9")}>
-                멍냥 나라에 오신것을 환영합니다.
-            </TextComponent>
-            <FormContainer>
-                <Controller
-                    control={control}
-                    name={"email"}
-                    render={({ field: { onChange, onBlur, value } }) => {
-                        return (
-                            <InputGroup
-                                id={"email"}
-                                label={"이메일"}
-                                placeholder={"이메일을 입력해주세요."}
-                                keyboardType={"email-address"}
-                                autoCapitalize={"none"} /* 첫글자 자동 대문자 전환 */
-                                onBlur={onBlur}
-                                onChangeText={onChange}
-                                value={value}
-                                errorMessage={errors.email?.message}
-                            />
-                        );
-                    }}
-                />
+            <ContentContainer className={"bg-transparent p-0"}><Title title={"로그인"} showBackButton={true} onBackPress={() => router.push("/")} />
+                <TextComponent className={twMerge("font-medium", "text-xl", "text-center", "mt-9")}>
+                    멍냥 나라에 오신것을 환영합니다.
+                </TextComponent>
+                <FormContainer>
+                    <Controller
+                        control={control}
+                        name={"email"}
+                        render={({ field: { onChange, onBlur, value } }) => {
+                            return (
+                                <InputGroup
+                                    id={"email"}
+                                    label={"이메일"}
+                                    placeholder={"이메일을 입력해주세요."}
+                                    keyboardType={"email-address"}
+                                    autoCapitalize={"none"} /* 첫글자 자동 대문자 전환 */
+                                    onBlur={onBlur}
+                                    onChangeText={onChange}
+                                    value={value}
+                                    errorMessage={errors.email?.message}
+                                />
+                            );
+                        }}
+                    />
 
-                <Controller
-                    control={control}
-                    name={"password"}
-                    render={({ field: { onChange, onBlur, value } }) => {
-                        return (
-                            <InputGroup
-                                id={"password"}
-                                secureTextEntry={true} // 비밀번호 마스킹 속성
-                                label={"비밀번호"}
-                                placeholder={"6자 이상 입력해주세요."}
-                                onBlur={onBlur}
-                                onChangeText={onChange}
-                                value={value}
-                                errorMessage={errors.password?.message}
-                            />
-                        );
-                    }}
-                />
+                    <Controller
+                        control={control}
+                        name={"password"}
+                        render={({ field: { onChange, onBlur, value } }) => {
+                            return (
+                                <InputGroup
+                                    id={"password"}
+                                    secureTextEntry={true} // 비밀번호 마스킹 속성
+                                    label={"비밀번호"}
+                                    placeholder={"6자 이상 입력해주세요."}
+                                    onBlur={onBlur}
+                                    onChangeText={onChange}
+                                    value={value}
+                                    errorMessage={errors.password?.message}
+                                />
+                            );
+                        }}
+                    />
 
-                <View className={"flex-row mt-9 gap-3"}>
-                    <Button
-                        variant={"outlined"}
-                        size={"large"}
-                        wrap={true}
-                        onPress={() => router.push("/auth/register")}>
-                        회원가입
-                    </Button>
-                    <Button size={"large"} wrap={true} onPress={handleSubmit(onSubmit)} disabled={isSubmitting}>로그인</Button>
-                </View>
-            </FormContainer>
+                    <View className={"md:flex-row mt-9 gap-3"}>
+                        <Button wrap={true} onPress={handleSubmit(onSubmit)}
+                                disabled={isSubmitting}>로그인</Button>
+                        <Button
+                            variant={"outlined"}
+                            wrap={true}
+                            onPress={() => router.push("/auth/register")}>
+                            회원가입
+                        </Button>
+                    </View>
+                </FormContainer></ContentContainer>
         </KeyboardAvoidingView>
     );
 }

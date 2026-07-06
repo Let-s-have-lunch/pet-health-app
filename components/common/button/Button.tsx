@@ -35,7 +35,7 @@ function Button({
             case "outlined":
                 return `border-2 border-text-${color} bg-transparent`;
             case "text":
-                return `bg-transparent`;
+                return `bg-background-paper`;
             case "icon":
                 return `rounded-full p-2`;
             default:
@@ -61,7 +61,7 @@ function Button({
                 <TextComponent
                     className={twMerge(
                         "leading-none text-center font-normal text-[#000000]",
-                        size === "small" ? "text-large" : size === "large" ? "text-2xl" : "text-xl",
+                        size === "small" ? "text-base" : size === "large" ? "text-xl" : "text-lg",
                         textClassName
                     )}>
                     {children}

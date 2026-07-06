@@ -12,6 +12,7 @@ import Title from "@/components/common/title/Title";
 import InputGroup from "@/components/common/input/InputGroup";
 import Button from "@/components/common/button/Button";
 import ErrorMessage from "@/components/common/label/ErrorMessage";
+import ContentContainer from "@/components/layouts/common/ContentContainer";
 
 function Register() {
     const router = useRouter();
@@ -91,135 +92,136 @@ function Register() {
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             className={twMerge("flex-1", "bg-background-paper")}>
             <ScrollView>
-                <Title
-                    title={"회원가입"}
-                    showBackButton={true}
-                    onBackPress={() => router.push("/")}
-                />
-                <TextComponent className={twMerge("font-medium", "text-xl", "text-center", "mt-9")}>
-                    멍냥 나라에 오신것을 환영합니다.
-                </TextComponent>
-                <FormContainer>
-                    <Controller
-                        control={control}
-                        name={"email"}
-                        render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                                <InputGroup
-                                    size={"small"}
-                                    id={"email"}
-                                    label={"이메일"}
-                                    placeholder={"이메일을 입력해주세요."}
-                                    keyboardType={"email-address"}
-                                    autoCapitalize={"none"} /* 첫글자 자동 대문자 전환 */
-                                    onBlur={onBlur}
-                                    onChangeText={onChange}
-                                    value={value}
-                                    errorMessage={errors.email?.message}
-                                />
-                            );
-                        }}
+                <ContentContainer className={"bg-transparent p-0"}>
+                    <Title
+                        title={"회원가입"}
+                        showBackButton={true}
+                        onBackPress={() => router.push("/")}
                     />
-                    <Controller
-                        control={control}
-                        name={"nickname"}
-                        render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                                <InputGroup
-                                    size={"small"}
-                                    id={"nickname"}
-                                    label={"닉네임"}
-                                    placeholder={"닉네임을 입력해주세요."}
-                                    onBlur={onBlur}
-                                    onChangeText={onChange} // HTML onChange 속성 => React-Native onChangeText 속성
-                                    value={value}
-                                    errorMessage={errors.nickname?.message}
-                                />
-                            );
-                        }}
-                    />
-                    <Controller
-                        control={control}
-                        name={"password"}
-                        render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                                <InputGroup
-                                    size={"small"}
-                                    id={"password"}
-                                    secureTextEntry={true} // 비밀번호 마스킹 속성
-                                    label={"비밀번호"}
-                                    placeholder={"6자 이상 입력해주세요."}
-                                    onBlur={onBlur}
-                                    onChangeText={onChange}
-                                    value={value}
-                                    errorMessage={errors.password?.message}
-                                />
-                            );
-                        }}
-                    />
-                    <Controller
-                        control={control}
-                        name={"confirmPassword"}
-                        render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                                <InputGroup
-                                    size={"small"}
-                                    id={"confirmPassword"}
-                                    secureTextEntry={true}
-                                    label={"비밀번호 확인"}
-                                    placeholder={"비밀번호를 다시 입력해주세요."}
-                                    onBlur={onBlur}
-                                    onChangeText={onChange}
-                                    value={value}
-                                    errorMessage={errors.confirmPassword?.message}
-                                />
-                            );
-                        }}
-                    />
-                    <Controller
-                        control={control}
-                        name={"birthdate"}
-                        render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                                <InputGroup
-                                    size={"small"}
-                                    id={"birthdate"}
-                                    label={"생년월일"}
-                                    placeholder={"YYYYMMDD"}
-                                    keyboardType={"number-pad"}
-                                    maxLength={8}
-                                    onBlur={onBlur}
-                                    onChangeText={onChange}
-                                    value={value}
-                                    errorMessage={errors.birthdate?.message}
-                                />
-                            );
-                        }}
-                    />
+                    <TextComponent
+                        className={twMerge("font-medium", "text-xl", "text-center", "mt-9")}>
+                        멍냥 나라에 오신것을 환영합니다.
+                    </TextComponent>
+                    <FormContainer>
+                        <Controller
+                            control={control}
+                            name={"email"}
+                            render={({ field: { onChange, onBlur, value } }) => {
+                                return (
+                                    <InputGroup
+                                        size={"small"}
+                                        id={"email"}
+                                        label={"이메일"}
+                                        placeholder={"이메일을 입력해주세요."}
+                                        keyboardType={"email-address"}
+                                        autoCapitalize={"none"} /* 첫글자 자동 대문자 전환 */
+                                        onBlur={onBlur}
+                                        onChangeText={onChange}
+                                        value={value}
+                                        errorMessage={errors.email?.message}
+                                    />
+                                );
+                            }}
+                        />
+                        <Controller
+                            control={control}
+                            name={"nickname"}
+                            render={({ field: { onChange, onBlur, value } }) => {
+                                return (
+                                    <InputGroup
+                                        size={"small"}
+                                        id={"nickname"}
+                                        label={"닉네임"}
+                                        placeholder={"닉네임을 입력해주세요."}
+                                        onBlur={onBlur}
+                                        onChangeText={onChange} // HTML onChange 속성 => React-Native onChangeText 속성
+                                        value={value}
+                                        errorMessage={errors.nickname?.message}
+                                    />
+                                );
+                            }}
+                        />
+                        <Controller
+                            control={control}
+                            name={"password"}
+                            render={({ field: { onChange, onBlur, value } }) => {
+                                return (
+                                    <InputGroup
+                                        size={"small"}
+                                        id={"password"}
+                                        secureTextEntry={true} // 비밀번호 마스킹 속성
+                                        label={"비밀번호"}
+                                        placeholder={"6자 이상 입력해주세요."}
+                                        onBlur={onBlur}
+                                        onChangeText={onChange}
+                                        value={value}
+                                        errorMessage={errors.password?.message}
+                                    />
+                                );
+                            }}
+                        />
+                        <Controller
+                            control={control}
+                            name={"confirmPassword"}
+                            render={({ field: { onChange, onBlur, value } }) => {
+                                return (
+                                    <InputGroup
+                                        size={"small"}
+                                        id={"confirmPassword"}
+                                        secureTextEntry={true}
+                                        label={"비밀번호 확인"}
+                                        placeholder={"비밀번호를 다시 입력해주세요."}
+                                        onBlur={onBlur}
+                                        onChangeText={onChange}
+                                        value={value}
+                                        errorMessage={errors.confirmPassword?.message}
+                                    />
+                                );
+                            }}
+                        />
+                        <Controller
+                            control={control}
+                            name={"birthdate"}
+                            render={({ field: { onChange, onBlur, value } }) => {
+                                return (
+                                    <InputGroup
+                                        size={"small"}
+                                        id={"birthdate"}
+                                        label={"생년월일"}
+                                        placeholder={"YYYYMMDD"}
+                                        keyboardType={"number-pad"}
+                                        maxLength={8}
+                                        onBlur={onBlur}
+                                        onChangeText={onChange}
+                                        value={value}
+                                        errorMessage={errors.birthdate?.message}
+                                    />
+                                );
+                            }}
+                        />
 
-                    {errors.root?.message && (
-                        <ErrorMessage className={twMerge("text-center", "mt-2", "mb-4")}>
-                            {errors.root?.message}
-                        </ErrorMessage>
-                    )}
+                        {errors.root?.message && (
+                            <ErrorMessage className={twMerge("text-center", "mt-2", "mb-4")}>
+                                {errors.root?.message}
+                            </ErrorMessage>
+                        )}
 
-                    <View className={"flex-row mt-9 gap-3"}>
-                        <Button
-                            variant={"outlined"}
-                            size={"large"}
-                            wrap={true}
-                            onPress={() => router.push("/auth/login")}>
-                            로그인
-                        </Button>
-                        <Button
-                            size={"large"}
-                            wrap={true}
-                            onPress={handleSubmit(onSubmit)}
-                            disabled={isSubmitting}>
-                            회원가입
-                        </Button>
-                    </View>
-                </FormContainer>
+                        <View className={"md:flex-row mt-9 gap-3"}>
+                            <Button
+                                variant={"outlined"}
+                                wrap={true}
+                                onPress={() => router.push("/auth/login")}>
+                                로그인
+                            </Button>
+                            <Button
+                                wrap={true}
+                                onPress={handleSubmit(onSubmit)}
+                                disabled={isSubmitting}>
+                                회원가입
+                            </Button>
+                        </View>
+                    </FormContainer>
+                </ContentContainer>
             </ScrollView>
         </KeyboardAvoidingView>
     );

@@ -1,6 +1,10 @@
-import { View } from "react-native";
+import { ActivityIndicator, Alert, Platform, ScrollView, View } from "react-native";
 import PetCardSection from "@/app/(main)/(tabs)/components/PetCardSection";
 import MedicalHistorySection from "@/app/(main)/(tabs)/components/MedicalHistorySection";
+import { useCallback, useEffect, useState } from "react";
+import { DashboardData, getHomeDashboard } from "@/api/home";
+import { twMerge } from "tailwind-merge";
+import TextComponent from "@/components/common/text/TextComponent";
 
 export default function HomeScreen() {
     const [isLoading, setIsLoading] = useState(true);
@@ -51,12 +55,12 @@ export default function HomeScreen() {
     }
     return (
         // 1. 전체 배경색: 소프트 밀크 크림 (#F1EBE4)
-        <ScrollView className={twMerge(["flex-1", "pt-12"])} style={{ backgroundColor: "#F1EBE4" }}>
+        <ScrollView className={twMerge(["flex-1"])} >
             {/* 🐶 상단: 동물 카드 영역 (팀원 원본) */}
             <PetCardSection />
 
             {/* 🏥 하단 대시보드: 2x2 카드 그리드 */}
-            <View className={twMerge(["flex-row", "flex-wrap", "justify-between", "px-5", "mt-6"])}>
+            <View className={twMerge(["flex-row", "flex-wrap", "justify-between"])}>
                 {/* 👟 산책 카드 */}
                 <View
                     className={twMerge([
