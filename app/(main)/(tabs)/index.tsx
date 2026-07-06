@@ -1,7 +1,7 @@
-import { View, StyleSheet } from "react-native";
-import PetCardSection from "@/app/(main)/(tabs)/components/PetCardSection";
-import MedicalHistorySection from "@/app/(main)/(tabs)/components/MedicalHistorySection";
-import InputGroup from "@/components/common/input/InputGroup";
+import { View } from "react-native";
+import PetCardSection from "../../(main)/(tabs)/components/PetCardSection";
+import MedicalHistorySection from "../../(main)/(tabs)/components/MedicalHistorySection";
+
 
 export default function HomeScreen() {
 
@@ -16,6 +16,4 @@ export default function HomeScreen() {
     );
 }
 
-const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: "#fff" },
-});
+

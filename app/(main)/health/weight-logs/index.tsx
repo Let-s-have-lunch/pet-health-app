@@ -1,5 +1,7 @@
+import TextComponent from "@/components/common/text/TextComponents";
+
 function WeightLogListPage() {
-    return <></>
+    return <TextComponent>hiv</TextComponent>
 }
 
 export default WeightLogListPage;

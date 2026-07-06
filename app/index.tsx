@@ -5,5 +5,4 @@ function HomeScreen() {
         <Text>Initialization</Text>
     )
 }
-
 export default HomeScreen;
