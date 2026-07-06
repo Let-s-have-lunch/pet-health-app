@@ -2,7 +2,7 @@ import { Modal, Pressable, useWindowDimensions, View } from "react-native";
 import { twMerge } from "tailwind-merge";
 import { Link, usePathname } from "expo-router";
 import TextComponent from "@/components/common/text/TextComponent";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { ADMIN_NAV_LIST } from "@/constants/menu";
@@ -32,7 +32,12 @@ function AdminAsideMobile() {
                 <Link href={"/admin"} asChild>
                     <Pressable>
                         <TextComponent
-                            className={twMerge("text-lg", "font-extrabold", "text-primary-main")}>
+                            className={twMerge("text-lg", "font-extrabold", "text-text-default")}>
+                            <Ionicons
+                                name={"shield-half"}
+                                size={22}
+                                className={twMerge(["pr-1", "text-text-default"])}
+                            />
                             관리자 센터
                         </TextComponent>
                     </Pressable>
@@ -60,6 +65,11 @@ function AdminAsideMobile() {
                                             "font-extrabold",
                                             "text-text-default",
                                         )}>
+                                        <Ionicons
+                                            name={"shield-half"}
+                                            size={22}
+                                            className={twMerge(["pr-1", "text-text-default"])}
+                                        />
                                         관리자 센터
                                     </TextComponent>
                                 </Pressable>
@@ -115,7 +125,6 @@ function AdminAsideMobile() {
                     </View>
 
                     {/* 메뉴 하단 */}
-
                 </View>
             </Modal>
         </>

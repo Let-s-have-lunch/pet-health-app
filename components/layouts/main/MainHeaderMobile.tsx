@@ -8,6 +8,7 @@ import { useThemeStore } from "@/stores/theme/useThemeStore";
 function MainHeaderMobile() {
     const router = useRouter();
 
+
     // 테마 변경
     const { theme, onChangeTheme } = useThemeStore();
 
@@ -44,7 +45,7 @@ function MainHeaderMobile() {
                     </Pressable>
                 </View>
 
-                {/*  우픅 컨트롤 영역 */}
+                {/*  우측 컨트롤 영역 */}
                 {/* 색상 바뀌는 아이콘 고양이 강아지 이것은 추가로 수정생각하기 선생님께 물어보고 넣기 */}
                 <View className={twMerge(["flex-row", "items-center", "gap-2", "px-4"])}>
                     <Pressable

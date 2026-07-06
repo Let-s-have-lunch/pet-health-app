@@ -6,7 +6,6 @@ export const USER_NAV_LIST = [
 ];
 
 export const ADMIN_NAV_LIST = [
-    { path: "/admin/categories", label: "카테고리 관리", icon: "grid" },
     { path: "/admin/users", label: "사용자 관리", icon: "users" },
     { path: "/admin/notices", label: "공지사항 관리", icon: "bell" },
     { path: "/admin/inquiries", label: "1:1 문의관리", icon: "message-square" },

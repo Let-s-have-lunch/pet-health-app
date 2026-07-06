@@ -26,7 +26,7 @@ function AdminAsideDesktop() {
                     )}>
                     <Pressable>
                         <TextComponent className={twMerge(["text-xl", "font-semibold", "px-8"])}>
-                            <Ionicons name={"shield"} size={22} className={twMerge(["pr-1", "text-text-default"])} />
+                            <Ionicons name={"shield-half"} size={22} className={twMerge(["pr-1", "text-text-default"])} />
                             관리자 센터
                         </TextComponent>
                     </Pressable>
