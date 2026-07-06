@@ -7,9 +7,6 @@ export default function HomeScreen() {
 
     return (
         <View style={styles.container}>
-            <InputGroup
-                placeholder={"제목을 입력해주세요 (최대 255자)"}
-            />
             {/* 🐶 상단: 동물 카드 영역 (더하기 카드까지 이 안에서 처리) */}
             <PetCardSection />
 
