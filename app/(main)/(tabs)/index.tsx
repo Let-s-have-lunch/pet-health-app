@@ -202,3 +202,4 @@ export default function HomeScreen() {
         </ScrollView>
     );
 }
+// Todo: 몸무게 부터 detail 페이지 랑 그래프 작성
