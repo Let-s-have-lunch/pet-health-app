@@ -31,7 +31,7 @@
 
         --error-main: #F2C6C2;     /* 블러시 핑크 */
         --error-contrast: #2C2C2C;
-        --error-point: #CD5B0A;  /* text 로만 사용 */
+        --error-point: #E95244;  /* text 로만 사용 */
 
         --warning-main: #E9D2A9;   /* 파스텔 옐로우/베이지 */
         --warning-contrast: #2C2C2C;
@@ -64,7 +64,7 @@
 
         --error-main: #E8B7B0;
         --error-contrast: #3A3532;
-        --error-point: #CD5B0A;  /* text 로만 사용 */
+        --error-point: #E95244;  /* text 로만 사용 */
 
         --warning-main: #E9D2A9;
         --warning-contrast: #3A3532;
@@ -74,36 +74,36 @@
     }
 } /* 👈 원래 제일 밑에 있던 @layer base의 닫는 괄호를 여기로 올렸어! */
 
-/*@media (prefers-color-scheme: dark) {*/
-/*    :root {*/
-/*        !* 앱이나 OS 시스템 설정이 다크/두번째 테마 모드일 때 자동 적용되는 변수 *!*/
-/*        --bg-default: #F6EFE9;*/
-/*        --bg-paper: #FFFFFF;*/
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* 앱이나 OS 시스템 설정이 다크/두번째 테마 모드일 때 자동 적용되는 변수 */
+        --bg-default: #F6EFE9;
+        --bg-paper: #FFFFFF;
 
-/*        --text-default: #3A3532;*/
-/*        --text-secondary: #8A807A;*/
+        --text-default: #3A3532;
+        --text-secondary: #8A807A;
 
-/*        --divider: #E8B7B0;*/
+        --divider: #E8B7B0;
 
-/*        --primary-main: #D9B49A;*/
-/*        --primary-contrast: #3A3532;*/
+        --primary-main: #D9B49A;
+        --primary-contrast: #3A3532;
 
-/*        --secondary-main: #A3BCD6;*/
-/*        --secondary-contrast: #2C2C2C;*/
-/*        --secondary-point: #2D94D7;  !* text 로만 사용 포인트 아이콘으로 *!*/
+        --secondary-main: #A3BCD6;
+        --secondary-contrast: #2C2C2C;
+        --secondary-point: #2D94D7;  /* text 로만 사용 포인트 아이콘으로 */
 
-/*        --success-main: #BACFCD;*/
-/*        --success-contrast: #2C2C2C;*/
-/*        --success-point: #35B18C; !* text 로만 사용 *!*/
+        --success-main: #BACFCD;
+        --success-contrast: #2C2C2C;
+        --success-point: #35B18C; /* text 로만 사용 */
 
-/*        --error-main: #E8B7B0;*/
-/*        --error-contrast: #3A3532;*/
-/*        --error-point: #CD5B0A;  !* text 로만 사용 *!*/
+        --error-main: #E8B7B0;
+        --error-contrast: #3A3532;
+        --error-point: #E95244;  /* text 로만 사용 */
 
-/*        --warning-main: #E9D2A9;*/
-/*        --warning-contrast: #3A3532;*/
+        --warning-main: #E9D2A9;
+        --warning-contrast: #3A3532;
 
-/*        --info-main: #D1CEE2;*/
-/*        --info-contrast: #3A3532;*/
-/*    }*/
-/*}*/
+        --info-main: #D1CEE2;
+        --info-contrast: #3A3532;
+    }
+}
