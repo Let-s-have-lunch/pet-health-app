@@ -42,6 +42,7 @@ function MainLayout() {
                     "p-4",
                     "md:py-8",
                     "self-center",
+                    "bg-background-default"
                 ])}>
                 <Slot />
             </View>
