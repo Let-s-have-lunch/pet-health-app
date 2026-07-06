@@ -39,9 +39,10 @@ function MainLayout() {
                     "flex-1",
                     "w-full",
                     "max-w-7xl",
-                    "p-4",
+                    "p-[25px]",
                     "md:py-8",
                     "self-center",
+                    "bg-background-default"
                 ])}>
                 <Slot />
             </View>
