@@ -31,7 +31,7 @@
 
         --error-main: #F2C6C2;     /* 블러시 핑크 */
         --error-contrast: #2C2C2C;
-        --error-point: #CD5B0A;  /* text 로만 사용 */
+        --error-point: #E95244;  /* text 로만 사용 */
 
         --warning-main: #E9D2A9;   /* 파스텔 옐로우/베이지 */
         --warning-contrast: #2C2C2C;
@@ -64,7 +64,7 @@
 
         --error-main: #E8B7B0;
         --error-contrast: #3A3532;
-        --error-point: #CD5B0A;  /* text 로만 사용 */
+        --error-point: #E95244;  /* text 로만 사용 */
 
         --warning-main: #E9D2A9;
         --warning-contrast: #3A3532;
@@ -98,7 +98,7 @@
 
         --error-main: #E8B7B0;
         --error-contrast: #3A3532;
-        --error-point: #CD5B0A;  /* text 로만 사용 */
+        --error-point: #E95244;  /* text 로만 사용 */
 
         --warning-main: #E9D2A9;
         --warning-contrast: #3A3532;

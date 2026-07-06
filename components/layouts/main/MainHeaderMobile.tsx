@@ -38,8 +38,9 @@ function MainHeaderMobile() {
                                 ["flex-row", "h-12", "w-12", "items-center"],
                                 ["rounded-full", "bg-success-main"],
                             )}></View>
-                        <TextComponent>초코</TextComponent>
-                        <Ionicons name={"chevron-down"} size={16} />
+                        <TextComponent className={twMerge(["text-xl", "font-bold"])}>
+                            초코
+                        </TextComponent>
                     </Pressable>
                 </View>
 
@@ -51,9 +52,11 @@ function MainHeaderMobile() {
                             ["p-2", "rounded-full"],
                             ["transition-all", "active:bg-background-default"],
                         )}>
-                        <Ionicons onPress={onChangeTheme} name={theme === "light" ? "paw" : "paw-outline" }
-                                  size={24}
-                                  className={twMerge("text-text-default")}
+                        <Ionicons
+                            onPress={onChangeTheme}
+                            name={theme === "light" ? "paw" : "paw-outline"}
+                            size={24}
+                            className={twMerge("text-text-default")}
                         />
                     </Pressable>
                     {/* 관리자일때 보이는 아이콘 */}
@@ -61,11 +64,18 @@ function MainHeaderMobile() {
                     <Pressable
                         onPress={() => router.push("/admin")}
                         className={twMerge(
-                        ["p-2", "rounded-full"],
-                        ["transition-all", "active:bg-background-default"],
-                    )}>
+                            ["p-2", "rounded-full"],
+                            ["transition-all", "active:bg-background-default"],
+                        )}>
+                        <Ionicons name={"shield-half"} size={22} className={"text-text-default"} />
+                    </Pressable>
+                    <Pressable
+                        className={twMerge(
+                            ["p-2", "rounded-full"],
+                            ["transition-all", "active:bg-background-default"],
+                        )}>
                         <Ionicons
-                            name={"shield"}
+                            name={"settings-outline"}
                             size={22}
                             className={"text-text-default"}
                         />
