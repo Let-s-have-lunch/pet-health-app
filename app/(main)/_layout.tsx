@@ -1,7 +1,6 @@
 import { useWindowDimensions, View } from "react-native";
 import { Slot } from "expo-router";
 import MainHeaderMobile from "@/components/layouts/main/MainHeaderMobile";
-import MainHeaderDesktop from "@/components/layouts/main/MainHeaderDesktop";
 import MainFooter from "@/components/layouts/main/MainFooter";
 import { twMerge } from "tailwind-merge";
 
