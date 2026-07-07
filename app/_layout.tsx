@@ -8,11 +8,10 @@ import { StatusBar } from "expo-status-bar";
 
 export default function RootLayout() {
     const { theme } = useThemeStore();
-    // 앱에서 라이브모드와 다크모를 적용하기 위한  기능을 호출
     const { setColorScheme } = useColorScheme();
 
     useEffect(() => {
-        // 앱을 위한것
+
         setColorScheme(theme);
     }, [theme, setColorScheme]);
 

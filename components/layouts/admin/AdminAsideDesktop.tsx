@@ -33,9 +33,9 @@ function AdminAsideDesktop() {
                 </Link>
 
                 <View className={"px-3 py-4 gap-1"}>
-                    {/* 실제 메뉴판 */}
+
                     {ADMIN_NAV_LIST.map(item => {
-                        // 지금 사용자가 보고 있는 화면이 어떤 메뉴에 속하는지 강조
+
                         const isActive =
                             item.path === "/" ? pathname === "/" : pathname.startsWith(item.path);
 
@@ -46,15 +46,15 @@ function AdminAsideDesktop() {
                                         ["flex-row", "items-center", "gap-3", "px-4", "py-3.5"],
                                         ["rounded-xl", "transition-all"],
                                         isActive
-                                            ? "bg-primary-main" //
-                                            : "hover:bg-background-default", // 지금 현재 사용자가 위치한 메뉴는 배경색 강조
+                                            ? "bg-primary-main"
+                                            : "hover:bg-background-default",
                                     )}>
                                     <Feather
                                         name={item.icon as any}
                                         size={18}
                                         className={
                                             isActive
-                                                ? "text-primary-contrast" // light 폰트 색상이 않보여서 내 맘대로 수정
+                                                ? "text-primary-contrast"
                                                 : "text-text-secondary"
                                         }
                                     />
@@ -63,7 +63,7 @@ function AdminAsideDesktop() {
                                             "font-bold",
 
                                             isActive
-                                                ? "text-primary-contrast" // light 폰트 색상이 않보여서 내 맘대로 수정
+                                                ? "text-primary-contrast"
                                                 : "text-text-default",
                                         )}>
                                         {item.label}
@@ -74,7 +74,7 @@ function AdminAsideDesktop() {
                     })}
                 </View>
             </View>
-            {/* 로그인 로그아웃 상태 */}
+
         </View>
     );
 }

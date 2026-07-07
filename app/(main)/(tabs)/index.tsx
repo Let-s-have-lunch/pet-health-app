@@ -1,10 +1,10 @@
 import { ActivityIndicator, Alert, Platform, ScrollView, View } from "react-native";
-import PetCardSection from "@/app/(main)/(tabs)/components/PetCardSection";
-import MedicalHistorySection from "@/app/(main)/(tabs)/components/MedicalHistorySection";
+import PetCardSection from "../../(main)/(tabs)/components/PetCardSection";
+import MedicalHistorySection from "../../(main)/(tabs)/components/MedicalHistorySection";
 import { useCallback, useEffect, useState } from "react";
 import { DashboardData, getHomeDashboard } from "@/api/home";
 import { twMerge } from "tailwind-merge";
-import TextComponent from "@/components/common/text/TextComponent";
+import TextComponent from "../../../components/common/text/TextComponent";
 
 export default function HomeScreen() {
     const [isLoading, setIsLoading] = useState(true);

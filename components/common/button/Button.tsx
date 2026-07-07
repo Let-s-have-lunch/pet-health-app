@@ -47,7 +47,7 @@ function Button({
         <Pressable
             className={twMerge(
                 "flex-row items-center rounded-[10px]",
-                // 🔥 핵심: showChevron이 있으면 양 끝 정렬(justify-between), 없으면 무조건 가운데 정렬(justify-center)
+
                 showChevron ? "justify-between" : "justify-center",
                 BUTTON_SIZE_STYLE[size],
                 getVariantClasses(),
@@ -70,7 +70,6 @@ function Button({
                 children
             )}
 
-            {/* 🔥 showChevron이 true일 때만 아이콘을 렌더링하고, false일 때는 아무것도 남기지 않습니다 */}
             {showChevron && (
                 <Feather
                     name="chevron-right"

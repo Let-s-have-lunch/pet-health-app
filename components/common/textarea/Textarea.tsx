@@ -25,7 +25,6 @@ function TextArea({
         }
     };
 
-    // textAlignVertical : 안드로이드에서 TextInput에 입력하는 텍스트는 y축 중앙에 정렬됨
     return (
         <TextInput
             multiline={true}

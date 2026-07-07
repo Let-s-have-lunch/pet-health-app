@@ -11,8 +11,6 @@ function MainHeaderMobile() {
     const router = useRouter();
     const { isLoggedIn, user } = useAuthStore();
 
-
-    // 테마 변경
     const { theme, onChangeTheme } = useThemeStore();
 
     return (
@@ -22,8 +20,7 @@ function MainHeaderMobile() {
                 ["justify-center", "items-center"],
                 ["border-b", "border-divider"],
             )}>
-            <View className={twMerge(["w-full", "flex-row", "items-center"])}>
-                {/*  마이펫 사진및 이믈 */}
+            <View className={twMerge(["w-full", "flex-row", "items-center", "max-w-7xl"])}>
                 <View
                     className={twMerge(
                         ["flex-row", "h-20", "justify-between", "items-center"],
@@ -48,8 +45,6 @@ function MainHeaderMobile() {
                     </Pressable>
                 </View>
 
-                {/*  우측 컨트롤 영역 */}
-                {/* 색상 바뀌는 아이콘 고양이 강아지 이것은 추가로 수정생각하기 선생님께 물어보고 넣기 */}
                 <View className={twMerge(["flex-row", "items-center", "gap-2", "px-4"])}>
                     <Pressable
                         className={twMerge(
@@ -63,8 +58,7 @@ function MainHeaderMobile() {
                             className={twMerge("text-text-default")}
                         />
                     </Pressable>
-                    {/* 관리자일때 보이는 아이콘 */}
-                    {/* TODO user와 관리자 일때 추가 하기  백엔드 연결후 */}
+
                     {isLoggedIn && user?.role === Role.ADMIN && (
                         <Pressable
                             onPress={() => router.push("/admin")}
