@@ -44,7 +44,7 @@ function MyPageHeader() {
 
                         <View className="justify-center">
                             <TextComponent
-                                className={twMerge(["text-base", "font-bold", "leading-tight"])}>
+                                className={twMerge(["text-xl", "font-bold", "leading-tight"])}>
                                 {isLoggedIn ? user?.nickname : "게스트"}
                             </TextComponent>
                             {isLoggedIn && (
