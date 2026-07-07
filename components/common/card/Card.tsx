@@ -1,5 +1,6 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
+import { View } from "react-native";
 
 // 그림자 단계를 정의 (팀 내에서 사용할 스타일 통일)
 type ShadowSize = "none" | "sm" | "md" | "lg";
@@ -25,7 +26,7 @@ export default function Card({
     ...props
 }: CardProps) {
     return (
-        <div
+        <View
             className={twMerge(
                 "bg-white",
                 "rounded-[10px]",
@@ -36,6 +37,6 @@ export default function Card({
             )}
             {...props}>
             {children}
-        </div>
+        </View>
     );
 }
