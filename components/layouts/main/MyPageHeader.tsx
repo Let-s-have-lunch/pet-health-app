@@ -10,7 +10,7 @@ function MyPageHeader() {
     const { isLoggedIn, user } = useAuthStore();
 
     return (
-        /* 1. MainHeaderMobile과 완전히 동일한 외부 틀 구조(높이 h-20, 배경색, 테두리) */
+        //* 1. MainHeaderMobile과 완전히 동일한 외부 틀 구조(높이 h-20, 배경색, 테두리) */
         <View
             className={twMerge(
                 ["w-full", "h-20", "bg-background-default"],
