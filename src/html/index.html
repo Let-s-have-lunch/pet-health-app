@@ -4,43 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>펫빌리지 공식 공지사항</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: 'Pretendard', sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #fdfdfd; }
+        header { text-align: center; padding: 40px 0; border-bottom: 3px solid #ffde59; margin-bottom: 30px; }
+        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .notice-item { padding: 20px; border-bottom: 1px solid #f0f0f0; transition: background 0.3s; display: flex; align-items: center; }
+        .notice-item:hover { background-color: #fffaf0; border-radius: 10px; cursor: pointer; }
+        .badge { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; margin-right: 12px; }
+    </style>
 </head>
 <body>
 
 <header>
-    <h1>🐾 펫빌리지 공지사항</h1>
+    <h1 style="color: #4a4a4a;">🐾 펫빌리지 소식통</h1>
+    <p style="color: #888;">우리 아이들과 더 행복해지는 시간</p>
 </header>
 
 <div class="container">
     <nav>
-        <ul style="list-style: none; padding: 0; display: flex; gap: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-            <li><a href="#" style="text-decoration: none; color: #222; font-weight: bold;">전체</a></li>
-            <li><a href="#" style="text-decoration: none; color: #555;">일반 안내</a></li>
-            <li><a href="#" style="text-decoration: none; color: #555;">서비스 점검</a></li>
+        <ul style="list-style: none; padding: 0; display: flex; gap: 20px; margin-bottom: 30px; justify-content: center;">
+            <li><a href="#" style="text-decoration: none; color: #ff9f43; font-weight: bold; border-bottom: 2px solid #ff9f43;">전체</a></li>
+            <li><a href="#" style="text-decoration: none; color: #555;">라이프 팁</a></li>
+            <li><a href="#" style="text-decoration: none; color: #555;">점검 소식</a></li>
             <li><a href="#" style="text-decoration: none; color: #555;">이벤트</a></li>
         </ul>
     </nav>
 
     <main>
-        <h2 style="color: #333; margin-top: 20px;">📌 최신 공지사항</h2>
-        <div class="notice-item" style="padding: 15px 0; border-bottom: 1px solid #eee;">
-            <span style="color: #555; font-size: 12px; margin-right: 10px;">[안내]</span>
-            2026년 상반기 반려동물 광견병 예방접종 지원 안내
+        <h2 style="font-size: 18px; color: #555; margin-bottom: 10px;">📌 펫빌리지 최신 소식</h2>
+
+        <div class="notice-item">
+            <span class="badge" style="background: #e1f5fe; color: #0288d1;">[라이프]</span>
+            산책하기 딱 좋은 날씨! 댕댕이/냥냥이 산책 매너 가이드 🐾
         </div>
-        <div class="notice-item" style="padding: 15px 0; border-bottom: 1px solid #eee;">
-            <span style="color: #d9534f; font-size: 12px; margin-right: 10px;">[점검]</span>
-            7월 15일(수) 새벽 서비스 정기 점검 안내 (이용 제한)
+        <div class="notice-item">
+            <span class="badge" style="background: #ffebee; color: #d32f2f;">[점검]</span>
+            더 쾌적한 환경을 위해 서비스 환경을 다듬고 있어요 (잠시만 기다려주냥! 😺)
         </div>
-        <div class="notice-item" style="padding: 15px 0; border-bottom: 1px solid #eee;">
-            <span style="color: #0275d8; font-size: 12px; margin-right: 10px;">[이벤트]</span>
-            '우리 아이 여름나기' 꿀팁 공유 이벤트 당첨자 발표
+        <div class="notice-item">
+            <span class="badge" style="background: #e8f5e9; color: #388e3c;">[이벤트]</span>
+            우리 아이 '최애 간식' 사진 올리고 선물 받아가개! 🐶
         </div>
     </main>
 </div>
 
-<footer style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #222; text-align: center; color: #666; font-size: 14px;">
-    <p>© 2026 PetVillage. All rights reserved. | 신뢰할 수 있는 반려동물 커뮤니티</p>
+<footer style="margin-top: 40px; text-align: center; color: #aaa; font-size: 13px;">
+    <p>© 2026 PetVillage. All rights reserved. | 펫빌리지는 여러분의 소중한 일상을 응원합니다.</p>
 </footer>
 
 </body>
