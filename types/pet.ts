@@ -1,6 +1,6 @@
-export const Gender = {
+export const PetGender = {
     MALE: "MALE",
     FEMALE: "FEMALE",
 };
 
-export type GenderType = (typeof Gender)[keyof typeof Gender];
+export type PetGenderType = (typeof PetGender)[keyof typeof PetGender];
