@@ -1,12 +1,9 @@
-import { useRouter } from "expo-router";
-import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { twMerge } from "tailwind-merge";
 import TextComponent from "@/components/common/text/TextComponent";
 import { View } from "react-native";
 
 function PostPageHeader() {
-    const router = useRouter();
-    const { isLoggedIn, user } = useAuthStore();
+
 
     return (
         <View
