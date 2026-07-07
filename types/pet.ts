@@ -20,16 +20,3 @@ export interface Pet {
     userId: number;
     gender: PetGenderType;
 }
-
-export type PetListResponse = Pick<
-    Pet,
-    | "id"
-    | "name"
-    | "species"
-    | "breed"
-    | "profileImage"
-    | "birthdate"
-    | "gender"
-    | "neutered"
-    | "registrationNumber"
->;
