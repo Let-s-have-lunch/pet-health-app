@@ -1,0 +1,40 @@
+/* 전체적인 여백 초기화 */
+body {
+    margin: 0;
+    font-family: sans-serif;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+/* 여기서부터 레이아웃 핵심! */
+.container {
+    display: flex; /* 가로로 나란히 배치하는 마법의 코드 */
+    min-height: 400px;
+}
+
+nav {
+    flex: 1; /* 왼쪽 메뉴가 1의 비율을 가짐 */
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+main {
+    flex: 3; /* 오른쪽 본문이 3의 비율을 가짐 (더 넓음) */
+    padding: 20px;
+}
+
+footer {
+    background-color: #eee;
+    text-align: center;
+    padding: 10px;
+}
+
+.notice-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}

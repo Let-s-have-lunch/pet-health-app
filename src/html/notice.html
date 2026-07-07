@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 여기서만 사용하는 추가 스타일 */
+        table {
+            width: 100%;
+            border-collapse: collapse; /* 표 테두리 한 줄로 만들기 */
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f8f8;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>공지사항 게시판</h1>
+</header>
+
+<div class="container">
+    <nav>
+        <ul>
+            <li><a href="index.html">홈으로</a></li>
+            <li><a href="notice.html">공지사항</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h2>공지사항 목록</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2</td>
+                <td><a href="notice-detail.html">서비스 점검 안내</a></td>
+                <td>2026-07-07</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>오픈 이벤트 안내</td>
+                <td>2026-07-01</td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+</div>
+
+<footer>
+    <p>© 2026 나의 웹사이트</p>
+</footer>
+
+</body>
+</html>
