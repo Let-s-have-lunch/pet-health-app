@@ -4,9 +4,12 @@ import { twMerge } from "tailwind-merge";
 import { Ionicons } from "@expo/vector-icons";
 import TextComponent from "@/components/common/text/TextComponent";
 import { useThemeStore } from "@/stores/theme/useThemeStore";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { Role } from "@/types/user";
 
 function MainHeaderMobile() {
     const router = useRouter();
+    const { isLoggedIn, user } = useAuthStore();
 
 
     // 테마 변경
@@ -15,7 +18,7 @@ function MainHeaderMobile() {
     return (
         <View
             className={twMerge(
-                ["w-full", "h-20", "bg-background-paper"],
+                ["w-full", "h-20", "bg-background-default"],
                 ["justify-center", "items-center"],
                 ["border-b", "border-divider"],
             )}>
@@ -62,14 +65,20 @@ function MainHeaderMobile() {
                     </Pressable>
                     {/* 관리자일때 보이는 아이콘 */}
                     {/* TODO user와 관리자 일때 추가 하기  백엔드 연결후 */}
-                    <Pressable
-                        onPress={() => router.push("/admin")}
-                        className={twMerge(
-                            ["p-2", "rounded-full"],
-                            ["transition-all", "active:bg-background-default"],
-                        )}>
-                        <Ionicons name={"shield-half"} size={22} className={"text-text-default"} />
-                    </Pressable>
+                    {isLoggedIn && user?.role === Role.ADMIN && (
+                        <Pressable
+                            onPress={() => router.push("/admin")}
+                            className={twMerge(
+                                ["p-2", "rounded-full"],
+                                ["transition-all", "active:bg-background-default"],
+                            )}>
+                            <Ionicons
+                                name={"shield-half"}
+                                size={22}
+                                className={"text-text-default"}
+                            />
+                        </Pressable>
+                    )}
                     <Pressable
                         className={twMerge(
                             ["p-2", "rounded-full"],

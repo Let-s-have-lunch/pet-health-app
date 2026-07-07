@@ -1,15 +1,16 @@
-import { Pressable, PressableProps, View } from "react-native";
+import { Pressable, PressableProps } from "react-native";
 import { BUTTON_SIZE_STYLE, StyleColorType, StyleSizeType, StyleVariantType } from "@/types/style";
 import { twMerge } from "tailwind-merge";
-import TextComponent from "@/components/common/text/TextComponents";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
+import TextComponent from "@/components/common/text/TextComponent";
 
 interface Props extends Omit<PressableProps, "children"> {
     children?: React.ReactNode;
     color?: StyleColorType;
     variant?: StyleVariantType;
     size?: StyleSizeType;
+    wrap?: boolean;
     fullWidth?: boolean;
     showChevron?: boolean; // > 아이콘 노출 여부
     textClassName?: string;
@@ -21,6 +22,7 @@ function Button({
     size = "medium",
     fullWidth = false,
     showChevron = false,
+    wrap = false,
     className,
     textClassName,
     children,
@@ -29,11 +31,11 @@ function Button({
     const getVariantClasses = () => {
         switch (variant) {
             case "contained":
-                return `bg-${color}-main`;
+                return `bg-${color}-main border-2 border-${color}-main`;
             case "outlined":
                 return `border-2 border-text-${color} bg-transparent`;
             case "text":
-                return `bg-transparent`;
+                return `bg-background-paper`;
             case "icon":
                 return `rounded-full p-2`;
             default:
@@ -50,6 +52,7 @@ function Button({
                 BUTTON_SIZE_STYLE[size],
                 getVariantClasses(),
                 fullWidth ? "w-full" : "",
+                wrap && "flex-1",
                 className,
             )}
             {...props}>
@@ -58,7 +61,7 @@ function Button({
                 <TextComponent
                     className={twMerge(
                         "leading-none text-center font-normal text-[#000000]",
-                        size === "small" ? "text-large" : size === "large" ? "text-2xl" : "text-xl",
+                        size === "small" ? "text-base" : size === "large" ? "text-xl" : "text-lg",
                         textClassName
                     )}>
                     {children}

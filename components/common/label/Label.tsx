@@ -1,7 +1,7 @@
 import { StyleSizeType } from "@/types/style";
 import { TextProps } from "react-native";
 import { twMerge } from "tailwind-merge";
-import TextComponent from "@/components/common/text/TextComponents";
+import TextComponent from "@/components/common/text/TextComponent";
 
 interface LabelProps extends TextProps {
     size?: StyleSizeType;
