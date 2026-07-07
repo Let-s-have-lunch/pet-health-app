@@ -1,10 +1,11 @@
 import axios from "axios";
-import { Notice, PaginatedNoticeResponse} from "../types/notice";
+import { Notice, PaginatedNoticeResponse} from "../../types/notice";
 import { NoticeFormData } from "./noticeSchema";
 import { noticeFormSchema } from "@/schemas/noticeSchema";
 import { z } from "zod";
 
 // 1. 인스턴스 생성 (베이스 URL 관리)
+// eslint-disable-next-line import/no-named-as-default-member
 const apiClient = axios.create({
     baseURL: process.env.REACT_APP_API_URL || "http://localhost:8000/api/notices",
     headers: { "Content-Type": "application/json" },
