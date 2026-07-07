@@ -17,7 +17,7 @@ function AdminLayout() {
                 <AdminAsideMobile />
             </View>
 
-            <View className={"flex-1"}>
+            <View className={"flex-1 bg-background-default"}>
                 <ScrollView
                     className={"flex-1"}
                     contentContainerClassName={"p-4 md:p-8 items-center"}

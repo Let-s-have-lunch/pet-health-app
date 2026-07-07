@@ -37,7 +37,7 @@ function MainLayout() {
     //
 
     return (
-        <View className={"flex-1"}>
+        <View className={"flex-1 bg-background-default"}>
             {isMyPage ? <MyPageHeader /> : <MainHeaderMobile />}
             <ContentContainer>
                 <Slot />

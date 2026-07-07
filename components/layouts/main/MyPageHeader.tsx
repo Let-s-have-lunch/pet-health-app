@@ -17,7 +17,7 @@ function MyPageHeader() {
                 ["justify-center", "items-center"],
                 ["border-b", "border-divider"],
             )}>
-            <View className={twMerge(["w-full", "flex-row", "items-center"])}>
+            <View className={twMerge(["w-full", "flex-row", "items-center", "max-w-7xl"])}>
                 {/* 2. 왼쪽 영역: 반려동물 대신 유저 정보(초코맘)가 들어가는 곳 */}
                 <View
                     className={twMerge(

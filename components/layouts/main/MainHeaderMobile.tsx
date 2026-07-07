@@ -11,7 +11,6 @@ function MainHeaderMobile() {
     const router = useRouter();
     const { isLoggedIn, user } = useAuthStore();
 
-
     // 테마 변경
     const { theme, onChangeTheme } = useThemeStore();
 
@@ -22,7 +21,7 @@ function MainHeaderMobile() {
                 ["justify-center", "items-center"],
                 ["border-b", "border-divider"],
             )}>
-            <View className={twMerge(["w-full", "flex-row", "items-center"])}>
+            <View className={twMerge(["w-full", "flex-row", "items-center", "max-w-7xl"])}>
                 {/*  마이펫 사진및 이믈 */}
                 <View
                     className={twMerge(
