@@ -21,22 +21,21 @@ function NoticeDetailPage() {
     const [notice, setNotice] = useState<Notice | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    // 반려동물 테마 카테고리 매핑
     const categoryMap: Record<string, string> = {
-        general: "🐾 일반",
-        maintenance: "🛠️ 점검",
+        general: "🐾 일반 안내",
+        maintenance: "🛠️ 서비스 점검",
         event: "🎉 이벤트",
     };
 
     useEffect(() => {
         const loadNotice = async () => {
+            if (!id) return;
             try {
-                // 기존 강사님 API 호출 방식 유지
                 const data = await noticeApi.getNoticeById(Number(id));
                 setNotice(data);
             } catch (error) {
-                console.log(error);
-                alert("공지사항을 불러오는 중 오류가 발생했습니다.");
+                console.error("공지사항 로딩 실패:", error);
+                alert("해당 공지사항을 찾을 수 없습니다.");
                 navigate(-1);
             } finally {
                 setIsLoading(false);
@@ -46,10 +45,22 @@ function NoticeDetailPage() {
         loadNotice();
     }, [id, navigate]);
 
+    // 🐾 날짜 포맷팅 안전장치 (데이터 오류 방지)
+    const formatDate = (dateString: string | Date) => {
+        const date = new Date(dateString);
+        return isNaN(date.getTime())
+            ? "날짜 정보 없음"
+            : date.toLocaleDateString("ko-KR", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+              });
+    };
+
     if (isLoading) {
         return (
             <PostContainer>
-                <LoadingText>공지사항 내용을 불러오는 중입니다... 🐕</LoadingText>
+                <LoadingText>소중한 정보를 불러오는 중입니다... 🐕</LoadingText>
             </PostContainer>
         );
     }
@@ -60,9 +71,14 @@ function NoticeDetailPage() {
         <PostContainer>
             <DetailWrapper>
                 <DetailHeader>
-                    {/* 🐾 카테고리 및 고정글 뱃지 추가 */}
-                    <div style={{ marginBottom: "10px" }}>
-                        <span style={{ marginRight: "8px", color: "#f97316", fontWeight: "bold" }}>
+                    <div
+                        style={{
+                            marginBottom: "15px",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                        }}>
+                        <span style={{ color: "#f97316", fontWeight: "bold", fontSize: "0.9rem" }}>
                             {categoryMap[notice.category] || "🐾 일반"}
                         </span>
                         {notice.isPinned && (
@@ -70,9 +86,9 @@ function NoticeDetailPage() {
                                 style={{
                                     background: "#fee2e2",
                                     color: "#ef4444",
-                                    padding: "2px 8px",
-                                    borderRadius: "10px",
-                                    fontSize: "12px",
+                                    padding: "3px 10px",
+                                    borderRadius: "15px",
+                                    fontSize: "11px",
                                     fontWeight: "bold",
                                 }}>
                                 📌 필독
@@ -84,17 +100,23 @@ function NoticeDetailPage() {
 
                     <DetailInfo>
                         <div className={"left-info"}>
-                            <span>작성일: {new Date(notice.createdAt).toLocaleDateString()}</span>
-                            <span style={{ marginLeft: "15px" }}>
-                                조회수: {notice.views?.toLocaleString() || 0}
+                            {/* 안전하게 포맷팅된 날짜 출력 */}
+                            <span>{formatDate(notice.createdAt)}</span>
+                            <span style={{ marginLeft: "15px", color: "#888" }}>
+                                조회수 {notice.views?.toLocaleString() || 0}
                             </span>
                         </div>
                     </DetailInfo>
                 </DetailHeader>
 
-                <DetailContent style={{ whiteSpace: "pre-wrap" }}>{notice.content}</DetailContent>
+                {/* 본문 내용의 가독성을 위해 여백 조절 */}
+                <DetailContent
+                    style={{ whiteSpace: "pre-wrap", padding: "20px 0", minHeight: "300px" }}>
+                    {notice.content}
+                </DetailContent>
 
-                <AdminButtonGroup style={{ marginTop: "40px" }}>
+                <AdminButtonGroup
+                    style={{ marginTop: "40px", borderTop: "1px solid #eee", paddingTop: "20px" }}>
                     <Button color={"secondary"} variant={"contained"} onClick={() => navigate(-1)}>
                         목록으로
                     </Button>

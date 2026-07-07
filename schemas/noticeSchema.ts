@@ -9,9 +9,12 @@ export const noticeFormSchema = z.object({
 
     content: z.string().min(5, { message: "🐾 공지 내용은 최소 5글자 이상 상세히 적어주세요." }),
 
-    category: z.enum(["general", "maintenance", "event"], {
-        errorMap: () => ({ message: "🐾 올바른 카테고리(일반/점검/이벤트)를 선택해 주세요." }),
-    }),
+    category: z
+        .enum(["general", "maintenance", "event", "adoption", "missing"], {
+        })
+        .refine(val => ["general", "maintenance", "event"].includes(val), {
+            message: "🐾 올바른 카테고리(일반/점검/이벤트)를 선택해 주세요.",
+        }),
 
     isPinned: z.boolean().default(false),
 });

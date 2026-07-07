@@ -2,66 +2,83 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>공지사항 상세</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 상세 - 펫빌리지</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* 상세 페이지를 위한 간단한 스타일 추가 */
+        /* 상세 페이지 전용 묵직한 디자인 */
         .notice-header {
-            border-bottom: 2px solid #333;
+            border-bottom: 2px solid #222;
             margin-bottom: 20px;
-            padding-bottom: 10px;
+            padding-bottom: 20px;
         }
+        .notice-header h2 { font-size: 26px; color: #222; margin-bottom: 10px; }
+        .notice-meta { color: #777; font-size: 14px; }
+
         .notice-content {
-            min-height: 200px;
-            line-height: 1.6;
-            margin-bottom: 30px;
+            padding: 30px 0;
+            line-height: 1.8;
+            color: #444;
+            min-height: 300px;
+            border-bottom: 1px solid #eee;
         }
+
+        .btn-group { margin-top: 30px; display: flex; justify-content: flex-end; }
         .btn-list {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #333;
+            padding: 10px 25px;
+            background-color: #222;
             color: white;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 4px;
+            font-weight: bold;
         }
+        .btn-list:hover { background-color: #444; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>공지사항 게시판</h1>
+    <h1>🐾 펫빌리지 공지사항</h1>
 </header>
 
 <div class="container">
     <nav>
-        <ul>
-            <li><a href="index.html">홈으로</a></li>
-            <li><a href="notice.html">공지사항</a></li>
+        <ul style="list-style: none; padding: 0; display: flex; gap: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+            <li><a href="index.html" style="text-decoration: none; color: #555;">홈으로</a></li>
+            <li><a href="notice.html" style="text-decoration: none; color: #222; font-weight: bold;">공지사항</a></li>
         </ul>
     </nav>
 
     <main>
         <div class="notice-header">
-            <h2>[공지] 서비스 점검 안내</h2>
-            <p>작성일: 2026-07-07</p>
+            <span style="background-color: #ffeaea; color: #d9534f; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">[점검]</span>
+            <h2>7월 15일(수) 새벽 서비스 정기 점검 안내</h2>
+            <div class="notice-meta">
+                작성일: 2026-07-07 | 작성자: 펫빌리지 관리자 | 조회수: 1,240
+            </div>
         </div>
 
         <div class="notice-content">
-            <p>안녕하세요.</p>
-            <p>더 나은 서비스를 제공하기 위해 정기 점검을 진행할 예정입니다.</p>
+            <p>안녕하세요. 펫빌리지 가족 여러분.</p>
+            <p>더 쾌적하고 안전한 반려동물 서비스를 위해 정기 점검을 진행합니다.</p>
             <br>
-            <p><strong>점검 시간:</strong> 2026년 7월 8일 02:00 ~ 04:00 (2시간)</p>
-            <p><strong>영향 범위:</strong> 웹사이트 접속 및 로그인 불가</p>
+            <div style="background-color: #f9f9f9; padding: 20px; border-left: 4px solid #d9534f;">
+                <p><strong>🕒 점검 시간:</strong> 2026년 7월 8일 02:00 ~ 04:00 (2시간)</p>
+                <p><strong>🚫 영향 범위:</strong> 웹사이트 접속 및 앱 로그인 불가</p>
+            </div>
             <br>
-            <p>이용에 불편을 드려 죄송합니다.</p>
+            <p>소중한 우리 아이들과의 일상이 멈추지 않도록 점검은 최대한 신속히 마무리하겠습니다.</p>
+            <p>이용에 불편을 드려 죄송합니다. 늘 함께해 주셔서 감사합니다.</p>
         </div>
 
-        <a href="notice.html" class="btn-list">목록으로</a>
+        <div class="btn-group">
+            <a href="notice.html" class="btn-list">목록으로</a>
+        </div>
     </main>
 </div>
 
-<footer>
-    <p>© 2026 나의 웹사이트</p>
+<footer style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #222; text-align: center; color: #666; font-size: 14px;">
+    <p>© 2026 PetVillage. All rights reserved.</p>
 </footer>
 
 </body>

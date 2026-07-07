@@ -2,26 +2,45 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>나의 첫 레이아웃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>펫빌리지 공식 공지사항</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-    <h1>공지사항 게시판</h1>
+    <h1>🐾 펫빌리지 공지사항</h1>
 </header>
 
 <div class="container">
-    <nav>메뉴 (카테고리)</nav>
+    <nav>
+        <ul style="list-style: none; padding: 0; display: flex; gap: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+            <li><a href="#" style="text-decoration: none; color: #222; font-weight: bold;">전체</a></li>
+            <li><a href="#" style="text-decoration: none; color: #555;">일반 안내</a></li>
+            <li><a href="#" style="text-decoration: none; color: #555;">서비스 점검</a></li>
+            <li><a href="#" style="text-decoration: none; color: #555;">이벤트</a></li>
+        </ul>
+    </nav>
+
     <main>
-        <h2>최신 공지사항</h2>
-        <div class="notice-item">공지사항 1: 레이아웃 공부를 시작합니다.</div>
-        <div class="notice-item">공지사항 2: CSS는 생각보다 재미있어요!</div>
+        <h2 style="color: #333; margin-top: 20px;">📌 최신 공지사항</h2>
+        <div class="notice-item" style="padding: 15px 0; border-bottom: 1px solid #eee;">
+            <span style="color: #555; font-size: 12px; margin-right: 10px;">[안내]</span>
+            2026년 상반기 반려동물 광견병 예방접종 지원 안내
+        </div>
+        <div class="notice-item" style="padding: 15px 0; border-bottom: 1px solid #eee;">
+            <span style="color: #d9534f; font-size: 12px; margin-right: 10px;">[점검]</span>
+            7월 15일(수) 새벽 서비스 정기 점검 안내 (이용 제한)
+        </div>
+        <div class="notice-item" style="padding: 15px 0; border-bottom: 1px solid #eee;">
+            <span style="color: #0275d8; font-size: 12px; margin-right: 10px;">[이벤트]</span>
+            '우리 아이 여름나기' 꿀팁 공유 이벤트 당첨자 발표
+        </div>
     </main>
 </div>
 
-<footer>
-    <p>© 2026 나의 웹사이트</p>
+<footer style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #222; text-align: center; color: #666; font-size: 14px;">
+    <p>© 2026 PetVillage. All rights reserved. | 신뢰할 수 있는 반려동물 커뮤니티</p>
 </footer>
 
 </body>
