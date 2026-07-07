@@ -1,5 +1,5 @@
 import { Link, useSearchParams } from "react-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import noticeApi from "../../api/user/noticeApi.ts";
 import {
     BoardTable,
@@ -33,17 +33,17 @@ function NoticeListPage() {
         try {
             await noticeApi.deleteNotice(id);
             alert("삭제되었습니다.");
-            loadList(); // 삭제 후 목록 새로고침
+            await loadList(); // 삭제 후 목록 새로고침
         } catch (error) {
             alert("삭제 실패");
         }
     };
 
     // 3. 목록 불러오기 로직 분리 (재사용성)
-    const loadList = async () => {
+    const loadList = useCallback(async (currentPage: number, currentSize: number) => {
         setLoading(true);
         try {
-            const data = await noticeApi.getNoticeList(page, size);
+            const data = await noticeApi.getNoticeList(currentPage, currentSize);
             // 중요: 고정글(isPinned)이 먼저 오도록 정렬
             const sortedList = [...data.list].sort(
                 (a, b) => Number(b.isPinned) - Number(a.isPinned),
@@ -55,11 +55,11 @@ function NoticeListPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [page, size]);
 
     useEffect(() => {
-        loadList();
-    }, [page]);
+        loadList(page, size)
+    }, [loadList,page, size]);
 
     return (
         <PostContainer>
@@ -113,7 +113,9 @@ function NoticeListPage() {
             <Pagination
                 currentPage={page}
                 totalPage={totalPage}
-                onPageChange={p => setSearchParams({ page: p.toString() })}
+                onPageChange={(page: { toString: () => any }) =>
+                    setSearchParams({ page: page.toString() })
+                }
             />
         </PostContainer>
     );
