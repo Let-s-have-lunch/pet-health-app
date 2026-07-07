@@ -6,6 +6,7 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { ADMIN_NAV_LIST } from "@/constants/menu";
+import Button from "@/components/common/button/Button";
 
 
 function AdminAsideMobile() {
@@ -23,7 +24,6 @@ function AdminAsideMobile() {
 
     return (
         <>
-
             <View
                 className={twMerge(
                     ["h-20", "px-4", "flex-row", "justify-between", "items-center"],
@@ -47,10 +47,8 @@ function AdminAsideMobile() {
                 </Pressable>
             </View>
 
-
             <Modal visible={isMenuOpen} transparent={true} animationType={"slide"}>
                 <View className={twMerge("flex-1", "justify-between", "bg-background-paper")}>
-
                     <View>
                         <View
                             className={twMerge(
@@ -124,7 +122,37 @@ function AdminAsideMobile() {
                         </View>
                     </View>
 
-
+                    <View className={twMerge(["p-4"], ["border-t", "border-divider"])}>
+                        <View className={twMerge("mb-4", ["flex-row", "items-center", "gap-3"])}>
+                            <View
+                                className={twMerge(
+                                    ["w-12", "h-12", "justify-center", "items-center"],
+                                    ["bg-primary-main", "rounded-full"],
+                                )}>
+                                <Feather name={"shield"} size={20} color={"white"} />
+                            </View>
+                            <View>
+                                <TextComponent className={twMerge("font-bold")}>
+                                    {user?.nickname}
+                                </TextComponent>
+                                <TextComponent
+                                    className={twMerge("text-sm", "text-text-secondary")}>
+                                    {user?.email}
+                                </TextComponent>
+                            </View>
+                        </View>
+                        <Button
+                            variant={"outlined"}
+                            color={"error"}
+                            fullWidth={true}
+                            size={"large"}
+                            onPress={() => {
+                                setIsMenuOpen(false);
+                                logout();
+                            }}>
+                            로그아웃
+                        </Button>
+                    </View>
                 </View>
             </Modal>
         </>

@@ -205,16 +205,16 @@ function Register() {
 
                         <View className={"md:flex-row mt-9 gap-3"}>
                             <Button
-                                variant={"outlined"}
-                                wrap={true}
-                                onPress={() => router.push("/auth/login")}>
-                                로그인
-                            </Button>
-                            <Button
                                 wrap={true}
                                 onPress={handleSubmit(onSubmit)}
                                 disabled={isSubmitting}>
                                 회원가입
+                            </Button>
+                            <Button
+                                variant={"outlined"}
+                                wrap={true}
+                                onPress={() => router.push("/auth/login")}>
+                                로그인
                             </Button>
                         </View>
                     </FormContainer>
