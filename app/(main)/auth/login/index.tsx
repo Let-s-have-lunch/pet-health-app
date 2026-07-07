@@ -61,7 +61,7 @@ function AuthLoginPage() {
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             className={twMerge("flex-1", "bg-background-paper")}>
             <ContentContainer className={"bg-transparent p-0"}>
-                <Title title={"로그인"} showBackButton={true} onBackPress={() => router.push("/")} />
+                <Title title={"로그인"} showBackButton={true} onBackPress={() => router.back()} />
                 <TextComponent className={twMerge("font-medium", "text-xl", "text-center", "mt-9")}>
                     멍냥 나라에 오신것을 환영합니다.
                 </TextComponent>
@@ -76,7 +76,7 @@ function AuthLoginPage() {
                                     label={"이메일"}
                                     placeholder={"이메일을 입력해주세요."}
                                     keyboardType={"email-address"}
-                                    autoCapitalize={"none"} /* 첫글자 자동 대문자 전환 */
+                                    autoCapitalize={"none"}
                                     onBlur={onBlur}
                                     onChangeText={onChange}
                                     value={value}
@@ -93,7 +93,7 @@ function AuthLoginPage() {
                             return (
                                 <InputGroup
                                     id={"password"}
-                                    secureTextEntry={true} // 비밀번호 마스킹 속성
+                                    secureTextEntry={true}
                                     label={"비밀번호"}
                                     placeholder={"6자 이상 입력해주세요."}
                                     onBlur={onBlur}

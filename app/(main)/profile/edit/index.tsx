@@ -155,16 +155,16 @@ function MyInfoPage() {
 
                         <View className={"md:flex-row mt-9 gap-3"}>
                             <Button
-                                wrap={true}
-                                onPress={handleSubmit(onSubmit)}
-                                disabled={isSubmitting}>
-                                수정하기
-                            </Button>
-                            <Button
                                 variant={"outlined"}
                                 wrap={true}
                                 onPress={() => router.push("/my")}>
                                 수정취소
+                            </Button>
+                            <Button
+                                wrap={true}
+                                onPress={handleSubmit(onSubmit)}
+                                disabled={isSubmitting}>
+                                수정하기
                             </Button>
                         </View>
                     </FormContainer>
