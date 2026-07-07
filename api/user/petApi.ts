@@ -7,10 +7,13 @@ const getMyPetList = async (): Promise<PetListResponse[]> => {
     return response.data.data;
 };
 
-const registerPet = async (data: RegisterPetInputType) => {
+const registerPet = async ( data: RegisterPetInputType ): Promise<Pet> => {
     const response = await axiosInstance.post("/pet/create", data);
-    return response.data;
+    return response.data.data
 };
+
+
+
 
 export default {
     getMyPetList,
