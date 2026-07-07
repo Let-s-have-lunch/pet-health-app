@@ -58,10 +58,6 @@ function CommunityPostListPage() {
                     </TextComponent>
                 </View>
 
-                {/* 내용 */}
-                <View>
-
-                </View>
             </View>
         </ScrollView>
     );

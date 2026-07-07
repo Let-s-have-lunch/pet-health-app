@@ -1,11 +1,10 @@
 import React from "react";
+import { View, ViewProps } from "react-native"; // 💡 View와 ViewProps를 불러옵니다.
 import { twMerge } from "tailwind-merge";
-import { View } from "react-native";
 
-// 그림자 단계를 정의 (팀 내에서 사용할 스타일 통일)
 type ShadowSize = "none" | "sm" | "md" | "lg";
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface CardProps extends ViewProps {
     children: React.ReactNode;
     shadow?: ShadowSize;
     wrap?: boolean;
@@ -14,7 +13,7 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 const getShadowStyles: Record<ShadowSize, string> = {
     none: "shadow-none",
     sm: "shadow-sm",
-    md: "shadow-[0_2px_4px_0_rgba(0,0,0,0.2)]",
+    md: "shadow-[0_2px_4px_0_rgba(0,0,0,0.2)]", // NativeWind 환경에서 지원하는 임의값 문법
     lg: "shadow-lg",
 };
 
