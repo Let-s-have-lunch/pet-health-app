@@ -60,7 +60,8 @@ function AuthLoginPage() {
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             className={twMerge("flex-1", "bg-background-paper")}>
-            <ContentContainer className={"bg-transparent p-0"}><Title title={"로그인"} showBackButton={true} onBackPress={() => router.push("/")} />
+            <ContentContainer className={"bg-transparent p-0"}>
+                <Title title={"로그인"} showBackButton={true} onBackPress={() => router.push("/")} />
                 <TextComponent className={twMerge("font-medium", "text-xl", "text-center", "mt-9")}>
                     멍냥 나라에 오신것을 환영합니다.
                 </TextComponent>

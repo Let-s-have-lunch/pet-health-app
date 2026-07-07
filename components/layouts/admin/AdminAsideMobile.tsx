@@ -23,7 +23,7 @@ function AdminAsideMobile() {
 
     return (
         <>
-            {/*    화면 상단에 나와야되는 바 */}
+
             <View
                 className={twMerge(
                     ["h-20", "px-4", "flex-row", "justify-between", "items-center"],
@@ -47,10 +47,10 @@ function AdminAsideMobile() {
                 </Pressable>
             </View>
 
-            {/* 화면에 햄버거 아이콘을 누르면 튀어나와야 되는 메뉴 View */}
+
             <Modal visible={isMenuOpen} transparent={true} animationType={"slide"}>
                 <View className={twMerge("flex-1", "justify-between", "bg-background-paper")}>
-                    {/* 메뉴 상단 */}
+
                     <View>
                         <View
                             className={twMerge(
@@ -124,7 +124,7 @@ function AdminAsideMobile() {
                         </View>
                     </View>
 
-                    {/* 메뉴 하단 */}
+
                 </View>
             </Modal>
         </>

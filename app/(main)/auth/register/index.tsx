@@ -38,9 +38,6 @@ function Register() {
         try {
             const { confirmPassword, ...submitData } = data;
 
-            // 전 세계 컴퓨터들이 약속한 표준 날짜 형태(ISO 표준)이기 때문에,
-            // 백엔드나 데이터베이스(DB) 시스템이 "어? 이거 날짜 형식이네!" 하고 알아서 날짜 데이터로 찰떡같이 인식해 저장합니다.
-            // string에는 slice(시작인덱스, 끝 전 인덱스)
             const formattedDate =
                 data.birthdate && data.birthdate !== ""
                     ? data.birthdate.slice(0, 4) +

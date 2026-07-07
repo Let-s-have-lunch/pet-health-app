@@ -9,7 +9,7 @@ interface AuthContainerProps extends ViewProps {
 function FormContainer({ children, className, ...props }: AuthContainerProps) {
     return (
         <View
-            // flex-1: 화면 꽉 채우기, bg-white: 하얀 배경, px-5: 좌우 기본 패딩(20px)
+
             className={twMerge("flex-1 bg-background-paper p-[25px]", className)}
             {...props}>
             {children}

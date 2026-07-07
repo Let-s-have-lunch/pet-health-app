@@ -1,7 +1,7 @@
 import { StyleColorType, StyleSizeType, StyleVariantType } from "@/types/style";
 import { View, ViewProps } from "react-native";
 import { twMerge } from "tailwind-merge";
-import TextComponent from "@/components/common/text/TextComponents";
+import TextComponent from "@/components/common/text/TextComponent";
 
 interface BadgeProps extends ViewProps {
     color?: StyleColorType;
@@ -56,7 +56,7 @@ function Badge({
                 className,
             )}
             {...props}>
-            {/* 사용할 때  children에 그냥 string이 들어올 경우, 그대로 출력해주면 React-Native에서는 에러 */}
+
             {typeof children === "string" ? (
                 <TextComponent className={twMerge("font-normal", getTextColorClasses(), textClasses)}>
                     {children}

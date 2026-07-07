@@ -17,27 +17,8 @@ function MainLayout() {
 
     const isMyPage = segments[segments.length - 1] === "my";
 
-
-    // const [list, setList] = useState<Category[]>([]);
-
-    // useEffect(() => {
-    //     const loadCategories = async () => {
-    //         try {
-    //             const result = await categoryApi.getCategoryList();
-    //             setList(result);
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-    //     loadCategories().then(() => {});
-    // }, []);
-
-    // flex 안에서 배치를 바꿔주기 위해서는 부모메데 justify-content, align-items 를 사용했는데
-    // 그렇다면 자식은 결코 위치를 바꿀 수 없는가?  그것은 아니다.
-    //
-
     return (
-        <View className={"flex-1"}>
+        <View className={"flex-1 bg-background-default"}>
             {isMyPage ? <MyPageHeader /> : <MainHeaderMobile />}
             <ContentContainer>
                 <Slot />
