@@ -56,7 +56,7 @@ function Badge({
                 className,
             )}
             {...props}>
-            {/* 사용할 때  children에 그냥 string이 들어올 경우, 그대로 출력해주면 React-Native에서는 에러 */}
+
             {typeof children === "string" ? (
                 <TextComponent className={twMerge("font-normal", getTextColorClasses(), textClasses)}>
                     {children}

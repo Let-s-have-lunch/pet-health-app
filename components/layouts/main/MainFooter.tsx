@@ -7,7 +7,7 @@ import { Link, usePathname } from "expo-router";
 
 function MainFooter() {
     const pathname = usePathname();
-    // const { user, logout } = useAuthStore();
+   
     return (
         <View
             className={twMerge(

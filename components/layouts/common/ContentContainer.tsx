@@ -18,7 +18,7 @@ function ContentContainer({ children, className }: ContentContainerProps) {
                 "md:py-8",
                 "self-center",
                 "bg-background-default",
-                className, // 추가적인 스타일 확장이 필요할 때 사용
+                className,
             ])}>
             {children}
         </View>

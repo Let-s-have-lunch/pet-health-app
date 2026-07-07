@@ -6,11 +6,10 @@ type ShadowSize = "none" | "sm" | "md" | "lg";
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
-    shadow?: ShadowSize; // 선택적 프롭스, 기본값은 'md'
+    shadow?: ShadowSize;
     wrap?: boolean;
 }
 
-// 매핑 객체로 테일윈드 shadow 클래스 관리
 const getShadowStyles: Record<ShadowSize, string> = {
     none: "shadow-none",
     sm: "shadow-sm",
@@ -20,7 +19,7 @@ const getShadowStyles: Record<ShadowSize, string> = {
 
 export default function Card({
     children,
-    shadow = "none", // 기본값 설정
+    shadow = "none",
     wrap = false,
     className,
     ...props
