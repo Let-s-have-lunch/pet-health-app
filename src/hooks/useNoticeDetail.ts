@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { noticeApi } from "@/src/api/admin/noticeApi";
+import { noticeApi } from "@/src/api/user/noticeApi";
 import { Notice } from "../types/notice";
 
 // 1. React Router(useParams) 연동을 고려해 string, undefined도 받을 수 있게 타입 확장
