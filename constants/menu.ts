@@ -1,8 +1,8 @@
 export const USER_NAV_LIST = [
     { path: "/", label: "홈", icon: "home" },
-    { path: "/todo", label: "다이어리", icon: "calendar" },
-    { path: "/message", label: "커뮤니티", icon: "message-circle" },
-    { path: "/user", label: "마이페이지", icon: "user" },
+    { path: "/diary", label: "다이어리", icon: "calendar" },
+    { path: "/communityPosts", label: "커뮤니티", icon: "message-circle" },
+    { path: "/my", label: "마이페이지", icon: "user" },
 ];
 
 export const ADMIN_NAV_LIST = [

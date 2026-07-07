@@ -5,24 +5,27 @@ import { useCallback, useEffect, useState } from "react";
 import { DashboardData, getHomeDashboard } from "@/api/home";
 import { twMerge } from "tailwind-merge";
 import TextComponent from "../../../components/common/text/TextComponent";
+import { FontAwesome } from "@expo/vector-icons";
 
 export default function HomeScreen() {
     const [isLoading, setIsLoading] = useState(true);
 
     const [data, setData] = useState<DashboardData | null>({
         date: "2026-07-01",
-        walk: { count: 3 },          // 산책 카드에 3회로 표시됨
-        weight: { value: 5.4 },      // 몸무게 카드에 5.4kg으로 표시됨
+        walk: { count: 3 }, // 산책 카드에 3회로 표시됨
+        weight: { value: 5.4 }, // 몸무게 카드에 5.4kg으로 표시됨
         water: { totalAmount: 250 }, //  물 카드에 250ml로 표시됨
-        vetRecord: {                 //  병원 카드에 예약 배지와 함께 표시됨
+        vetRecord: {
+            //  병원 카드에 예약 배지와 함께 표시됨
             purpose: "정기 예방접종",
-            hospitalName: "튼튼동물병원"
-        }
+            hospitalName: "튼튼동물병원",
+        },
     });
 
     const loadDashboard = useCallback(async () => {
         try {
             setIsLoading(true);
+
             const result = await getHomeDashboard(1, "2026-07-01");
             if (result.success) {
                 // setData(result.data);
