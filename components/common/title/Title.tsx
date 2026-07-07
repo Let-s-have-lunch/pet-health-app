@@ -15,7 +15,7 @@ function Title({ title, showBackButton = false, onBackPress, children, className
     return (
         <View
             className={twMerge(
-                "h-[91px] flex-row items-center justify-between px-8 border-b border-divider bg-transparent",
+                "w-full h-20 flex-row items-center justify-between px-8 border-b border-divider bg-transparent",
                 className,
             )}>
 
@@ -30,13 +30,13 @@ function Title({ title, showBackButton = false, onBackPress, children, className
                         <Feather
                             name="chevron-left"
                             size={24} // 피그마 너비 24px 맞춤
-                            className={twMerge("text-[#191919]")}
+                            className={twMerge("text-text-default")}
                         />
                     </TouchableOpacity>
                 )}
                 <Text
                     className={twMerge(
-                        "text-secondary-contrast",
+                        "text-text-default",
                         "font-bold",
                         "text-xl",
                         "leading-[24px]",

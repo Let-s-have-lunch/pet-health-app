@@ -20,8 +20,7 @@ function MainHeaderMobile() {
                 ["justify-center", "items-center"],
                 ["border-b", "border-divider"],
             )}>
-            <View className={twMerge(["w-full", "flex-row", "items-center"])}>
-
+            <View className={twMerge(["w-full", "flex-row", "items-center", "max-w-7xl"])}>
                 <View
                     className={twMerge(
                         ["flex-row", "h-20", "justify-between", "items-center"],
