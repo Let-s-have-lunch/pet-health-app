@@ -4,6 +4,7 @@ import axiosInstance from "@/api/axiosInstance";
 import { LoginUserInputType } from "@/schemas/user/loginUserSchema";
 import { UpdateUserInputType } from "@/schemas/user/updateUserSchema";
 import { UpdatePasswordInputType } from "@/schemas/user/updatePasswordSchema";
+import { WithdrawUserInputType } from "@/schemas/user/withdrawUserSchema";
 
 const registerUser = async (
     data: Omit<RegisterUserInputType, "confirmPassword">,
@@ -26,4 +27,8 @@ const updatePassword = async (data: UpdatePasswordInputType): Promise<void> => {
     await axiosInstance.patch("/user/password", data);
 };
 
-export default { registerUser, login, updateUser, updatePassword };
+const withdrawUser = async (data: WithdrawUserInputType): Promise<void> => {
+    await axiosInstance.patch("/user/withdraw", data);
+};
+
+export default { registerUser, login, updateUser, updatePassword, withdrawUser };

@@ -1,24 +1,21 @@
+import TextComponent from "@/components/common/text/TextComponent";
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
-import { UpdateUserInputType, updateUserSchema } from "@/schemas/user/updateUserSchema";
+import { UpdatePasswordInputType, updatePasswordSchema } from "@/schemas/user/updatePasswordSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { isAxiosError } from "axios";
 import userApi from "@/api/user/userApi";
-import { useAuthStore } from "@/stores/auth/useAuthStore";
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
+import { Alert, KeyboardAvoidingView, Platform, View, ScrollView } from "react-native";
+import { isAxiosError } from "axios";
 import { twMerge } from "tailwind-merge";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
 import Title from "@/components/common/title/Title";
-import TextComponent from "@/components/common/text/TextComponent";
 import FormContainer from "@/components/layouts/common/FormContainer";
 import InputGroup from "@/components/common/input/InputGroup";
 import ErrorMessage from "@/components/common/label/ErrorMessage";
 import Button from "@/components/common/button/Button";
-import { useEffect } from "react";
 
-function MyInfoEditPage() {
+function MyPasswordPage() {
     const router = useRouter();
-    const { user } = useAuthStore();
 
     const {
         control,
@@ -26,64 +23,42 @@ function MyInfoEditPage() {
         setError,
         reset,
         formState: { errors, isSubmitting },
-    } = useForm<UpdateUserInputType>({
-        resolver: zodResolver(updateUserSchema),
+    } = useForm<UpdatePasswordInputType>({
+        resolver: zodResolver(updatePasswordSchema),
         mode: "onTouched",
         defaultValues: {
-            nickname: "",
-            birthdate: "",
+            prevPassword: "",
+            password: "",
+            confirmPassword: "",
         },
     });
 
-    useEffect(() => {
-        if (user) {
-            let formattedBirthdate = "";
-            if (user.birthdate) {
-                formattedBirthdate = user.birthdate.substring(0, 10).replace(/-/g, "");
-            } else {
-                formattedBirthdate = "";
-            }
-            reset({
-                nickname: user.nickname,
-                birthdate: formattedBirthdate,
-            });
-        }
-    }, [user, reset]);
-
-    const onSubmit = async (data: UpdateUserInputType) => {
+    const onSubmit = async (data: UpdatePasswordInputType) => {
         try {
-            const { nickname, birthdate } = data;
-            let formattedBirthdate;
-            if (birthdate && birthdate.length === 8) {
-                const year = birthdate.slice(0, 4);
-                const month = birthdate.slice(4, 6);
-                const day = birthdate.slice(6, 8);
-
-                formattedBirthdate = `${year}-${month}-${day}T00:00:00Z`;
-            } else {
-                formattedBirthdate = undefined;
-            }
-
-            const result = await userApi.updateUser({ nickname, birthdate: formattedBirthdate });
-            useAuthStore.setState({ user: result });
+            await userApi.updatePassword(data);
 
             if (Platform.OS === "web") {
-                alert("회원정보가 성공적으로 수정되었습니다.");
-                router.push("/my");
+                alert("비밀번호 수정이 완료되었습니다.");
+                router.push("/profile");
             } else {
-                Alert.alert("수정 완료", "회원정보가 성공적으로 수정되었습니다.", [
-                    { text: "확인", onPress: () => router.push("/my") },
+                Alert.alert("수정 완료", "비밀번호가 성공적으로 수정되었습니다.", [
+                    { text: "확인", onPress: () => router.push("/profile") },
                 ]);
             }
+            reset({
+                prevPassword: "",
+                password: "",
+                confirmPassword: "",
+            });
         } catch (error) {
             console.log(error);
             if (isAxiosError(error) && error.response) {
                 const errorMessage = error.response.data.message;
-                if (error.response.status === 409) {
-                    if (errorMessage.includes("닉네임")) {
-                        setError("nickname", { message: errorMessage });
+                if (error.response.status === 400) {
+                    if (errorMessage.includes("비밀번호")) {
+                        setError("root", { message: errorMessage });
+                        return;
                     }
-                    return;
                 }
                 setError("root", { message: errorMessage });
             } else {
@@ -99,49 +74,68 @@ function MyInfoEditPage() {
             <ScrollView>
                 <ContentContainer className={"bg-transparent p-0"}>
                     <Title
-                        title={"회원정보 수정"}
+                        title={"비밀번호 수정"}
                         showBackButton={true}
-                        onBackPress={() => router.push("/my")}
+                        onBackPress={() => router.back()}
                     />
                     <TextComponent
                         className={twMerge("font-medium", "text-xl", "text-center", "mt-9")}>
-                        나의 정보를 변경합니다.
+                        나의 비밀번호를 변경합니다.
                     </TextComponent>
                     <FormContainer>
                         <Controller
                             control={control}
-                            name={"nickname"}
+                            name={"prevPassword"}
                             render={({ field: { onChange, onBlur, value } }) => {
                                 return (
                                     <InputGroup
                                         size={"small"}
-                                        id={"nickname"}
-                                        label={"닉네임"}
-                                        placeholder={"닉네임을 입력해주세요."}
+                                        id={"prevPassword"}
+                                        secureTextEntry={true}
+                                        label={"현재 비밀번호"}
+                                        placeholder={"현재 비밀번호를 입력하세요."}
                                         onBlur={onBlur}
                                         onChangeText={onChange}
                                         value={value}
-                                        errorMessage={errors.nickname?.message}
+                                        errorMessage={errors.prevPassword?.message}
                                     />
                                 );
                             }}
                         />
                         <Controller
                             control={control}
-                            name={"birthdate"}
+                            name={"password"}
                             render={({ field: { onChange, onBlur, value } }) => {
                                 return (
                                     <InputGroup
                                         size={"small"}
-                                        id={"birthdate"}
-                                        label={"생년월일"}
-                                        placeholder={"YYYYMMDD"}
-                                        keyboardType={"number-pad"}
-                                        maxLength={8}
+                                        id={"password"}
+                                        secureTextEntry={true}
+                                        label={"변경할 비밀번호"}
+                                        placeholder={"변경할 비밀번호를 입력해주세요."}
                                         onBlur={onBlur}
                                         onChangeText={onChange}
                                         value={value}
-                                        errorMessage={errors.birthdate?.message}
+                                        errorMessage={errors.password?.message}
+                                    />
+                                );
+                            }}
+                        />
+                        <Controller
+                            control={control}
+                            name={"confirmPassword"}
+                            render={({ field: { onChange, onBlur, value } }) => {
+                                return (
+                                    <InputGroup
+                                        size={"small"}
+                                        id={"confirmPassword"}
+                                        secureTextEntry={true}
+                                        label={"변경할 비밀번호 확인"}
+                                        placeholder={"변경할 비밀번호를 다시 입력해주세요."}
+                                        onBlur={onBlur}
+                                        onChangeText={onChange}
+                                        value={value}
+                                        errorMessage={errors.confirmPassword?.message}
                                     />
                                 );
                             }}
@@ -154,17 +148,14 @@ function MyInfoEditPage() {
                         )}
 
                         <View className={"md:flex-row mt-9 gap-3"}>
+                            <Button variant={"outlined"} wrap={true} onPress={() => router.back()}>
+                                취소
+                            </Button>
                             <Button
                                 wrap={true}
                                 onPress={handleSubmit(onSubmit)}
                                 disabled={isSubmitting}>
-                                수정하기
-                            </Button>
-                            <Button
-                                variant={"outlined"}
-                                wrap={true}
-                                onPress={() => router.push("/my")}>
-                                수정취소
+                                비밀번호 변경
                             </Button>
                         </View>
                     </FormContainer>
@@ -174,4 +165,4 @@ function MyInfoEditPage() {
     );
 }
 
-export default MyInfoEditPage;
+export default MyPasswordPage;
