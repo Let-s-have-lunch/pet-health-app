@@ -1,4 +1,3 @@
-import TextComponent from "@/components/common/text/TextComponent";
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,7 +12,7 @@ import InputGroup from "@/components/common/input/InputGroup";
 import TextareaGroup from "@/components/common/textarea/TextareaGroup";
 import Button from "@/components/common/button/Button";
 
-function InquiryCreatePage() {
+function MyInquiryCreatePage() {
     const router = useRouter();
 
     const {
@@ -115,4 +114,4 @@ function InquiryCreatePage() {
     );
 }
 
-export default InquiryCreatePage;
+export default MyInquiryCreatePage;
