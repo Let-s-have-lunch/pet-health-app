@@ -13,13 +13,13 @@ const registerPet = async ( data: RegisterPetInputType ): Promise<Pet> => {
     return response.data.data;
 };
 
-const updatePet = async ( petId: number, data: PetUpdateInputType ): Promise<Pet> => {
-    const response = await axiosInstance.patch(`/pet/update/${petId}`, data);
+const updatePet = async ( id : number, data: PetUpdateInputType ): Promise<Pet> => {
+    const response = await axiosInstance.patch(`/pet/update/${id}`, data);
     return response.data.data;
 };
 
-const deletePet = async ( petId: number ) => {
-    await axiosInstance.delete(`/pet/delete/${petId}`);
+const deletePet = async ( id : number ): Promise<void> => {
+    await axiosInstance.delete(`/pet/delete/${id}`);
 }
 
 

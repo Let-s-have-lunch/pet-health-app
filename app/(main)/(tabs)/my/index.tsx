@@ -15,14 +15,14 @@ function MyInfoPage() {
                 variant={"text"}
                 showChevron={true}
                 size={"large"}
-                onPress={() => router.push("/my/notices")}>
+                onPress={() => router.push("/notices")}>
                 공지사항
             </Button>
             <Button
                 variant={"text"}
                 showChevron={true}
                 size={"large"}
-                onPress={() => router.push("/my/inquiry")}>
+                onPress={() => router.push("/inquiry")}>
                 1:1 문의
             </Button>
             <Button variant={"text"} showChevron={true} size={"large"}>

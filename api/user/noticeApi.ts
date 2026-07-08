@@ -2,7 +2,7 @@ import axiosInstance from "@/api/axiosInstance";
 import { PaginationResponseType } from "@/types/common";
 import { Notice } from "@/types/notice";
 
-const getNoticeList = async (page: number = 1, size: number = 20): Promise<PaginationResponseType<Notice>> => {
+const getNoticeList = async (page: number = 1, size: number = 15): Promise<PaginationResponseType<Notice>> => {
     const response = await axiosInstance.get("/notice/list", {
         params: {
             page,

@@ -5,7 +5,7 @@ import { AdminNoticeInputType, adminNoticeSchema } from "@/schemas/notice/notice
 import { useLocalSearchParams, useRouter } from "expo-router";
 import noticeApi from "@/api/user/noticeApi";
 import { Alert, Platform, ScrollView, View } from "react-native";
-import adminNoticeApi from "@/api/notice/AdminNoticeApi";
+import adminNoticeApi from "@/api/admin/adminNoticeApi";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import { twMerge } from "tailwind-merge";
 import Title from "@/components/common/title/Title";

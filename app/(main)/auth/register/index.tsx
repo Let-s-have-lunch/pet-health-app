@@ -88,13 +88,9 @@ function Register() {
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             className={twMerge("flex-1", "bg-background-paper")}>
+            <Title title={"회원가입"} showBackButton={true} onBackPress={() => router.push("/")} />
             <ScrollView>
                 <ContentContainer className={"bg-transparent p-0"}>
-                    <Title
-                        title={"회원가입"}
-                        showBackButton={true}
-                        onBackPress={() => router.push("/")}
-                    />
                     <TextComponent
                         className={twMerge("font-medium", "text-xl", "text-center", "mt-9")}>
                         멍냥 나라에 오신것을 환영합니다.
