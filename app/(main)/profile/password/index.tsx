@@ -71,13 +71,13 @@ function MyPasswordPage() {
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             className={twMerge("flex-1", "bg-background-paper")}>
+            <Title
+                title={"비밀번호 수정"}
+                showBackButton={true}
+                onBackPress={() => router.back()}
+            />
             <ScrollView>
                 <ContentContainer className={"bg-transparent p-0"}>
-                    <Title
-                        title={"비밀번호 수정"}
-                        showBackButton={true}
-                        onBackPress={() => router.back()}
-                    />
                     <TextComponent
                         className={twMerge("font-medium", "text-xl", "text-center", "mt-9")}>
                         나의 비밀번호를 변경합니다.

@@ -1,12 +1,12 @@
 import { PaginationResponseType } from "@/types/common";
-import { Inquiry } from "@/types/inquiry";
+import { Inquiry, InquiryUserItemType } from "@/types/inquiry";
 import axiosInstance from "@/api/axiosInstance";
 import { InquiryInputType } from "@/schemas/inquiry/inquirySchema";
 
 const fetchMyInquiryList = async (
     page: number,
     size: number,
-): Promise<PaginationResponseType<Inquiry>> => {
+): Promise<PaginationResponseType<InquiryUserItemType>> => {
     const response = await axiosInstance.get("/inquiry/list", {
         params: {
             page,
@@ -16,7 +16,7 @@ const fetchMyInquiryList = async (
     return response.data.data;
 };
 
-const getMyInquiryById = async (inquiryId: number): Promise<Inquiry> => {
+const getMyInquiryById = async (inquiryId: number): Promise<InquiryUserItemType> => {
     const response = await axiosInstance.get(`/inquiry/${inquiryId}`);
     return response.data.data;
 };

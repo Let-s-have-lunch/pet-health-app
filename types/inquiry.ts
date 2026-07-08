@@ -11,3 +11,9 @@ export interface Inquiry {
     userId: number;
     user: Pick<User, "id" | "nickname" | "email">;
 }
+
+export type InquiryUser = Pick<User, "id" | "nickname" | "email">
+
+export interface InquiryUserItemType extends Inquiry {
+    user: InquiryUser;
+}

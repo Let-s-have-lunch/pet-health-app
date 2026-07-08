@@ -63,19 +63,15 @@ function MyWithdrawPage() {
                 setError("root", { message: "알 수 없는 오류가 발생했습니다." });
             }
         }
-    }
+    };
 
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             className={twMerge("flex-1", "bg-background-paper")}>
+            <Title title={"회원탈퇴"} showBackButton={true} onBackPress={() => router.back()} />
             <ScrollView>
                 <ContentContainer className={"bg-transparent p-0"}>
-                    <Title
-                        title={"회원탈퇴"}
-                        showBackButton={true}
-                        onBackPress={() => router.back()}
-                    />
                     <TextComponent
                         className={twMerge("font-bold", "text-xl", "text-center", "mt-9")}>
                         정말 탈퇴하시겠습니까?

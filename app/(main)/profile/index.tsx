@@ -31,84 +31,91 @@ function MyProfilePage() {
     }, []);
 
     return (
-        <ContentContainer className={"p-0"}>
+        <View className={"flex-1 bg-background-default"}>
             <Title
                 title={"나의 정보"}
                 showBackButton={true}
                 onBackPress={() => router.push("/my")}
+                className={"bg-background-paper"}
             />
-            <FormContainer className={"bg-background-default"}>
-                <Card className="flex flex-col items-center py-8 mb-6">
-                    <View className="w-20 h-20 bg-success-main rounded-full mb-3 flex items-center justify-center">
-                        <TextComponent className="text-3xl font-bold text-gray-500">
-                            {user?.nickname ? user.nickname.charAt(0) : "U"}
+            <ContentContainer className={"p-0"}>
+                <FormContainer className={"bg-background-default"}>
+                    <Card className="flex flex-col items-center py-8 mb-6">
+                        <View className="w-20 h-20 bg-success-main rounded-full mb-3 flex items-center justify-center">
+                            <TextComponent className="text-3xl font-bold text-gray-500">
+                                {user?.nickname ? user.nickname.charAt(0) : "U"}
+                            </TextComponent>
+                        </View>
+
+                        <View className="flex-row items-center justify-center mb-1">
+                            <TextComponent className="text-xl font-bold mr-2">
+                                {user?.nickname}
+                            </TextComponent>
+
+                            <Pressable onPress={() => router.push("/profile/edit")}>
+                                <TextComponent className="text-lg">✏️</TextComponent>
+                            </Pressable>
+                        </View>
+
+                        <TextComponent className="text-sm text-gray-500">
+                            {user?.email}
                         </TextComponent>
+                    </Card>
+
+                    <TextComponent className="font-bold text-xl mb-3">
+                        등록된 반려동물
+                    </TextComponent>
+
+                    <Card className={"overflow-hidden"}>
+                        {pets.length === 0 ? (
+                            <TextComponent className="text-center text-gray-500 py-4">
+                                등록된 반려동물이 없습니다.
+                            </TextComponent>
+                        ) : (
+                            pets.map((pet, index) => (
+                                <View
+                                    key={pet.id}
+                                    className={twMerge(
+                                        "flex-row items-center",
+                                        index !== pets.length - 1 ? "mb-4" : "",
+                                    )}>
+                                    {pet.profileImage ? (
+                                        <Image
+                                            source={{ uri: pet.profileImage }}
+                                            className="w-14 h-14 rounded-full mr-4 bg-gray-200"
+                                            resizeMode="cover"
+                                        />
+                                    ) : (
+                                        <View className="w-14 h-14 rounded-full mr-4 bg-success-main" />
+                                    )}
+
+                                    <TextComponent className="text-base font-medium">
+                                        {pet.name}
+                                    </TextComponent>
+                                </View>
+                            ))
+                        )}
+                    </Card>
+
+                    <View className={twMerge("md:flex-row mt-9 gap-3")}>
+                        <Button
+                            wrap={true}
+                            onPress={() => router.push("/profile/password")}
+                            variant={"text"}
+                            size={"large"}>
+                            비밀번호 수정
+                        </Button>
+                        <Button
+                            wrap={true}
+                            onPress={() => router.push("/profile/withdraw")}
+                            variant={"text"}
+                            size={"large"}>
+                            회원탈퇴
+                        </Button>
                     </View>
-
-                    <View className="flex-row items-center justify-center mb-1">
-                        <TextComponent className="text-xl font-bold mr-2">
-                            {user?.nickname}
-                        </TextComponent>
-
-                        <Pressable onPress={() => router.push("/profile/edit")}>
-                            <TextComponent className="text-lg">✏️</TextComponent>
-                        </Pressable>
-                    </View>
-
-                    <TextComponent className="text-sm text-gray-500">{user?.email}</TextComponent>
-                </Card>
-
-                <TextComponent className="font-bold text-xl mb-3">등록된 반려동물</TextComponent>
-
-                <Card className={"overflow-hidden"}>
-                    {pets.length === 0 ? (
-                        <TextComponent className="text-center text-gray-500 py-4">
-                            등록된 반려동물이 없습니다.
-                        </TextComponent>
-                    ) : (
-                        pets.map((pet, index) => (
-                            <View
-                                key={pet.id}
-                                className={twMerge(
-                                    "flex-row items-center",
-                                    index !== pets.length - 1 ? "mb-4" : "",
-                                )}>
-                                {pet.profileImage ? (
-                                    <Image
-                                        source={{ uri: pet.profileImage }}
-                                        className="w-14 h-14 rounded-full mr-4 bg-gray-200"
-                                        resizeMode="cover"
-                                    />
-                                ) : (
-                                    <View className="w-14 h-14 rounded-full mr-4 bg-success-main" />
-                                )}
-
-                                <TextComponent className="text-base font-medium">
-                                    {pet.name}
-                                </TextComponent>
-                            </View>
-                        ))
-                    )}
-                </Card>
-
-                <View className={twMerge("md:flex-row mt-9 gap-3")}>
-                    <Button
-                        wrap={true}
-                        onPress={() => router.push("/profile/password")}
-                        variant={"text"}
-                        size={"large"}>
-                        비밀번호 수정
-                    </Button>
-                    <Button
-                        wrap={true}
-                        onPress={() => router.push("/profile/withdraw")}
-                        variant={"text"}
-                        size={"large"}>
-                        회원탈퇴
-                    </Button>
-                </View>
-            </FormContainer>
-        </ContentContainer>
+                </FormContainer>
+            </ContentContainer>
+        </View>
     );
 }
 
