@@ -50,7 +50,7 @@ function AdminAsideDesktop() {
                                         ["rounded-xl", "transition-all"],
                                         isActive
                                             ? "bg-primary-main"
-                                            : "hover:bg-background-default",
+                                            : "hover:bg-primary-light",
                                     )}>
                                     <Feather
                                         name={item.icon as any}
@@ -81,7 +81,7 @@ function AdminAsideDesktop() {
             <View
                 className={twMerge(
                     ["p-4", "m-4"],
-                    ["border", "border-divider", "rounded-2xl", "bg-background-default"],
+                    ["border", "border-divider", "rounded-2xl", "bg-background-paper"],
                 )}>
                 <View className={twMerge("flex-row", "items-center", "gap-3", "mb-3")}>
                     <View
@@ -98,7 +98,7 @@ function AdminAsideDesktop() {
                         </TextComponent>
                     </View>
                 </View>
-                <Button variant={"outlined"} color={"error"} fullWidth={true} onPress={logout}>
+                <Button variant={"outlined"} color={"error"} fullWidth={true} onPress={logout} className={"border"}>
                     로그아웃
                 </Button>
             </View>

@@ -80,7 +80,7 @@ function MyProfilePage() {
                                         resizeMode="cover"
                                     />
                                 ) : (
-                                    <View className="w-14 h-14 rounded-full mr-4 bg-secondary-main" />
+                                    <View className="w-14 h-14 rounded-full mr-4 bg-success-main" />
                                 )}
 
                                 <TextComponent className="text-base font-medium">

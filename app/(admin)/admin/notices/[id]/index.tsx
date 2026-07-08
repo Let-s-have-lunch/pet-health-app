@@ -119,7 +119,6 @@ function AdminNoticeDetailPage() {
                         <Button
                             size={"small"}
                             variant={"outlined"}
-                            color={"secondary"}
                             onPress={() => router.push("/admin/notices")}>
                             목록으로
                         </Button>
@@ -128,7 +127,6 @@ function AdminNoticeDetailPage() {
                             <Button
                                 size={"small"}
                                 variant={"outlined"}
-                                color={"error"}
                                 onPress={handleDeleteNotice}>
                                 삭제
                             </Button>
@@ -136,7 +134,8 @@ function AdminNoticeDetailPage() {
                                 size={"small"}
                                 variant={"contained"}
                                 color={"warning"}
-                                onPress={() => router.push(`/admin/notices/${notice.id}/update`)}>
+                                onPress={() => router.push(`/admin/notices/${notice.id}/update`)}
+                                className={"bg-primary-main border-primary-main"}>
                                 수정
                             </Button>
                         </View>
