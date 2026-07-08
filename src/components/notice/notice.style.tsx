@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components"; // 🐾 css 추가됨!
+import styled, { css } from "styled-components";
 
 export const NoticeContainer = styled.div`
     width: 100%;
@@ -16,52 +16,35 @@ export const Title = styled.h1`
     padding-bottom: 10px;
 `;
 
-export const Select = styled.select`
+// 💡 공통 입력창 스타일을 위한 믹스인 (중복 코드 제거)
+const inputStyle = css<{ $error?: boolean }>`
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin: 10px 0;
-    border: 1px solid #ccc;
+    border: 1px solid ${({ $error }) => ($error ? "#ff4d4f" : "#ccc")}; // 에러 시 빨간색 테두리
     border-radius: 4px;
     box-sizing: border-box;
     font-family: inherit;
-    color: #333;
+    transition: border-color 0.2s;
 
     &:focus {
         outline: none;
-        border-color: #555;
+        border-color: ${({ $error }) => ($error ? "#ff4d4f" : "#555")};
     }
 `;
 
-export const Input = styled.input`
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-family: inherit;
-
-    &:focus {
-        outline: none;
-        border-color: #555;
-    }
+export const Select = styled.select<{ $error?: boolean }>`
+    ${inputStyle}
 `;
 
-export const TextArea = styled.textarea`
-    width: 100%;
+export const Input = styled.input<{ $error?: boolean }>`
+    ${inputStyle}
+`;
+
+export const TextArea = styled.textarea<{ $error?: boolean }>`
+    ${inputStyle}
     height: 300px;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
     resize: none;
-    box-sizing: border-box;
-    font-family: inherit;
-
-    &:focus {
-        outline: none;
-        border-color: #555;
-    }
 `;
 
 export const ButtonGroup = styled.div`
@@ -69,35 +52,4 @@ export const ButtonGroup = styled.div`
     justify-content: flex-end;
     gap: 10px;
     margin-top: 20px;
-`;
-
-export const Button = styled.button<{ $variant?: "outline" | "solid" }>`
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-
-    /* 1. 기본 스타일 (일반 검정색 버튼) - props를 안 쓰므로 에러 날 일이 없음 */
-    background-color: #222;
-    color: white;
-    border: 1px solid #222;
-
-    &:hover {
-        background-color: #444;
-    }
-
-    /* 2. $variant가 "outline"일 때만 통째로 스타일 덮어쓰기 (props 딱 한 번만 평가) */
-    ${(props: { $variant: string }) =>
-        props.$variant === "outline" &&
-        css`
-            background-color: white;
-            color: #333;
-            border: 1px solid #ccc;
-
-            &:hover {
-                background-color: #f9f9f9;
-            }
-        `}
 `;

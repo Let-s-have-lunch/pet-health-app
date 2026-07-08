@@ -1,122 +1,90 @@
-import { Link, useSearchParams } from "react-router";
-import { useCallback, useEffect, useState } from "react";
-import noticeApi from "../../api/user/noticeApi.ts";
-import {
-    BoardTable,
-    BoardTd,
-    BoardTh,
-    BoardWrapper,
-    LoadingText,
-    PostContainer,
-    PostPageHeader,
-    PostTitle,
-} from "../../components/post/post.style.tsx";
-import Pagination from "../../components/common/Pagination/Pagination.tsx";
-import Button from "../../components/common/button/Button.tsx"; // 공통 버튼 사용
-import type { Notice } from "../../types/notice.type.ts";
+import { useState, useEffect, useCallback } from "react";
+import { View, Text, TextInput, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
+import { useLocalSearchParams, useRouter, Link } from "expo-router"; // 💡 핵심: expo-router 사용
+import { noticeApi } from "../../api/user/noticeApi";
+import { PostContainer, PostTitle } from "../../components/post/post.style";
+import Button from "../../components/common/button/Button"; // 네이티브용 버튼으로 가정
 
 function NoticeListPage() {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const page = Number(searchParams.get("page")) || 1;
-    const size = 10; // 페이지당 글 개수 고정
+    const router = useRouter();
+    const params = useLocalSearchParams(); // 💡 URL 쿼리 파라미터 가져오기
 
-    const [list, setList] = useState<Notice[]>([]);
+    // params.page가 undefined일 수 있으므로 처리
+    const page = Number(params.page) || 1;
+    const keyword = (params.keyword as string) || "";
+
+    const [list, setList] = useState<any[]>([]);
     const [total, setTotal] = useState(0);
     const [isLoading, setLoading] = useState(true);
-    const [keyword, setKeyword] = useState(""); // 1. 검색 기능용 상태
 
-    const totalPage = Math.ceil(total / size);
+    const size = 10;
 
-    // 2. 삭제 기능 (관리자 페이지라면 필수)
-    const handleDelete = async (id: number) => {
-        if (!window.confirm("정말 삭제하시겠습니까?")) return;
-        try {
-            await noticeApi.deleteNotice(id);
-            alert("삭제되었습니다.");
-            await loadList(page, size); // 삭제 후 목록 새로고침
-        } catch (error) {
-            alert("삭제 실패");
-        }
-    };
-
-    // 3. 목록 불러오기 로직 분리 (재사용성)
-    const loadList = useCallback(async (currentPage: number, currentSize: number) => {
+    const loadList = useCallback(async (currentPage: number) => {
         setLoading(true);
         try {
-            const data = await noticeApi.getNoticeList(currentPage, currentSize);
-            // 중요: 고정글(isPinned)이 먼저 오도록 정렬
+            const data = await noticeApi.getNoticeList(currentPage, size);
+            // 정렬 로직 (네이티브에서도 동일)
             const sortedList = [...data.list].sort(
                 (a, b) => Number(b.isPinned) - Number(a.isPinned),
             );
             setList(sortedList);
             setTotal(data.total);
         } catch (error) {
-            console.error(error);
+            console.error("목록 로딩 실패:", error);
         } finally {
             setLoading(false);
         }
-    }, [page, size]);
+    }, []);
 
     useEffect(() => {
-        loadList(page, size)
-    }, [loadList,page, size]);
+        loadList(page);
+    }, [loadList, page]);
+
+    // 검색 시 URL 파라미터 변경
+    const handleSearch = (text: string) => {
+        router.push({
+            pathname: "/notices",
+            params: { page: "1", keyword: text },
+        });
+    };
+
+    const handleDelete = async (id: number) => {
+        // 네이티브에선 window.confirm 대신 Alert 사용
+        try {
+            await noticeApi.deleteNotice(id);
+            loadList(page);
+        } catch (error) {
+            console.error("삭제 실패");
+        }
+    };
 
     return (
         <PostContainer>
-            <PostPageHeader>
-                <PostTitle>공지사항 관리 ({total}건)</PostTitle>
-                {/* 4. 상단 검색바 예시 영역 */}
-                <input placeholder="제목 검색..." onChange={e => setKeyword(e.target.value)} />
-            </PostPageHeader>
+            <PostTitle>공지사항 ({total}건)</PostTitle>
 
-            <BoardWrapper>
-                {isLoading ? (
-                    <LoadingText>불러오는 중...</LoadingText>
-                ) : (
-                    <BoardTable>
-                        <thead>
-                            <tr>
-                                <BoardTh $width={"10%"}>번호</BoardTh>
-                                <BoardTh $width={"50%"}>제목</BoardTh>
-                                <BoardTh $width={"20%"}>작성일</BoardTh>
-                                <BoardTh $width={"20%"}>관리</BoardTh>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {list.map(item => (
-                                <tr
-                                    key={item.id}
-                                    style={{ background: item.isPinned ? "#fdf6f2" : "" }}>
-                                    <BoardTd>{item.id}</BoardTd>
-                                    <BoardTd>
-                                        <Link to={`/notice/${item.id}`}>{item.title}</Link>
-                                    </BoardTd>
-                                    <BoardTd>
-                                        {new Date(item.createdAt).toLocaleDateString()}
-                                    </BoardTd>
-                                    <BoardTd>
-                                        {/* 5. 관리자 전용 삭제 버튼 */}
-                                        <Button
-                                            size="small"
-                                            color="danger"
-                                            onClick={() => handleDelete(item.id)}>
-                                            삭제
-                                        </Button>
-                                    </BoardTd>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </BoardTable>
-                )}
-            </BoardWrapper>
-
-            <Pagination
-                currentPage={page}
-                totalPage={totalPage}
-                onPageChange={(page: { toString: () => any }) =>
-                    setSearchParams({ page: page.toString() })
-                }
+            <TextInput
+                placeholder="제목 검색..."
+                onChangeText={handleSearch}
+                defaultValue={keyword}
             />
+
+            {isLoading ? (
+                <ActivityIndicator size="large" />
+            ) : (
+                <FlatList
+                    data={list}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <View style={{ flexDirection: "row", padding: 10, borderBottomWidth: 1 }}>
+                            <Text style={{ flex: 1 }}>{item.id}</Text>
+                            <Link href={`/notice/${item.id}`} style={{ flex: 3 }}>
+                                <Text>{item.title}</Text>
+                            </Link>
+                            <Button onPress={() => handleDelete(item.id)}>삭제</Button>
+                        </View>
+                    )}
+                />
+            )}
         </PostContainer>
     );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // 1. 기존 페이지들
@@ -7,32 +7,40 @@ import CommunityList from "./pages/CommunityList";
 import CommunityWrite from "./pages/CommunityWrite";
 import InquiryForm from "./pages/InquiryForm";
 
-// 2. 우리가 만든 공지사항 페이지들
-import Layout from "./layouts/Layout"; // 공통 레이아웃
-import NoticeListPage from "./pages/NoticeListPage";
-import NoticeDetailPage from "./pages/NoticeDetailPage";
-import NoticeWritePage from "./pages/NoticeWritePage";
+// 2. 공통 레이아웃
+import Layout from "./layouts/Layout";
+
+// 3. 공지사항 페이지들 (Lazy Loading을 위해 lazy 함수 사용)
+const NoticeListPage = lazy(() => import("./pages/NoticeListPage"));
+const NoticeDetailPage = lazy(() => import("./pages/NoticeDetailPage"));
+const NoticeCreatePage = lazy(() => import("./pages/NoticeCreatePage"));
+const NoticeEditPage = lazy(() => import("./pages/NoticeEditPage")); // 💡 추가됨!
 
 export default function App() {
     return (
         <Router>
-            <Routes>
-                {/* 로그인 화면은 레이아웃 없이 단독으로 보여줄 때 */}
-                <Route path="/login" element={<Login />} />
+            {/* Suspense는 페이지 로딩 중에 보여줄 화면을 설정합니다. */}
+            <Suspense fallback={<div>Loading...</div>}>
+                <Routes>
+                    {/* 로그인 화면은 레이아웃 없이 단독으로 */}
+                    <Route path="/login" element={<Login />} />
 
-                {/* 나머지 페이지들은 Layout 안에 중첩(Nested Route)시켜서 헤더/푸터를 공유 */}
-                <Route element={<Layout />}>
-                    {/* 기존 페이지들 */}
-                    <Route path="/community" element={<CommunityList />} />
-                    <Route path="/community/write" element={<CommunityWrite />} />
-                    <Route path="/inquiry" element={<InquiryForm />} />
+                    {/* 레이아웃 공유 페이지 */}
+                    <Route element={<Layout />}>
+                        {/* 기존 페이지들 */}
+                        <Route path="/community" element={<CommunityList />} />
+                        <Route path="/community/write" element={<CommunityWrite />} />
+                        <Route path="/inquiry" element={<InquiryForm />} />
 
-                    {/* 우리 공지사항 파트 */}
-                    <Route path="/notices" element={<NoticeListPage />} />
-                    <Route path="/notice/:id" element={<NoticeDetailPage />} />
-                    <Route path="/notice/write" element={<NoticeWritePage />} />
-                </Route>
-            </Routes>
+                        {/* 공지사항 라우팅 */}
+                        <Route path="/notices" element={<NoticeListPage />} />
+                        <Route path="/notice/:id" element={<NoticeDetailPage />} />
+                        <Route path="/notice/create" element={<NoticeCreatePage />} />
+                        {/* 💡 수정 페이지 경로 추가 */}
+                        <Route path="/notice/edit/:id" element={<NoticeEditPage />} />
+                    </Route>
+                </Routes>
+            </Suspense>
         </Router>
     );
 }

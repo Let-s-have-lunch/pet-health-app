@@ -1,8 +1,36 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-// 1. 스타일 정의 (버튼의 모양을 결정합니다)
-const StyledButton = styled.button<{ $color?: "primary" | "secondary" }>`
+// 1. 스타일 변수 객체로 관리 (유지보수가 쉽습니다)
+const variants = {
+    primary: css`
+        background-color: #ffde59;
+        color: #333;
+        &:hover {
+            background-color: #ffc837;
+        }
+    `,
+    secondary: css`
+        background-color: #f0f0f0;
+        color: #666;
+        &:hover {
+            background-color: #e0e0e0;
+        }
+    `,
+    danger: css`
+        background-color: #ff4d4f;
+        color: white;
+        &:hover {
+            background-color: #d9363e;
+        }
+    `,
+};
+
+// 2. 스타일 정의
+const StyledButton = styled.button<{
+    $variant: keyof typeof variants;
+    $fullWidth?: boolean;
+}>`
     padding: 10px 20px;
     border-radius: 8px;
     border: none;
@@ -10,14 +38,11 @@ const StyledButton = styled.button<{ $color?: "primary" | "secondary" }>`
     cursor: pointer;
     transition: all 0.2s;
 
-    /* 색상 테마 설정 */
-    background-color: ${({ $color }: { $color?: string }) => ($color === "secondary" ? "#f0f0f0" : "#ffde59")};
-    color: ${({ $color }: { $color?: string }) => ($color === "secondary" ? "#666" : "#333")};
+    /* fullWidth 옵션 처리 */
+    width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "auto")};
 
-    &:hover {
-        background-color: ${({ $color }: { $color?: string }) => ($color === "secondary" ? "#e0e0e0" : "#ffc837")};
-        transform: translateY(-1px);
-    }
+    /* variant(색상 테마) 적용 */
+    ${({ $variant }) => variants[$variant]}
 
     &:disabled {
         background-color: #ccc;
@@ -26,16 +51,22 @@ const StyledButton = styled.button<{ $color?: "primary" | "secondary" }>`
     }
 `;
 
-// 2. 타입 정의 (Button 컴포넌트가 받을 수 있는 데이터 형태)
+// 3. 타입 정의
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    color?: "primary" | "secondary";
+    variant?: "primary" | "secondary" | "danger";
+    fullWidth?: boolean;
     children: React.ReactNode;
 }
 
-// 3. 컴포넌트 구현
-export default function Button({ color = "primary", children, ...props }: ButtonProps) {
+// 4. 컴포넌트 구현
+export default function Button({
+    variant = "primary",
+    fullWidth = false,
+    children,
+    ...props
+}: ButtonProps) {
     return (
-        <StyledButton $color={color} {...props}>
+        <StyledButton $variant={variant} $fullWidth={fullWidth} {...props}>
             {children}
         </StyledButton>
     );
