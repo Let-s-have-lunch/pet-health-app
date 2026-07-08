@@ -1,43 +1,56 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
+import styled from "styled-components";
 
-// 간단하게 스타일을 입힌 레이아웃 컴포넌트입니다.
 export default function Layout() {
     return (
-        <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-            {/* 상단 헤더 */}
-            <header
-                style={{
-                    padding: "20px",
-                    borderBottom: "1px solid #eee",
-                    textAlign: "center",
-                    backgroundColor: "#fffef0",
-                }}>
-                <h1>🐾 펫빌리지 공지사항</h1>
-            </header>
+        <LayoutContainer>
+            <Header>
+                <Link to="/">🐾 펫빌리지 공지사항</Link>
+            </Header>
 
-            {/* 메인 콘텐츠 영역: Outlet이 핵심! */}
-            <main
-                style={{
-                    flex: 1,
-                    padding: "20px",
-                    maxWidth: "800px",
-                    margin: "0 auto",
-                    width: "100%",
-                }}>
+            <Main>
                 <Outlet />
-            </main>
+            </Main>
 
-            {/* 하단 푸터 */}
-            <footer
-                style={{
-                    padding: "20px",
-                    textAlign: "center",
-                    borderTop: "1px solid #eee",
-                    fontSize: "0.8rem",
-                    color: "#888",
-                }}>
-                © 2026 PetVillage. All rights reserved.
-            </footer>
-        </div>
+            <Footer>© 2026 PetVillage. All rights reserved.</Footer>
+        </LayoutContainer>
     );
 }
+
+// 레이아웃 전용 스타일 (파일을 나누지 않고 여기서 관리)
+const LayoutContainer = styled.div`
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+`;
+
+const Header = styled.header`
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    background-color: #fffef0;
+
+    a {
+        text-decoration: none;
+        color: inherit;
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+`;
+
+const Main = styled.main`
+    flex: 1;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+`;
+
+const Footer = styled.footer`
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #eee;
+    font-size: 0.8rem;
+    color: #888;
+`;

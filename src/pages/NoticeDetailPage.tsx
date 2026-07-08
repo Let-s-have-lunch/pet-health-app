@@ -8,7 +8,7 @@ import {
     DetailWrapper,
     LoadingText,
     PostContainer,
-} from "../../../components/post/post.style";
+} from "../../../components/post/post.style.tsx";
 import { AdminButtonGroup } from "../../../components/admin/admin.style";
 import Button from "../../../components/common/button/Button"; // 우리가 만든 재사용 버튼
 

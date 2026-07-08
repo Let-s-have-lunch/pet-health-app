@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { noticeFormSchema, type NoticeFormData } from "@/schemas/noticeSchema"; // 경로 확인!
 import { noticeApi } from "@/api/user/noticeApi"; // 💡 destructuring import
 import { PostContainer, PostTitle } from "@/components/post/post.style";
-import { Input, TextArea, Select } from "@/styles/notice.style"; // 우리가 만든 스타일들
+import { Input, TextArea, Select } from "@/src/components/notice/notice.style"; // 우리가 만든 스타일들
 import { AdminButtonGroup } from "@/components/admin/admin.style"; // 스타일 통일
 import Button from "@/components/common/button/Button"; // 공용 버튼
 
@@ -19,7 +19,7 @@ function NoticeEditPage() {
         reset,
         formState: { errors, isSubmitting },
     } = useForm<NoticeFormData>({
-        resolver: zodResolver(noticeFormSchema),
+        resolver: zodResolver(noticeFormSchema as any),
     });
 
     useEffect(() => {

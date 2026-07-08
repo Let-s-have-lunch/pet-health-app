@@ -43,7 +43,7 @@ function NoticeListPage() {
     // 검색 시 URL 파라미터 변경
     const handleSearch = (text: string) => {
         router.push({
-            pathname: "/notices",
+            pathname: "/notices" as any,
             params: { page: "1", keyword: text },
         });
     };
@@ -77,7 +77,7 @@ function NoticeListPage() {
                     renderItem={({ item }) => (
                         <View style={{ flexDirection: "row", padding: 10, borderBottomWidth: 1 }}>
                             <Text style={{ flex: 1 }}>{item.id}</Text>
-                            <Link href={`/notice/${item.id}`} style={{ flex: 3 }}>
+                            <Link href={`/notice/${item.id}`as any} style={{ flex: 3 }}>
                                 <Text>{item.title}</Text>
                             </Link>
                             <Button onPress={() => handleDelete(item.id)}>삭제</Button>

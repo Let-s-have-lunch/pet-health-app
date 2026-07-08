@@ -39,10 +39,10 @@ const StyledButton = styled.button<{
     transition: all 0.2s;
 
     /* fullWidth 옵션 처리 */
-    width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "auto")};
+    width: ${(props) => (props.$fullWidth ? "100%" : "auto")};
 
     /* variant(색상 테마) 적용 */
-    ${({ $variant }) => variants[$variant]}
+    ${(props) => variants[props.$variant]}
 
     &:disabled {
         background-color: #ccc;
@@ -70,4 +70,4 @@ export default function Button({
             {children}
         </StyledButton>
     );
-}
+};
