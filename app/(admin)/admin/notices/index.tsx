@@ -54,16 +54,16 @@ function AdminNoticeListPage() {
                 <Button
                     size={"small"}
                     variant={"contained"}
-                    onPress={() => router.push("/admin/notices/create")}>
+                    onPress={() => router.push("/admin/notices/create")} className={"bg-primary-main"}>
                     + 공지사항 등록
                 </Button>
             </Title>
 
-            <Card className={"overflow-hidden"}>
+            <Card className={"overflow-hidden p-0"}>
                 <View
                     className={twMerge(
                         ["flex-row", "items-center", "px-4", "py-3"],
-                        ["border-divider", "border-b", "bg-background-default"],
+                        ["border-divider", "border-b", "bg-primary-main", "border-primary-main", "rounded-t-xl"],
                     )}>
                     <TextComponent
                         className={twMerge(
@@ -106,7 +106,8 @@ function AdminNoticeListPage() {
                                 "py-3",
                                 "transition-all",
                                 "border-b",
-                                "border-divider",
+                                "border-primary-light",
+                                "hover:bg-primary-light",
                                 index === list.length - 1 && ["rounded-b-xl", "border-b-0"],
                             )}>
                             <TextComponent
@@ -122,7 +123,6 @@ function AdminNoticeListPage() {
                                 <TextComponent
                                     className={twMerge([
                                         "font-bold",
-                                        "hover:text-primary-main",
                                         "transition-all",
                                     ])}
                                     numberOfLines={1}>

@@ -36,6 +36,7 @@ export default {
                 primary: {
                     main: "var(--primary-main)",
                     contrast: "var(--primary-contrast)",
+                    light: "var(--primary-light)",
                 },
                 secondary: {
                     main: "var(--secondary-main)",
@@ -67,7 +68,7 @@ export default {
     safelist: [
         {
             pattern:
-                /(bg|text|border)-(primary|secondary|error|success|warning|info|text)-(main|contrast|secondary)/,
+                /(bg|text|border)-(primary|secondary|error|success|warning|info|text)-(main|contrast|secondary|lignt)/,
         },
     ],
 } satisfies Config;

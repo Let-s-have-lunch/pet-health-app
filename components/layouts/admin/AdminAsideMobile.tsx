@@ -95,7 +95,7 @@ function AdminAsideMobile() {
                                                 ["p-4", "rounded-xl"],
                                                 isActive
                                                     ? "bg-primary-main"
-                                                    : "active:bg-background-default",
+                                                    : "hover:bg-primary-light active:bg-background-default",
                                             )}>
                                             <Feather
                                                 name={item.icon as any}
@@ -149,7 +149,7 @@ function AdminAsideMobile() {
                             onPress={() => {
                                 setIsMenuOpen(false);
                                 logout();
-                            }}>
+                            }} className={"border"}>
                             로그아웃
                         </Button>
                     </View>

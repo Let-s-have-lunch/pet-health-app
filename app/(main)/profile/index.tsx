@@ -6,15 +6,15 @@ import Button from "@/components/common/button/Button";
 import { View, Image, Pressable } from "react-native";
 import { twMerge } from "tailwind-merge";
 import { useEffect, useState } from "react";
-import { PetListResponse } from "@/types/pet";
 import petApi from "@/api/user/petApi";
 import TextComponent from "@/components/common/text/TextComponent";
 import Card from "@/components/common/card/Card";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { Pet } from "@/types/pet";
 
 function MyProfilePage() {
     const router = useRouter();
-    const [pets, setPets] = useState<PetListResponse[]>([]);
+    const [pets, setPets] = useState<Pet[]>([]);
 
     const { user } = useAuthStore();
 
@@ -80,7 +80,7 @@ function MyProfilePage() {
                                         resizeMode="cover"
                                     />
                                 ) : (
-                                    <View className="w-14 h-14 rounded-full mr-4 bg-secondary-main" />
+                                    <View className="w-14 h-14 rounded-full mr-4 bg-success-main" />
                                 )}
 
                                 <TextComponent className="text-base font-medium">
