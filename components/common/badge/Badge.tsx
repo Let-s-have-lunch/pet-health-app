@@ -1,7 +1,7 @@
 import { StyleColorType, StyleSizeType, StyleVariantType } from "@/types/style";
 import { View, ViewProps } from "react-native";
 import { twMerge } from "tailwind-merge";
-import TextComponent from "@/components/common/text/TextComponents";
+import TextComponent from "@/components/common/text/TextComponent";
 
 interface BadgeProps extends ViewProps {
     color?: StyleColorType;

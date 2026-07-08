@@ -17,7 +17,7 @@ interface Props extends Omit<PressableProps, "children"> {
 }
 
 function Button({
-    color = "secondary",
+    color = "primary",
     variant = "contained",
     size = "medium",
     fullWidth = false,
@@ -33,7 +33,7 @@ function Button({
             case "contained":
                 return `bg-${color}-main border-2 border-${color}-main`;
             case "outlined":
-                return `border-2 border-text-${color} bg-transparent`;
+                return `border-2 border-text-secondary bg-transparent`;
             case "text":
                 return `bg-background-paper`;
             case "icon":

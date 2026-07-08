@@ -25,7 +25,7 @@ function MyPageHeader() {
                         ["flex-1", "px-4", "h-full"],
                     )}>
                     <Pressable
-                        onPress={() => router.push("/auth/edit")}
+                        onPress={() => router.push(isLoggedIn ? "/profile" : "/auth/login")}
                         className={twMerge([
                             "flex-row",
                             "h-20",

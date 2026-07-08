@@ -19,7 +19,7 @@ function AdminLayout() {
             <View className={"flex-1 bg-background-default"}>
                 <ScrollView
                     className={"flex-1"}
-                    contentContainerClassName={"p-4 md:p-8 items-center"}
+                    contentContainerClassName={"p-[25px] md:p-8 items-center"}
                     showsVerticalScrollIndicator={false}>
                     <View className={"w-full max-w-5xl"}>
                         <Slot />

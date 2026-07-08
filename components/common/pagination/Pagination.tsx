@@ -9,6 +9,9 @@ interface PaginationProps {
 }
 
 export default function Pagination({ currentPage, totalPages, onPageChange, maxVisibleButtons = 5 }: PaginationProps) {
+    if (totalPages <= 1) {
+        return null;
+    }
 
     const getPageNumbers = () => {
         if (totalPages <= maxVisibleButtons) {
