@@ -17,7 +17,7 @@ function AdminNoticeListPage() {
 
     const { page, size } = useLocalSearchParams<{ page: string; size: string }>();
     const currentPage = Number(page) || 1;
-    const pageSize = Number(size) || 20;
+    const pageSize = Number(size) || 15;
 
     const loadNotices = useCallback(
         async (targetPage: number, targetSize: number) => {
@@ -124,6 +124,7 @@ function AdminNoticeListPage() {
                                     className={twMerge([
                                         "font-bold",
                                         "transition-all",
+                                        "hover:text-primary-main"
                                     ])}
                                     numberOfLines={1}>
                                     {item.title}

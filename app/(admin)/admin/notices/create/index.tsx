@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import { AdminNoticeInputType, adminNoticeSchema } from "@/schemas/notice/noticeSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import adminNoticeApi from "@/api/notice/AdminNoticeApi";
+import adminNoticeApi from "@/api/admin/adminNoticeApi";
 import { Alert, Platform, ScrollView, View } from "react-native";
 import { twMerge } from "tailwind-merge";
 import Title from "@/components/common/title/Title";
