@@ -11,10 +11,9 @@ export interface Post {
     deletedAt: string | null;
 }
 
-export type PostUser = Pick<User, "id" | "nickname" | "email">;
+export type PostUser = Pick<User, "id" | "nickname" >;
 
-// 게시글 상세 조회 시 응답 (게시글 정보 + 작성자 + 댓글 목록)
-export interface PostDetail extends Post {
+
+export interface PostListItemType extends Post {
     user: PostUser;
-    comments: ReplyListItemType[]; // 아래 정의한 댓글 목록 타입 사용
 }

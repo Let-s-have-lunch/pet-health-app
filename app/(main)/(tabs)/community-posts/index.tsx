@@ -1,13 +1,51 @@
-import { ScrollView, View } from "react-native";
+import { Alert, Platform, Pressable, ScrollView, View } from "react-native";
 import TextComponent from "@/components/common/text/TextComponent";
 import { twMerge } from "tailwind-merge";
-import { useRouter } from "expo-router";
-
-
-
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { isLoading } from "expo-font";
+import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
+import { useCallback, useEffect, useState } from "react";
+import { Post, PostDetailListType } from "@/types/post";
+import postApi from "@/api/user/postApi";
+import Button from "@/components/common/button/Button";
+import { Feather, Ionicons } from "@expo/vector-icons";
 
 function CommunityPostListPage() {
     const router = useRouter();
+    const { id, page, size } = useLocalSearchParams<{ id: string; page: string; size: string }>();
+    const categoryId = Number(id);
+    const currentPage = Number(page) || 1;
+    const pageSize = Number(size) || 10;
+
+    const [list, setList] = useState<PostDetailListType[]>([]);
+    const [total, setTotal] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const loadPosts = useCallback(async () => {
+        try {
+            setIsLoading(true);
+            const result = await postApi.getPostList(currentPage, pageSize);
+            setList(result.list);
+            setTotal(result.total);
+        } catch (error) {
+            console.log(error);
+            const msg = "게시글 목록을 불러오는데 실패했습니다.";
+            if (Platform.OS === "web") {
+                alert(msg);
+            } else {
+                Alert.alert("오류", msg);
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    }, [currentPage, pageSize]);
+
+    useEffect(() => {
+        loadPosts().then(() => {});
+    }, [loadPosts]);
+
+    const totalPages = Math.ceil(total / pageSize) || 1;
+
     return (
         <ScrollView className={twMerge(["flex-1", "w-full"])}>
             <TextComponent className={twMerge(["font-medium", "text-left", "p-4"])}>
@@ -59,16 +97,115 @@ function CommunityPostListPage() {
                 </View>
                 {/* 내용 */}
                 <View>
-                    <View
-                        className={twMerge(
-                            ["flex-col", "md:flex-row", "md:items-center"],
-                            ["px-4", "py-3", "md:px-4"],
-                            ["transition-colors", "hover:bg-background-default"],
-                            // isLast && ["border-b", "border-divider"],
-                        )}>
+                    {isLoading && (
+                        <View className={"py-20"}>
+                            <LoadingIndicator />
+                        </View>
+                    )}
+                    {!isLoading && list.length === 0 && (
+                        <View className={twMerge(["py-20", "justify-center", "items-center"])}>
+                            <TextComponent className={"text-text-secondary"}>
+                                등록된 게시글이 없습니다.
+                            </TextComponent>
+                        </View>
+                    )}
+                    {list.map((item, index) => {
+                        const isLast = index === list.length - 1;
 
-                    </View>
+                        return (
+                            <View
+                                key={item.id}
+                                className={twMerge(
+                                    ["flex-col", "md:flex-row", "md:items-center"],
+                                    ["px-4", "py-3", "md:px-4"],
+                                    ["transition-colors", "hover:bg-background-default"],
+                                    isLast && ["border-b", "border-divider"],
+                                )}>
+                                <TextComponent
+                                    className={twMerge(
+                                        ["hidden", "md:flex", "justify-center", "w-16"],
+                                        ["text-text-secondary"],
+                                    )}>
+                                    {item.id}
+                                </TextComponent>
+                                <Pressable
+                                    className={twMerge(
+                                        ["flex-1", "flex-row", "items-center", "gap-2"],
+                                        ["md:px-2", "mb-1.5", "md:mb-0"],
+                                    )}
+                                    onPress={() => router.push(`/posts/${item.id}`)}>
+                                    <TextComponent
+                                        className={twMerge([
+                                            "font-medium",
+                                            "hover:text-primary-main",
+                                            "transition-colors",
+                                        ])}
+                                        numberOfLines={1}>
+                                        {item.title}
+                                    </TextComponent>
+                                </Pressable>
+
+                                <View
+                                    className={twMerge([
+                                        "flex-row",
+                                        "items-center",
+                                        "gap-2",
+                                        "md:gap-0",
+                                    ])}>
+                                    <TextComponent
+                                        className={twMerge(
+                                            ["text-xs", "md:text-sm"],
+                                            ["text-text-secondary", "md:text-text-default"],
+                                            ["md:w-28", "md:text-center"],
+                                        )}>
+                                        {item.user?.nickname}
+                                    </TextComponent>
+                                    <TextComponent
+                                        className={twMerge("md:hidden", "text-xs", "text-divider")}>
+                                        |
+                                    </TextComponent>
+                                    <TextComponent
+                                        className={twMerge(
+                                            ["text-xs", "md:text-sm"],
+                                            ["text-text-secondary", "md:text-text-default"],
+                                            ["md:w-20", "md:text-center"],
+                                        )}>
+                                        <TextComponent
+                                            className={twMerge(
+                                                "md:hidden",
+                                                "text-xs",
+                                                "text-text-secondary",
+                                            )}>
+                                            조회 :{" "}
+                                        </TextComponent>
+                                        {item.views}
+                                    </TextComponent>
+                                    <TextComponent
+                                        className={twMerge("md:hidden", "text-xs", "text-divider")}>
+                                        |
+                                    </TextComponent>
+                                    <TextComponent
+                                        className={twMerge(
+                                            ["text-xs", "md:text-sm"],
+                                            ["text-text-secondary", "md:text-text-default"],
+                                            ["md:w-24", "md:text-center"],
+                                        )}>
+                                        {item.createdAt.substring(0, 10)}
+                                    </TextComponent>
+                                </View>
+                            </View>
+                        );
+                    })}
                 </View>
+                <Pressable
+                    className={twMerge(
+                        ["justify-center", "items-center", "fixed", "bottom-10", "right-10"],
+                        ["w-10", "h-10", "rounded", "bg-success-point"],
+                    )}
+                    onPress={() => router.push("/community-posts/create")}
+                >
+                    <Feather name={"edit-3"} size={20} className={"color-amber-50"} />
+                </Pressable>
             </View>
         </ScrollView>
     );
