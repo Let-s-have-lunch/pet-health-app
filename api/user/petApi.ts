@@ -1,6 +1,7 @@
 import axiosInstance from "@/api/axiosInstance";
 import { RegisterPetInputType } from "@/schemas/user/pet/registerPetSchema";
 import { Pet } from "@/types/pet";
+import { PetUpdateInputType } from "@/schemas/user/pet/updatePetSchema";
 
 const getMyPetList = async():Promise<Pet[]> => {
     const response = await axiosInstance.get("/pet/list");
@@ -12,10 +13,20 @@ const registerPet = async ( data: RegisterPetInputType ): Promise<Pet> => {
     return response.data.data;
 };
 
+const updatePet = async ( id : number, data: PetUpdateInputType ): Promise<Pet> => {
+    const response = await axiosInstance.patch(`/pet/update/${id}`, data);
+    return response.data.data;
+};
+
+const deletePet = async ( id : number ): Promise<void> => {
+    await axiosInstance.delete(`/pet/delete/${id}`);
+}
 
 
 
 export default {
     getMyPetList,
     registerPet,
+    updatePet,
+    deletePet,
 };
