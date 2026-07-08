@@ -28,8 +28,10 @@ function NoticeDetailPage() {
     };
 
     useEffect(() => {
+        // 1. 공지사항을 불러오는 함수를 useEffect 안에서 만듭니다.
         const loadNotice = async () => {
             if (!id) return;
+
             try {
                 const data = await noticeApi.getNoticeById(Number(id));
                 setNotice(data);
@@ -42,7 +44,9 @@ function NoticeDetailPage() {
             }
         };
 
-        loadNotice();
+        // 2. 위에서 만든 함수를 바로 실행합니다.
+        void loadNotice();
+
     }, [id, navigate]);
 
     // 🐾 날짜 포맷팅 안전장치 (데이터 오류 방지)

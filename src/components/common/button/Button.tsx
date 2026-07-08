@@ -11,11 +11,11 @@ const StyledButton = styled.button<{ $color?: "primary" | "secondary" }>`
     transition: all 0.2s;
 
     /* 색상 테마 설정 */
-    background-color: ${props => (props.$color === "secondary" ? "#f0f0f0" : "#ffde59")};
-    color: ${props => (props.$color === "secondary" ? "#666" : "#333")};
+    background-color: ${({ $color }: { $color?: string }) => ($color === "secondary" ? "#f0f0f0" : "#ffde59")};
+    color: ${({ $color }: { $color?: string }) => ($color === "secondary" ? "#666" : "#333")};
 
     &:hover {
-        background-color: ${props => (props.$color === "secondary" ? "#e0e0e0" : "#ffc837")};
+        background-color: ${({ $color }: { $color?: string }) => ($color === "secondary" ? "#e0e0e0" : "#ffc837")};
         transform: translateY(-1px);
     }
 

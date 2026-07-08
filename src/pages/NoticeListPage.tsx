@@ -29,11 +29,11 @@ function NoticeListPage() {
 
     // 2. 삭제 기능 (관리자 페이지라면 필수)
     const handleDelete = async (id: number) => {
-        if (!confirm("정말 삭제하시겠습니까?")) return;
+        if (!window.confirm("정말 삭제하시겠습니까?")) return;
         try {
             await noticeApi.deleteNotice(id);
             alert("삭제되었습니다.");
-            await loadList(); // 삭제 후 목록 새로고침
+            await loadList(page, size); // 삭제 후 목록 새로고침
         } catch (error) {
             alert("삭제 실패");
         }
