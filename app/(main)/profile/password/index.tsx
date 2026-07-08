@@ -148,14 +148,14 @@ function MyPasswordPage() {
                         )}
 
                         <View className={"md:flex-row mt-9 gap-3"}>
-                            <Button variant={"outlined"} wrap={true} onPress={() => router.back()}>
-                                취소
-                            </Button>
                             <Button
                                 wrap={true}
                                 onPress={handleSubmit(onSubmit)}
                                 disabled={isSubmitting}>
                                 비밀번호 변경
+                            </Button>
+                            <Button variant={"outlined"} wrap={true} onPress={() => router.back()}>
+                                취소
                             </Button>
                         </View>
                     </FormContainer>

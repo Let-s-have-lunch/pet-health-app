@@ -24,7 +24,7 @@ function MyInquiryListPage() {
     const loadInquiries = useCallback(
         async (targetPage: number, targetSize: number) => {
             try {
-                const result = await inquiryApi.fetchMyInquiryList(currentPage, pageSize);
+                const result = await inquiryApi.fetchMyInquiryList(targetPage, targetSize);
                 setList(result.list);
                 setTotal(result.total);
             } catch (error) {
@@ -62,12 +62,12 @@ function MyInquiryListPage() {
             <Title
                 title="나의 1:1 문의 게시판"
                 showBackButton={true}
-                onBackPress={() => router.back()}
+                onBackPress={() => router.push("/my")}
                 className={"bg-background-paper"}>
                 <Button
                     size={"small"}
                     variant={"contained"}
-                    onPress={() => router.back()}
+                    onPress={() => router.push("/inquiry/create")}
                     className={"bg-primary-main"}>
                     + 문의글 등록
                 </Button>
@@ -155,7 +155,7 @@ function MyInquiryListPage() {
                                         className={twMerge([
                                             "font-bold",
                                             "transition-all",
-                                            "hover:text-primary-main",
+                                            "hover:text-success-point",
                                         ])}
                                         numberOfLines={1}>
                                         {item.title}
