@@ -57,7 +57,18 @@ function CommunityPostListPage() {
                         작성일
                     </TextComponent>
                 </View>
+                {/* 내용 */}
+                <View>
+                    <View
+                        className={twMerge(
+                            ["flex-col", "md:flex-row", "md:items-center"],
+                            ["px-4", "py-3", "md:px-4"],
+                            ["transition-colors", "hover:bg-background-default"],
+                            // isLast && ["border-b", "border-divider"],
+                        )}>
 
+                    </View>
+                </View>
             </View>
         </ScrollView>
     );
