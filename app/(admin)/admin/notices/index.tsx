@@ -9,11 +9,13 @@ import Title from "@/components/common/title/Title";
 import Button from "@/components/common/button/Button";
 import TextComponent from "@/components/common/text/TextComponent";
 import Pagination from "@/components/common/pagination/Pagination";
+import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 
 function AdminNoticeListPage() {
     const [list, setList] = useState<Notice[]>([]);
     const [total, setTotal] = useState(0);
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(true);
 
     const { page, size } = useLocalSearchParams<{ page: string; size: string }>();
     const currentPage = Number(page) || 1;
@@ -34,6 +36,8 @@ function AdminNoticeListPage() {
                         { text: "확인", onPress: () => router.back() },
                     ]);
                 }
+            } finally {
+                setIsLoading(false);
             }
         },
         [router],
@@ -54,7 +58,8 @@ function AdminNoticeListPage() {
                 <Button
                     size={"small"}
                     variant={"contained"}
-                    onPress={() => router.push("/admin/notices/create")} className={"bg-primary-main"}>
+                    onPress={() => router.push("/admin/notices/create")}
+                    className={"bg-primary-main"}>
                     + 공지사항 등록
                 </Button>
             </Title>
@@ -63,7 +68,13 @@ function AdminNoticeListPage() {
                 <View
                     className={twMerge(
                         ["flex-row", "items-center", "px-4", "py-3"],
-                        ["border-divider", "border-b", "bg-primary-main", "border-primary-main", "rounded-t-xl"],
+                        [
+                            "border-divider",
+                            "border-b",
+                            "bg-primary-main",
+                            "border-primary-main",
+                            "rounded-t-xl",
+                        ],
                     )}>
                     <TextComponent
                         className={twMerge(
@@ -88,59 +99,66 @@ function AdminNoticeListPage() {
                     </TextComponent>
                 </View>
 
-                <ScrollView className={"flex-1"}>
-                    {list.length === 0 && (
-                        <View className={twMerge("py-10", "justify-center", "items-center")}>
-                            <TextComponent className={"text-text-secondary"}>
-                                등록된 공지사항이 없습니다.
-                            </TextComponent>
-                        </View>
-                    )}
-                    {list.map((item, index) => (
-                        <View
-                            key={item.id}
-                            className={twMerge(
-                                "flex-row",
-                                "items-center",
-                                "px-4",
-                                "py-3",
-                                "transition-all",
-                                "border-b",
-                                "border-primary-light",
-                                "hover:bg-primary-light",
-                                index === list.length - 1 && ["rounded-b-xl", "border-b-0"],
-                            )}>
-                            <TextComponent
-                                className={twMerge(
-                                    ["hidden", "md:flex", "w-12"],
-                                    ["text-center", "text-text-secondary"],
-                                )}>
-                                {item.id}
-                            </TextComponent>
-                            <Pressable
-                                className={twMerge("flex-1", "justify-center", "px-2")}
-                                onPress={() => router.push(`/admin/notices/${item.id}`)}>
-                                <TextComponent
-                                    className={twMerge([
-                                        "font-bold",
+                <View>
+                    {isLoading ? (
+                        <LoadingIndicator />
+                    ) : (
+                        <ScrollView className={"flex-1"}>
+                            {list.length === 0 && (
+                                <View
+                                    className={twMerge("py-10", "justify-center", "items-center")}>
+                                    <TextComponent className={"text-text-secondary"}>
+                                        등록된 공지사항이 없습니다.
+                                    </TextComponent>
+                                </View>
+                            )}
+                            {list.map((item, index) => (
+                                <View
+                                    key={item.id}
+                                    className={twMerge(
+                                        "flex-row",
+                                        "items-center",
+                                        "px-4",
+                                        "py-3",
                                         "transition-all",
-                                        "hover:text-success-point"
-                                    ])}
-                                    numberOfLines={1}>
-                                    {item.title}
-                                </TextComponent>
-                            </Pressable>
-                            <TextComponent
-                                className={twMerge("w-24", [
-                                    "text-sm",
-                                    "text-text-secondary",
-                                    "text-center",
-                                ])}>
-                                {item.createdAt.substring(0, 10)}
-                            </TextComponent>
-                        </View>
-                    ))}
-                </ScrollView>
+                                        "border-b",
+                                        "border-primary-light",
+                                        "hover:bg-primary-light",
+                                        index === list.length - 1 && ["rounded-b-xl", "border-b-0"],
+                                    )}>
+                                    <TextComponent
+                                        className={twMerge(
+                                            ["hidden", "md:flex", "w-12"],
+                                            ["text-center", "text-text-secondary"],
+                                        )}>
+                                        {item.id}
+                                    </TextComponent>
+                                    <Pressable
+                                        className={twMerge("flex-1", "justify-center", "px-2")}
+                                        onPress={() => router.push(`/admin/notices/${item.id}`)}>
+                                        <TextComponent
+                                            className={twMerge([
+                                                "font-bold",
+                                                "transition-all",
+                                                "hover:text-success-point",
+                                            ])}
+                                            numberOfLines={1}>
+                                            {item.title}
+                                        </TextComponent>
+                                    </Pressable>
+                                    <TextComponent
+                                        className={twMerge("w-24", [
+                                            "text-sm",
+                                            "text-text-secondary",
+                                            "text-center",
+                                        ])}>
+                                        {item.createdAt.substring(0, 10)}
+                                    </TextComponent>
+                                </View>
+                            ))}
+                        </ScrollView>
+                    )}
+                </View>
             </Card>
             <Pagination
                 currentPage={currentPage}

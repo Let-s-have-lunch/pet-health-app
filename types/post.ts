@@ -12,3 +12,7 @@ export interface Post {
 }
 
 export type PostUser = Pick<User, "id" | "nickname" | "email">
+
+export interface PostListItemType extends Post {
+    user: PostUser;
+}

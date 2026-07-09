@@ -119,7 +119,7 @@ function MyInquiryDetailPage() {
                                         "border-b pb-4 border-divider",
                                     )}>
                                     <TextComponent
-                                        className={twMerge("font-bold text-primary-main")}>
+                                        className={twMerge("font-bold", "text-base")}>
                                         관리자 답변
                                     </TextComponent>
 
