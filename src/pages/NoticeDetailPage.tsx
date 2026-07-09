@@ -3,7 +3,6 @@ import { useNoticeDetail } from "../hooks/useNoticeDetail";
 import {
     DetailContent,
     DetailHeader,
-    DetailInfo,
     DetailTitle,
     DetailWrapper,
     LoadingText,

@@ -47,7 +47,7 @@ export const useNoticeDetail = (id: string | undefined) => {
     };
 
     useEffect(() => {
-        fetchNotice();
+        void fetchNotice();
     }, [fetchNotice]);
 
     return { notice, isLoading, isDeleting, error, deleteNotice };

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { View, Text, TextInput, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, TextInput, FlatList, ActivityIndicator } from "react-native";
 import { useLocalSearchParams, useRouter, Link } from "expo-router"; // 💡 핵심: expo-router 사용
 import { noticeApi } from "../../api/user/noticeApi";
 import { PostContainer, PostTitle } from "../../components/post/post.style";
@@ -37,7 +37,7 @@ function NoticeListPage() {
     }, []);
 
     useEffect(() => {
-        loadList(page);
+        loadList(page).catch(err => console.error("useEffect 호출 에러:", err));
     }, [loadList, page]);
 
     // 검색 시 URL 파라미터 변경
@@ -52,9 +52,9 @@ function NoticeListPage() {
         // 네이티브에선 window.confirm 대신 Alert 사용
         try {
             await noticeApi.deleteNotice(id);
-            loadList(page);
-        } catch (error) {
-            console.error("삭제 실패");
+            await loadList(page);
+        } catch (error: unknown) {
+            console.error("삭제 실패", error);
         }
     };
 

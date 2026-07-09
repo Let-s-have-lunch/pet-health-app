@@ -29,7 +29,6 @@ function NoticeEditPage() {
                 // API 결과값이 { success: true, data: ... } 형태라면 data.data를 사용하세요!
                 const response = await noticeApi.getNoticeById(Number(id));
                 const data = response.data;
-
                 reset({
                     title: data.title,
                     content: data.content,
@@ -41,7 +40,7 @@ function NoticeEditPage() {
                 alert("데이터를 불러올 수 없습니다.");
             }
         };
-        fetchNotice();
+        void fetchNotice();
     }, [id, reset]);
 
     const onSubmit = async (data: NoticeFormData) => {
