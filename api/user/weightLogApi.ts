@@ -12,4 +12,9 @@ export const weightLogApi = {
 
     // 3. 삭제: 삭제도 꼭 추가해두세요!
     delete: (id: number) => axiosInstance.delete(`/weight-logs/${id}`),
+
+    update: (id: number, data: { petId: number; weight: number; recordDate: string; memo?: string }) =>
+        axiosInstance.put<{ message: string; data: WeightLog }>(`/weight-logs/${id}`, data),
 };
+
+
