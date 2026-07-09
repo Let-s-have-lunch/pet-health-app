@@ -3,11 +3,12 @@ import PetCardSection from "../../(main)/(tabs)/components/PetCardSection";
 import MedicalHistorySection from "../../(main)/(tabs)/components/MedicalHistorySection";
 import { useCallback, useEffect, useState } from "react";
 import { DashboardData, getHomeDashboard } from "../../../api/home";
+import { waterIntakeApi } from "../../../api/user/waterIntakeApi"; // 💧 음수량 API 추가
 import { twMerge } from "tailwind-merge";
 import TextComponent from "../../../components/common/text/TextComponent";
 import { router } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
-// 📅 오늘 날짜를 "YYYY-MM-DD" 형식으로 반환하는 헬퍼 함수
 const getTodayString = () => {
     const today = new Date();
     const year = today.getFullYear();
@@ -18,27 +19,42 @@ const getTodayString = () => {
 
 export default function HomeScreen() {
     const [isLoading, setIsLoading] = useState(true);
-
-    // ✨ 초기 날짜를 오늘 날짜로 동적 설정!
     const todayDate = getTodayString();
 
     const [data, setData] = useState<DashboardData | null>({
-        date: todayDate, // 기본값도 오늘 날짜로 세팅
+        date: todayDate,
         walk: { count: 0 },
         weight: { value: 0 },
-        water: { totalAmount: 0 },
+        water: { totalAmount: 0 }, // 💡 이제 여기에는 최신 등록 음수량이 담길 거야
         vetRecord: null,
     });
 
     const loadDashboard = useCallback(async () => {
         try {
             setIsLoading(true);
+            const petId = 1; // 실제 선택된 펫 ID 변수로 대체 가능
 
-            //  petId는 예시로 1을 넣었습니다. 실제로는 유저가 선택한 펫 ID 변수가 들어가야 합니다.
-            const result = await getHomeDashboard(1, todayDate);
+            // 1. 기존 대시보드 데이터 호출
+            const dashboardResult = await getHomeDashboard(petId, todayDate);
+            // 2. 💧 펫의 전체 음수량 기록 리스트 호출
+            const waterLogsResult = await waterIntakeApi.getByPetId(petId);
 
-            if (result.success) {
-                setData(result.data); // 주석을 풀고 백엔드 데이터를 상태에 반영합니다.
+            if (dashboardResult.success) {
+                let latestWaterAmount = 0;
+
+                // 💧 전체 리스트 중 가장 최근(배열의 마지막)에 등록된 음수량 기록 찾기
+                if (waterLogsResult?.data?.data && waterLogsResult.data.data.length > 0) {
+                    const logs = waterLogsResult.data.data;
+                    latestWaterAmount = logs[logs.length - 1].amount;
+                }
+
+                // 대시보드 상태 세팅할 때 물 부분만 최신 데이터로 변경해 주기
+                setData({
+                    ...dashboardResult.data,
+                    water: {
+                        totalAmount: latestWaterAmount,
+                    },
+                });
             }
         } catch (error) {
             console.log(error);
@@ -51,23 +67,24 @@ export default function HomeScreen() {
         } finally {
             setIsLoading(false);
         }
-    }, [todayDate]); // 의존성 배열에 오늘 날짜 추가
+    }, [todayDate]);
 
     useEffect(() => {
         loadDashboard().then(() => {});
     }, [loadDashboard]);
 
-    // ✨ map을 돌리기 위한 카드 설정 데이터
+    // 🎨 카드 설정 데이터
     const cardConfig = [
         {
             id: "walk",
             title: "산책",
             renderBottom: () => (
-                <TextComponent
-                    className="font-bold text-2xl text-right"
-                    style={{ color: "#2C2C2C" }}>
-                    {data?.walk.count ?? 0}회
-                </TextComponent>
+                <View className="flex-row justify-end items-center gap-3">
+                    <Ionicons name="paw" size={22} color="#BACFCD" />
+                    <TextComponent className="font-bold text-2xl" style={{ color: "#2C2C2C" }}>
+                        {data?.walk.count ?? 0}회
+                    </TextComponent>
+                </View>
             ),
         },
         {
@@ -75,23 +92,28 @@ export default function HomeScreen() {
             title: "몸무게",
             onPress: () => router.push("/(main)/health/weight-logs"),
             renderBottom: () => (
-                <TextComponent
-                    className="font-bold text-2xl text-right"
-                    style={{ color: "#2C2C2C" }}>
-                    {data?.weight.value ?? 0}kg
-                </TextComponent>
+                <View className="flex-row justify-end items-center gap-1">
+                    <Ionicons name="fitness" size={22} color="#D9A05B" />
+                    <TextComponent className="font-bold text-2xl" style={{ color: "#2C2C2C" }}>
+                        {data?.weight.value ?? 0}kg
+                    </TextComponent>
+                </View>
             ),
         },
         {
             id: "water",
             title: "물",
-            // onPress: () => router.push("/water-detail"), 수정 상세페이지로 이동 임시주석처리
+            // 🚀 [기획 수정] 모달 대신 몸무게처럼 그래프/리스트가 있는 상세 페이지로 이동!
+            onPress: () => router.push("/(main)/health/water-logs"),
             renderBottom: () => (
-                <TextComponent
-                    className="font-bold text-2xl text-right"
-                    style={{ color: "#2C2C2C" }}>
-                    {data?.water.totalAmount ?? 0}ml
-                </TextComponent>
+                <View className={twMerge("flex-row", "justify-end", "items-center", "gap-1.5")}>
+                    <Ionicons name={"water"} size={22} color={"#A9C6D9"} />
+                    <TextComponent
+                        className="font-bold text-2xl text-right"
+                        style={{ color: "#2C2C2C" }}>
+                        {data?.water.totalAmount ?? 0}ml
+                    </TextComponent>
+                </View>
             ),
         },
         {
@@ -100,20 +122,26 @@ export default function HomeScreen() {
             showBadge: !!data?.vetRecord,
             renderBottom: () =>
                 data?.vetRecord ? (
-                    <View className="items-end">
-                        <TextComponent
-                            className="text-sm font-semibold"
-                            style={{ color: "#2C2C2C" }}>
-                            {data.vetRecord.purpose}
-                        </TextComponent>
-                        <TextComponent className="text-xs" style={{ color: "#7F8C8D" }}>
-                            {data.vetRecord.hospitalName}
-                        </TextComponent>
+                    <View className="flex-row justify-end items-center gap-1.5">
+                        <Ionicons name="medkit" size={20} color="#E8A7A1" />
+                        <View className="items-end">
+                            <TextComponent
+                                className="text-sm font-semibold"
+                                style={{ color: "#2C2C2C" }}>
+                                {data.vetRecord.purpose}
+                            </TextComponent>
+                            <TextComponent className="text-xs" style={{ color: "#7F8F8D" }}>
+                                {data.vetRecord.hospitalName}
+                            </TextComponent>
+                        </View>
                     </View>
                 ) : (
-                    <TextComponent className="text-sm text-right" style={{ color: "#7F8C8D" }}>
-                        기록 없음
-                    </TextComponent>
+                    <View className="flex-row justify-end items-center gap-1">
+                        <Ionicons name="medkit" size={20} color="#D1D1D1" />
+                        <TextComponent className="text-sm" style={{ color: "#7F8C8D" }}>
+                            기록 없음
+                        </TextComponent>
+                    </View>
                 ),
         },
     ];
