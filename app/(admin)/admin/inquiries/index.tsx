@@ -140,7 +140,7 @@ function AdminInquiryListPage() {
                                     </TextComponent>
                                     <Pressable
                                         className={twMerge("flex-1", "justify-center", "px-2")}
-                                        onPress={() => router.push(`/admin/notices/${item.id}`)}>
+                                        onPress={() => router.push(`/admin/inquiries/${item.id}`)}>
                                         <TextComponent
                                             className={twMerge([
                                                 "font-bold",
@@ -176,7 +176,7 @@ function AdminInquiryListPage() {
                                             "justify-center",
                                             ["text-sm", "text-text-secondary", "text-center"],
                                         )}>
-                                        <Badge color={item.answer ? "success" : "secondary"}>
+                                        <Badge color={item.answer ? "success" : "info"}>
                                             {item.answer ? "답변완료" : "답변대기"}
                                         </Badge>
                                     </View>

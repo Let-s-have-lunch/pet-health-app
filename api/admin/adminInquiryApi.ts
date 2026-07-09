@@ -1,6 +1,7 @@
 import axiosInstance from "@/api/axiosInstance";
-import { InquiryUserItemType } from "@/types/inquiry";
+import { Inquiry, InquiryUserItemType } from "@/types/inquiry";
 import { PaginationResponseType } from "@/types/common";
+import { InquiryAnswerInputType } from "@/schemas/inquiry/inquiryAnswerSchema";
 
 const fetchInquiryList = async (
     page: number,
@@ -20,4 +21,14 @@ const fetchInquiryById = async (id: number): Promise<InquiryUserItemType> => {
     return response.data.data;
 };
 
-export default {fetchInquiryList, fetchInquiryById}
+const updateInquiryAnswer = async (id: number, input: InquiryAnswerInputType): Promise<Inquiry> => {
+    const response = await axiosInstance.patch(`/admin/inquiry/${id}`, input);
+    return response.data.data;
+}
+
+const deleteInquiryAnswer = async (id: number) => {
+    await axiosInstance.delete(`/admin/inquiry/${id}`);
+}
+
+
+export default {fetchInquiryList, fetchInquiryById , updateInquiryAnswer, deleteInquiryAnswer}
