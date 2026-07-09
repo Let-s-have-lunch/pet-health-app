@@ -3,14 +3,15 @@ import { PaginationResponseType } from "@/types/common";
 import { Post, PostListItemType} from "@/types/post";
 import { PostInputType } from "@/schemas/post/postSchema";
 
-const getPostList = async (page = 1, size = 10): Promise<PaginationResponseType<PostListItemType>> => {
+const getPostList = async (page = 1, size = 20): Promise<PaginationResponseType<PostListItemType>> => {
     const response = await axiosInstance.get("/post", {
         params: { page, size },
     });
     return response.data.data;
 };
 
-const getPostById = async (postId: number): Promise<PostDetail> => {
+const getPostById = async (postId: number): Promise<Post> => {
+    // TODO 타입확인하고 Prisma  추가 하기
     const response = await axiosInstance.get(`/post/${postId}`);
     return response.data.data;
 };
