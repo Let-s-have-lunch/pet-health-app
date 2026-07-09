@@ -124,7 +124,7 @@ function AdminNoticeListPage() {
                                     className={twMerge([
                                         "font-bold",
                                         "transition-all",
-                                        "hover:text-primary-main"
+                                        "hover:text-success-point"
                                     ])}
                                     numberOfLines={1}>
                                     {item.title}
