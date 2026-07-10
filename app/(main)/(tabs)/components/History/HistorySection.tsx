@@ -3,11 +3,10 @@ import { useCallback, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { router, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { DashboardData, getHomeDashboard } from "../../../../../api/home";
-import TextComponent from "../../../../../components/common/text/TextComponent";
-import { DashboardData, getHomeDashboard } from "@/api/home";
 import TextComponent from "@/components/common/text/TextComponent";
 import { waterIntakeApi } from "@/api/user/waterIntakeApi";
+import { weightLogApi } from "@/api/user/weightLogApi";
+import { DashboardData, getHomeDashboard } from "@/api/home";
 
 const getTodayString = () => {
     const today = new Date();
