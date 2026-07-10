@@ -41,6 +41,7 @@ function HomeScreen() {
             router.push("/auth/login");
             return;
         }
+
         router.push("/pets/create");
     };
 
@@ -52,4 +53,5 @@ function HomeScreen() {
         </ScrollView>
     );
 }
+
 export default HomeScreen;

@@ -1,7 +1,8 @@
 import TextComponent from "@/components/common/text/TextComponent";
 
-function CreateCommunityPostPage() {
-    return <TextComponent>내용</TextComponent>
+
+function CreateCommunityPost() {
+    return <TextComponent>내용 수정하기 페이지 삭제</TextComponent>
 }
 
-export default CreateCommunityPostPage;
+export default CreateCommunityPost;

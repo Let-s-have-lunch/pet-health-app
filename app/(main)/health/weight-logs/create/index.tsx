@@ -1,23 +1,29 @@
-import { View, TextInput, Pressable, Platform, Alert } from "react-native"; // Modal 제거
+import { View, TextInput, Pressable, Platform, Alert } from "react-native";
 import { router } from "expo-router";
 import { useState } from "react";
 import TextComponent from "../../../../../components/common/text/TextComponent";
 import { weightLogApi } from "../../../../../api/user/weightLogApi";
 
+const getTodayString = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 +1
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+};
+
 export default function WeightLogCreatePage() {
-    const [date, setDate] = useState("2026-07-07");
+    const [date, setDate] = useState(getTodayString());
     const [weight, setWeight] = useState("");
 
     const onSubmit = async () => {
         try {
-            // 백엔드로 데이터 전송
             await weightLogApi.create({
                 petId: 1,
                 weight: parseFloat(weight),
                 recordDate: date,
             });
 
-            // 성공 시 페이지 뒤로가기 (이러면 리스트 페이지로 돌아가며 데이터가 갱신됩니다)
             router.back();
         } catch (error) {
             console.log(error);
@@ -29,9 +35,6 @@ export default function WeightLogCreatePage() {
             }
         }
     };
-
-
-
 
     return (
         <View className="flex-1 justify-center items-center bg-black/50 p-5">
@@ -45,6 +48,7 @@ export default function WeightLogCreatePage() {
                     className="border border-divider p-3 rounded-lg mb-4 text-text-default"
                     value={date}
                     onChangeText={setDate}
+                    placeholder="YYYY-MM-DD" // 🐶 입력 시 힌트 추가
                 />
 
                 <TextComponent className="text-sm text-text-secondary mb-1">몸무게</TextComponent>

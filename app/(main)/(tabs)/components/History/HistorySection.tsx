@@ -1,11 +1,12 @@
 import { ActivityIndicator, Alert, Platform, Pressable, ScrollView, View } from "react-native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { twMerge } from "tailwind-merge";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { DashboardData, getHomeDashboard } from "@/api/home";
 import TextComponent from "@/components/common/text/TextComponent";
 import { waterIntakeApi } from "@/api/user/waterIntakeApi";
+import { weightLogApi } from "@/api/user/weightLogApi";
+import { DashboardData, getHomeDashboard } from "@/api/home";
 
 const getTodayString = () => {
     const today = new Date();
@@ -22,8 +23,8 @@ export default function HistorySection() {
     const [data, setData] = useState<DashboardData | null>({
         date: todayDate,
         walk: { count: 0 },
-        weight: { value: 0 },
-        water: { totalAmount: 0 }, // 💡 이제 여기에는 최신 등록 음수량이 담길 거야
+        weight: { value: 0 }, // 🐶 여기에 최신 몸무게가 담길 예정
+        water: { totalAmount: 0 },
         vetRecord: null,
     });
 
@@ -35,22 +36,34 @@ export default function HistorySection() {
             // 1. 기존 대시보드 데이터 호출
             const dashboardResult = await getHomeDashboard(petId, todayDate);
             // 2. 💧 펫의 전체 음수량 기록 리스트 호출
-            // const waterLogsResult = await waterIntakeApi.getByPetId(petId);
+            const waterLogsResult = await waterIntakeApi.getByPetId(petId);
+            // 3. 🐶 펫의 전체 몸무게 기록 리스트 호출
+            const weightLogsResult = await weightLogApi.getByPetId(petId);
 
             if (dashboardResult.success) {
                 let latestWaterAmount = 0;
+                let latestWeightValue = 0; // 🐶 최신 몸무게 변수 초기화
 
                 // 💧 전체 리스트 중 가장 최근(배열의 마지막)에 등록된 음수량 기록 찾기
-                // if (waterLogsResult?.data?.data && waterLogsResult.data.data.length > 0) {
-                //     const logs = waterLogsResult.data.data;
-                //     latestWaterAmount = logs[logs.length - 1].amount;
-                // }
+                if (waterLogsResult?.data?.data && waterLogsResult.data.data.length > 0) {
+                    const logs = waterLogsResult.data.data;
+                    latestWaterAmount = logs[logs.length - 1].amount;
+                }
 
-                // 대시보드 상태 세팅할 때 물 부분만 최신 데이터로 변경해 주기
+                // 🐶 전체 리스트 중 가장 최근(배열의 첫 번째)에 등록된 몸무게 기록 찾기
+                if (weightLogsResult?.data?.data && weightLogsResult.data.data.length > 0) {
+                    const weightLogs = weightLogsResult.data.data;
+                    latestWeightValue = weightLogs[0].weight;
+                }
+
+                // 대시보드 상태 세팅할 때 물, 몸무게 최신 데이터로 변경해 주기
                 setData({
                     ...dashboardResult.data,
                     water: {
                         totalAmount: latestWaterAmount,
+                    },
+                    weight: {
+                        value: latestWeightValue,
                     },
                 });
             }
@@ -67,9 +80,12 @@ export default function HistorySection() {
         }
     }, [todayDate]);
 
-    useEffect(() => {
-        loadDashboard().then(() => {});
-    }, [loadDashboard]);
+    // 🐶 useEffect 대신 useFocusEffect 적용 (화면으로 돌아올 때 즉시 새로고침)
+    useFocusEffect(
+        useCallback(() => {
+            loadDashboard().then(() => {});
+        }, [loadDashboard])
+    );
 
     // 🎨 카드 설정 데이터
     const cardConfig = [
@@ -117,7 +133,7 @@ export default function HistorySection() {
         {
             id: "vet",
             title: "병원",
-            showBadge: !!data?.vetRecord,
+            onPress: () => router.push("/(main)/health/vet-records"),
             renderBottom: () =>
                 data?.vetRecord ? (
                     <View className="flex-row justify-end items-center gap-1.5">
@@ -181,13 +197,7 @@ export default function HistorySection() {
                                 </TextComponent>
                             </View>
 
-                            {card.showBadge && (
-                                <View className="px-2 py-0.5 rounded bg-success-main">
-                                    <TextComponent className="text-[10px] font-bold text-success-contrast">
-                                        예약
-                                    </TextComponent>
-                                </View>
-                            )}
+
                         </View>
 
                         {card.renderBottom()}
