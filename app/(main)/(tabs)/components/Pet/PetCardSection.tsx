@@ -1,17 +1,5 @@
-// import PetCard from "@/app/(main)/(tabs)/components/Pet/PetCard";
-//
-// export default function PetCardSection() {
-//     return (
-//         <>
-//             {pets.map(pet => (
-//                 <PetCard key={pet.id} pet={pet} />
-//             ))}
-//         </>
-//     );
-// }
-
-import { View } from "react-native";
 import AddPetCard from "@/app/(main)/(tabs)/components/Pet/AddPetCard";
+import { Text } from "react-native";
 
 type Props = {
     isLoggedIn: boolean;
@@ -19,11 +7,17 @@ type Props = {
 };
 
 export default function PetCardSection({ isLoggedIn, onPressAdd }: Props) {
+    if (!isLoggedIn) {
+        return (
+            <>
+                <AddPetCard onPress={onPressAdd} />
+            </>
+        );
+    }
+
     return (
-        <View>
-        <View>
-            {/* 등록증 */}
-        </View>
-    {!isLoggedIn && <AddPetCard onPress={onPressAdd} />)}
-        </View>
+
+            <Text>아</Text>
+
+    );
 }

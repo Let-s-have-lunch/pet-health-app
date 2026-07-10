@@ -1,6 +1,7 @@
 import { Todo } from "@/types/todo";
 import { CreateTodoInputType } from "@/schemas/user/todo/createTodoSchema";
 import { UpdateTodoInputType } from "@/schemas/user/todo/updateTodoSchema";
+import axiosInstance from "@/api/axiosInstance";
 
 const getTodoList = async (date: string): Promise<Todo[]> => {
     const response = await axiosInstance.get(`/pet/date`, {
