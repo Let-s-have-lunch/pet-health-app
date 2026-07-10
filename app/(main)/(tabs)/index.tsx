@@ -1,31 +1,60 @@
-import { ActivityIndicator, Alert, Platform, ScrollView, View } from "react-native";
+import { ActivityIndicator, Alert, Platform, Pressable, ScrollView, View } from "react-native";
 import PetCardSection from "../../(main)/(tabs)/components/PetCardSection";
 import MedicalHistorySection from "../../(main)/(tabs)/components/MedicalHistorySection";
 import { useCallback, useEffect, useState } from "react";
-import { DashboardData, getHomeDashboard } from "@/api/home";
+import { DashboardData, getHomeDashboard } from "../../../api/home";
+import { waterIntakeApi } from "../../../api/user/waterIntakeApi"; // 💧 음수량 API 추가
 import { twMerge } from "tailwind-merge";
 import TextComponent from "../../../components/common/text/TextComponent";
+import { router } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+
+const getTodayString = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+};
 
 export default function HomeScreen() {
     const [isLoading, setIsLoading] = useState(true);
+    const todayDate = getTodayString();
 
     const [data, setData] = useState<DashboardData | null>({
-        date: "2026-07-01",
-        walk: { count: 3 },          // 산책 카드에 3회로 표시됨
-        weight: { value: 5.4 },      // 몸무게 카드에 5.4kg으로 표시됨
-        water: { totalAmount: 250 }, //  물 카드에 250ml로 표시됨
-        vetRecord: {                 //  병원 카드에 예약 배지와 함께 표시됨
-            purpose: "정기 예방접종",
-            hospitalName: "튼튼동물병원"
-        }
+        date: todayDate,
+        walk: { count: 0 },
+        weight: { value: 0 },
+        water: { totalAmount: 0 }, // 💡 이제 여기에는 최신 등록 음수량이 담길 거야
+        vetRecord: null,
     });
 
     const loadDashboard = useCallback(async () => {
         try {
             setIsLoading(true);
-            const result = await getHomeDashboard(1, "2026-07-01");
-            if (result.success) {
-                // setData(result.data);
+            const petId = 1; // 실제 선택된 펫 ID 변수로 대체 가능
+
+            // 1. 기존 대시보드 데이터 호출
+            const dashboardResult = await getHomeDashboard(petId, todayDate);
+            // 2. 💧 펫의 전체 음수량 기록 리스트 호출
+            const waterLogsResult = await waterIntakeApi.getByPetId(petId);
+
+            if (dashboardResult.success) {
+                let latestWaterAmount = 0;
+
+                // 💧 전체 리스트 중 가장 최근(배열의 마지막)에 등록된 음수량 기록 찾기
+                if (waterLogsResult?.data?.data && waterLogsResult.data.data.length > 0) {
+                    const logs = waterLogsResult.data.data;
+                    latestWaterAmount = logs[logs.length - 1].amount;
+                }
+
+                // 대시보드 상태 세팅할 때 물 부분만 최신 데이터로 변경해 주기
+                setData({
+                    ...dashboardResult.data,
+                    water: {
+                        totalAmount: latestWaterAmount,
+                    },
+                });
             }
         } catch (error) {
             console.log(error);
@@ -38,11 +67,84 @@ export default function HomeScreen() {
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [todayDate]);
 
     useEffect(() => {
         loadDashboard().then(() => {});
     }, [loadDashboard]);
+
+    // 🎨 카드 설정 데이터
+    const cardConfig = [
+        {
+            id: "walk",
+            title: "산책",
+            renderBottom: () => (
+                <View className="flex-row justify-end items-center gap-3">
+                    <Ionicons name="paw" size={22} color="#BACFCD" />
+                    <TextComponent className="font-bold text-2xl" style={{ color: "#2C2C2C" }}>
+                        {data?.walk.count ?? 0}회
+                    </TextComponent>
+                </View>
+            ),
+        },
+        {
+            id: "weight",
+            title: "몸무게",
+            onPress: () => router.push("/(main)/health/weight-logs"),
+            renderBottom: () => (
+                <View className="flex-row justify-end items-center gap-1">
+                    <Ionicons name="fitness" size={22} color="#D9A05B" />
+                    <TextComponent className="font-bold text-2xl" style={{ color: "#2C2C2C" }}>
+                        {data?.weight.value ?? 0}kg
+                    </TextComponent>
+                </View>
+            ),
+        },
+        {
+            id: "water",
+            title: "물",
+            // 🚀 [기획 수정] 모달 대신 몸무게처럼 그래프/리스트가 있는 상세 페이지로 이동!
+            onPress: () => router.push("/(main)/health/water-logs"),
+            renderBottom: () => (
+                <View className={twMerge("flex-row", "justify-end", "items-center", "gap-1.5")}>
+                    <Ionicons name={"water"} size={22} color={"#A9C6D9"} />
+                    <TextComponent
+                        className="font-bold text-2xl text-right"
+                        style={{ color: "#2C2C2C" }}>
+                        {data?.water.totalAmount ?? 0}ml
+                    </TextComponent>
+                </View>
+            ),
+        },
+        {
+            id: "vet",
+            title: "병원",
+            showBadge: !!data?.vetRecord,
+            renderBottom: () =>
+                data?.vetRecord ? (
+                    <View className="flex-row justify-end items-center gap-1.5">
+                        <Ionicons name="medkit" size={20} color="#E8A7A1" />
+                        <View className="items-end">
+                            <TextComponent
+                                className="text-sm font-semibold"
+                                style={{ color: "#2C2C2C" }}>
+                                {data.vetRecord.purpose}
+                            </TextComponent>
+                            <TextComponent className="text-xs" style={{ color: "#7F8F8D" }}>
+                                {data.vetRecord.hospitalName}
+                            </TextComponent>
+                        </View>
+                    </View>
+                ) : (
+                    <View className="flex-row justify-end items-center gap-1">
+                        <Ionicons name="medkit" size={20} color="#D1D1D1" />
+                        <TextComponent className="text-sm" style={{ color: "#7F8C8D" }}>
+                            기록 없음
+                        </TextComponent>
+                    </View>
+                ),
+        },
+    ];
 
     if (isLoading) {
         return (
@@ -53,151 +155,50 @@ export default function HomeScreen() {
             </View>
         );
     }
+
     return (
-        // 1. 전체 배경색: 소프트 밀크 크림 (#F1EBE4)
-        <ScrollView className={twMerge(["flex-1"])} >
-            {/* 🐶 상단: 동물 카드 영역 (팀원 원본) */}
+        <ScrollView className="flex-1 pt-12 bg-background-default">
             <PetCardSection />
 
-            {/* 🏥 하단 대시보드: 2x2 카드 그리드 */}
-            <View className={twMerge(["flex-row", "flex-wrap", "justify-between"])}>
-                {/* 👟 산책 카드 */}
-                <View
-                    className={twMerge([
-                        "w-[48%]",
-                        "h-40",
-                        "p-5",
-                        "mb-4",
-                        "justify-between",
-                        "border",
-                        "rounded-[10px]",
-                    ])}
-                    style={{ backgroundColor: "#FFFFFF", borderColor: "#E5D4CD" }}>
-                    <View>
-                        <TextComponent className="font-bold text-base" style={{ color: "#2C2C2C" }}>
-                            산책
-                        </TextComponent>
-                        <TextComponent className="text-xs mt-1" style={{ color: "#7F8C8D" }}>
-                            {data?.date}
-                        </TextComponent>
-                    </View>
-                    <TextComponent
-                        className="font-bold text-2xl text-right"
-                        style={{ color: "#2C2C2C" }}>
-                        {data?.walk.count ?? 0}회
-                    </TextComponent>
-                </View>
-
-                {/* ⚖️ 몸무게 카드 */}
-                <View
-                    className={twMerge([
-                        "w-[48%]",
-                        "h-40",
-                        "p-5",
-                        "mb-4",
-                        "justify-between",
-                        "border",
-                        "rounded-[10px]",
-                    ])}
-                    style={{ backgroundColor: "#FFFFFF", borderColor: "#E5D4CD" }}>
-                    <View>
-                        <TextComponent className="font-bold text-base" style={{ color: "#2C2C2C" }}>
-                            몸무게
-                        </TextComponent>
-                        <TextComponent className="text-xs mt-1" style={{ color: "#7F8C8D" }}>
-                            {data?.date}
-                        </TextComponent>
-                    </View>
-                    <TextComponent
-                        className="font-bold text-2xl text-right"
-                        style={{ color: "#2C2C2C" }}>
-                        {data?.weight.value ?? 0}kg
-                    </TextComponent>
-                </View>
-
-                {/* 💧 물 카드 */}
-                <View
-                    className={twMerge([
-                        "w-[48%]",
-                        "h-40",
-                        "p-5",
-                        "mb-4",
-                        "justify-between",
-                        "border",
-                        "rounded-[10px]",
-                    ])}
-                    style={{ backgroundColor: "#FFFFFF", borderColor: "#E5D4CD" }}>
-                    <View>
-                        <TextComponent className="font-bold text-base" style={{ color: "#2C2C2C" }}>
-                            물
-                        </TextComponent>
-                        <TextComponent className="text-xs mt-1" style={{ color: "#7F8C8D" }}>
-                            {data?.date}
-                        </TextComponent>
-                    </View>
-                    <TextComponent
-                        className="font-bold text-2xl text-right"
-                        style={{ color: "#2C2C2C" }}>
-                        {data?.water.totalAmount ?? 0}ml
-                    </TextComponent>
-                </View>
-
-                {/* 🏥 병원 카드 */}
-                <View
-                    className={twMerge([
-                        "w-[48%]",
-                        "h-40",
-                        "p-5",
-                        "mb-4",
-                        "justify-between",
-                        "border",
-                        "rounded-[10px]",
-                    ])}
-                    style={{ backgroundColor: "#FFFFFF", borderColor: "#E5D4CD" }}>
-                    <View className={twMerge(["flex-row", "justify-between", "items-start"])}>
-                        <View>
-                            <TextComponent
-                                className="font-bold text-base"
-                                style={{ color: "#2C2C2C" }}>
-                                병원
-                            </TextComponent>
-                            <TextComponent className="text-xs mt-1" style={{ color: "#7F8C8D" }}>
-                                {data?.date}
-                            </TextComponent>
-                        </View>
-                        {data?.vetRecord && (
-                            <View
-                                className={twMerge(["px-2", "py-0.5", "rounded"])}
-                                style={{ backgroundColor: "#A3D9C9" }}>
-                                <TextComponent
-                                    className="text-[10px] font-bold"
-                                    style={{ color: "#2C2C2C" }}>
-                                    예약
+            <View className="flex-row flex-wrap justify-between px-5 mt-6">
+                {cardConfig.map(card => (
+                    <Pressable
+                        key={card.id}
+                        onPress={card.onPress}
+                        disabled={!card.onPress}
+                        className={twMerge([
+                            "w-[48%]",
+                            "h-40",
+                            "p-5",
+                            "mb-4",
+                            "justify-between",
+                            "border border-divider rounded-[10px]",
+                            "bg-background-paper",
+                        ])}>
+                        <View className="flex-row justify-between items-start">
+                            <View>
+                                <TextComponent className="font-bold text-base text-text-default">
+                                    {card.title}
+                                </TextComponent>
+                                <TextComponent className="text-xs mt-1 text-text-secondary">
+                                    {data?.date}
                                 </TextComponent>
                             </View>
-                        )}
-                    </View>
 
-                    {data?.vetRecord ? (
-                        <View className={twMerge(["items-end"])}>
-                            <TextComponent
-                                className="text-sm font-semibold"
-                                style={{ color: "#2C2C2C" }}>
-                                {data.vetRecord.purpose}
-                            </TextComponent>
-                            <TextComponent className="text-xs" style={{ color: "#7F8C8D" }}>
-                                {data.vetRecord.hospitalName}
-                            </TextComponent>
+                            {card.showBadge && (
+                                <View className="px-2 py-0.5 rounded bg-success-main">
+                                    <TextComponent className="text-[10px] font-bold text-success-contrast">
+                                        예약
+                                    </TextComponent>
+                                </View>
+                            )}
                         </View>
-                    ) : (
-                        <TextComponent className="text-sm text-right" style={{ color: "#7F8C8D" }}>
-                            기록 없음
-                        </TextComponent>
-                    )}
-                </View>
+
+                        {card.renderBottom()}
+                    </Pressable>
+                ))}
             </View>
 
-            {/* 🏥 하단: 진료 이력 및 나머지 UI 영역 (팀원 원본) */}
             <MedicalHistorySection />
         </ScrollView>
     );
