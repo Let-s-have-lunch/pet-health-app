@@ -1,77 +1,87 @@
 import { Pressable, View } from "react-native";
+import { twMerge } from "tailwind-merge";
+
 import TextComponent from "@/components/common/text/TextComponent";
-import { Pet } from "@/types/pet";
+import { Pet, PetGender } from "@/types/pet";
 
 type Props = {
-    pets: Pet[];
+    pet: Pet;
+    onPressEdit: () => void;
 };
 
-export default function PetCard({ pets }: Props) {
-    const pet = pets[0];
-
-    if (!pet) return null;
-
+export default function PetCard({ pet, onPressEdit }: Props) {
     return (
-        <View
-            className="mx-5 mt-4 rounded-[14px] border bg-white p-4"
-            style={{
-                borderColor: "#A3D9C9",
-                shadowColor: "#000",
-                shadowOpacity: 0.08,
-                shadowRadius: 10,
-                shadowOffset: {
-                    width: 0,
-                    height: 4,
-                },
-                elevation: 4,
-            }}>
-            {/* 제목 */}
-            <View className="mb-4 flex-row items-center justify-between">
-                <TextComponent className="text-xl font-bold">반려동물 등록증</TextComponent>
+        <View className={twMerge(["mx-5", "rounded-[24px]", "bg-white", "p-5", "shadow-lg"])}>
+            {/* 상단 */}
+            <View className={twMerge(["flex-row", "items-center", "justify-between"])}>
+                <TextComponent className="text-[26px] font-bold text-[#2F2A28]">
+                    반려동물등록증
+                </TextComponent>
 
                 <Pressable
-                    className="rounded-md border px-3 py-1"
-                    style={{ borderColor: "#A3D9C9" }}>
-                    <TextComponent className="text-xs font-semibold" style={{ color: "#4D9B87" }}>
-                        수정
-                    </TextComponent>
+                    onPress={onPressEdit}
+                    className={twMerge([
+                        "rounded-[10px]",
+                        "border",
+                        "border-[#A3D9C9]",
+                        "px-4",
+                        "py-2",
+                    ])}>
+                    <TextComponent className="font-semibold text-[#2F2A28]">수정</TextComponent>
                 </Pressable>
             </View>
 
-            <View className="flex-row">
-                {/* 사진 */}
-                <View
-                    className="mr-4 h-28 w-28 rounded-xl"
-                    style={{ backgroundColor: "#E8E8E8" }}
-                />
+            {/* 등록번호 */}
+            <TextComponent className="mt-3 text-base text-[#8A8A8A]">
+                {pet.registrationNumber ?? "--"}
+            </TextComponent>
 
-                {/* 정보 */}
+            {/* 내용 */}
+            <View className={twMerge(["mt-5", "flex-row", "justify-between"])}>
+                {/* 왼쪽 */}
                 <View className="flex-1">
                     <InfoRow label="이름" value={pet.name} />
 
-                    <InfoRow label="생년월일" value={pet.birthdate ?? "-"} />
+                    <InfoRow label="생년월일" value={pet.birthdate ?? "--"} />
 
-                    <InfoRow label="성별" value={pet.gender === "MALE" ? "수컷" : "암컷"} />
+                    <InfoRow label="성별" value={pet.gender === PetGender.MALE ? "수컷" : "암컷"} />
 
-                    <InfoRow label="종" value={pet.species} />
+                    <InfoRow label="동물종" value={pet.species} />
 
-                    <InfoRow label="품종" value={pet.breed ?? "-"} />
+                    <InfoRow label="품종" value={pet.breed ?? "--"} />
 
-                    <InfoRow label="중성화" value={pet.neutered ? "중성화" : "미중성화"} />
+                    <InfoRow label="중성화" value={pet.neutered ? "O" : "X"} />
+                </View>
+
+                {/* 사진 */}
+                <View
+                    className={twMerge([
+                        "ml-4",
+                        "h-40",
+                        "w-32",
+                        "items-center",
+                        "justify-center",
+                        "rounded-[20px]",
+                        "bg-[#F6F6F6]",
+                    ])}>
+                    <TextComponent className="text-5xl">🐾</TextComponent>
                 </View>
             </View>
         </View>
     );
 }
 
-function InfoRow({ label, value }: { label: string; value: string }) {
-    return (
-        <View className="mb-1 flex-row">
-            <TextComponent className="w-16 text-sm" style={{ color: "#666" }}>
-                {label}
-            </TextComponent>
+type InfoRowProps = {
+    label: string;
+    value: string;
+};
 
-            <TextComponent className="text-sm font-semibold">{value}</TextComponent>
+function InfoRow({ label, value }: InfoRowProps) {
+    return (
+        <View className={twMerge(["mb-2", "flex-row"])}>
+            <TextComponent className="w-20 text-[#8A8A8A]">{label}</TextComponent>
+
+            <TextComponent className="font-semibold text-[#2F2A28]">{value}</TextComponent>
         </View>
     );
 }
