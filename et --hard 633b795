@@ -1,0 +1,93 @@
+[33mefc2b13[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m HEAD@{0}: reset: moving to efc2b13867104d7d48b54c4b616e776f00a4e205
+[33m633b795[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mwalkLog[m[33m)[m HEAD@{1}: checkout: moving from walkLog to master
+[33m633b795[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mwalkLog[m[33m)[m HEAD@{2}: merge master: Fast-forward
+[33mefc2b13[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m HEAD@{3}: checkout: moving from master to walkLog
+[33m633b795[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mwalkLog[m[33m)[m HEAD@{4}: commit: CardSection 오류 수정
+[33mf9709d5[m HEAD@{5}: merge origin/master: Fast-forward
+[33mefc2b13[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m HEAD@{6}: checkout: moving from walkLog to master
+[33mefc2b13[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m HEAD@{7}: checkout: moving from master to walkLog
+[33mefc2b13[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m HEAD@{8}: merge origin/master: Fast-forward
+[33md1c4144[m[33m ([m[1;31morigin/admin[m[33m, [m[1;32madmin[m[33m)[m HEAD@{9}: merge admin: Fast-forward
+[33mea4a1e9[m[33m ([m[1;31morigin/yeonhan[m[33m, [m[1;31morigin/inquiry[m[33m)[m HEAD@{10}: checkout: moving from admin to master
+[33md1c4144[m[33m ([m[1;31morigin/admin[m[33m, [m[1;32madmin[m[33m)[m HEAD@{11}: commit: admin페이지 작성 완료
+[33mea4a1e9[m[33m ([m[1;31morigin/yeonhan[m[33m, [m[1;31morigin/inquiry[m[33m)[m HEAD@{12}: merge master: Fast-forward
+[33m5dd7e08[m HEAD@{13}: checkout: moving from master to admin
+[33mea4a1e9[m[33m ([m[1;31morigin/yeonhan[m[33m, [m[1;31morigin/inquiry[m[33m)[m HEAD@{14}: checkout: moving from admin to master
+[33m5dd7e08[m HEAD@{15}: checkout: moving from master to admin
+[33mea4a1e9[m[33m ([m[1;31morigin/yeonhan[m[33m, [m[1;31morigin/inquiry[m[33m)[m HEAD@{16}: pull origin master: Fast-forward
+[33m5dd7e08[m HEAD@{17}: checkout: moving from admin to master
+[33m5dd7e08[m HEAD@{18}: merge master: Fast-forward
+[33m9b592e6[m HEAD@{19}: checkout: moving from master to admin
+[33m5dd7e08[m HEAD@{20}: checkout: moving from master to master
+[33m5dd7e08[m HEAD@{21}: merge origin/master: Merge made by the 'ort' strategy.
+[33m9b592e6[m HEAD@{22}: merge admin: Fast-forward
+[33m9f838ca[m HEAD@{23}: checkout: moving from admin to master
+[33m9b592e6[m HEAD@{24}: commit: InquiryDetailPage 작성중
+[33mdbf9d13[m HEAD@{25}: commit: adminUserPage 작성 완료
+[33m9f838ca[m HEAD@{26}: checkout: moving from master to admin
+[33m9f838ca[m HEAD@{27}: merge admin: Fast-forward
+[33mabcae31[m HEAD@{28}: checkout: moving from admin to master
+[33m9f838ca[m HEAD@{29}: commit: adminNoticePage, Button, global.css 수정
+[33mabcae31[m HEAD@{30}: checkout: moving from master to admin
+[33mabcae31[m HEAD@{31}: merge admin: Fast-forward
+[33m4bd3a54[m HEAD@{32}: checkout: moving from admin to master
+[33mabcae31[m HEAD@{33}: commit: Title 컴포넌트 수정
+[33m4bd3a54[m HEAD@{34}: checkout: moving from master to admin
+[33m4bd3a54[m HEAD@{35}: commit: ProfilePage Pet 타입 수정
+[33m270bd48[m HEAD@{36}: merge origin/master: Fast-forward
+[33m7ab56e6[m HEAD@{37}: commit (merge): Merge remote-tracking branch 'origin/master'
+[33m5a962bd[m HEAD@{38}: commit: Card 컴포넌트 네이티브 형태로 변경
+[33medb176b[m[33m ([m[1;31morigin/auth작업[m[33m, [m[1;32mauth작업[m[33m)[m HEAD@{39}: checkout: moving from auth작업 to master
+[33medb176b[m[33m ([m[1;31morigin/auth작업[m[33m, [m[1;32mauth작업[m[33m)[m HEAD@{40}: merge master: Fast-forward
+[33m82544d4[m HEAD@{41}: checkout: moving from master to auth작업
+[33medb176b[m[33m ([m[1;31morigin/auth작업[m[33m, [m[1;32mauth작업[m[33m)[m HEAD@{42}: commit (merge): 병합완료
+[33m3980650[m HEAD@{43}: pull origin master: Fast-forward
+[33m1d41160[m HEAD@{44}: checkout: moving from auth작업 to master
+[33m82544d4[m HEAD@{45}: commit: auth 작업 완료
+[33m1d41160[m HEAD@{46}: checkout: moving from master to auth작업
+[33m1d41160[m HEAD@{47}: commit: auth/edit/_layout.tsx수정
+[33m810a1d4[m HEAD@{48}: commit (merge): Merge remote-tracking branch 'origin/master'
+[33m077f752[m HEAD@{49}: commit: 로더역할 레이아웃 추가, userUpdatePage작성 완료
+[33m7bd79e4[m[33m ([m[1;31morigin/haneul/auth[m[33m)[m HEAD@{50}: pull origin master: Fast-forward
+[33m5d7bda3[m[33m ([m[1;31morigin/haneul/로그인[m[33m, [m[1;32mhaneul/로그인[m[33m)[m HEAD@{51}: checkout: moving from haneul/로그인 to master
+[33m5d7bda3[m[33m ([m[1;31morigin/haneul/로그인[m[33m, [m[1;32mhaneul/로그인[m[33m)[m HEAD@{52}: merge master: Fast-forward
+[33mfb739c0[m HEAD@{53}: checkout: moving from master to haneul/로그인
+[33m5d7bda3[m[33m ([m[1;31morigin/haneul/로그인[m[33m, [m[1;32mhaneul/로그인[m[33m)[m HEAD@{54}: commit (merge): Merge remote-tracking branch 'origin/master'
+[33mfb739c0[m HEAD@{55}: merge haneul/로그인: Fast-forward
+[33m30f0992[m HEAD@{56}: checkout: moving from haneul/로그인 to master
+[33mfb739c0[m HEAD@{57}: commit: login, register 작성 완료
+[33m30f0992[m HEAD@{58}: checkout: moving from master to haneul/로그인
+[33m30f0992[m HEAD@{59}: commit: 경로수정
+[33m02981a2[m HEAD@{60}: checkout: moving from haneul/공통컴포넌트작업(학원) to master
+[33mf21e32b[m[33m ([m[1;31morigin/haneul/공통컴포넌트작업(학원)[m[33m, [m[1;32mhaneul/공통컴포넌트작업(학원)[m[33m)[m HEAD@{61}: commit: 로그인 페이지 작성중
+[33m02981a2[m HEAD@{62}: checkout: moving from master to haneul/공통컴포넌트작업(학원)
+[33m02981a2[m HEAD@{63}: checkout: moving from haneul/공통컴포넌트작업(학원) to master
+[33m02981a2[m HEAD@{64}: checkout: moving from master to haneul/공통컴포넌트작업(학원)
+[33m02981a2[m HEAD@{65}: checkout: moving from haneul/공통컴포넌트작업(학원) to master
+[33m02981a2[m HEAD@{66}: merge master: Fast-forward
+[33mf50b9d4[m HEAD@{67}: checkout: moving from master to haneul/공통컴포넌트작업(학원)
+[33m02981a2[m HEAD@{68}: pull origin master: Fast-forward
+[33m2eac18a[m HEAD@{69}: merge haneul/공통컴포넌트작업(학원): Merge made by the 'ort' strategy.
+[33md37e90a[m HEAD@{70}: pull origin master: Fast-forward
+[33m582990a[m HEAD@{71}: checkout: moving from haneul/공통컴포넌트작업(학원) to master
+[33mf50b9d4[m HEAD@{72}: commit: Card,Pagination,Textarea 컴포넌트 완성
+[33m582990a[m HEAD@{73}: merge master: Fast-forward
+[33mc192eaa[m HEAD@{74}: checkout: moving from master to haneul/공통컴포넌트작업(학원)
+[33m582990a[m HEAD@{75}: pull origin master: Fast-forward
+[33mc192eaa[m HEAD@{76}: checkout: moving from haneul/공통컴포넌트작업(학원) to master
+[33mc192eaa[m HEAD@{77}: checkout: moving from master to haneul/공통컴포넌트작업(학원)
+[33mc192eaa[m HEAD@{78}: checkout: moving from haneul/공통컴포넌트작업(학원) to master
+[33mc192eaa[m HEAD@{79}: checkout: moving from master to haneul/공통컴포넌트작업(학원)
+[33mc192eaa[m HEAD@{80}: checkout: moving from haneul/공통컴포넌트작업(학원) to master
+[33mc192eaa[m HEAD@{81}: checkout: moving from master to haneul/공통컴포넌트작업(학원)
+[33mc192eaa[m HEAD@{82}: commit: 인풋 컴포넌트 변경
+[33m9e95e3a[m[33m ([m[1;31morigin/haneul/공통컴포넌트작업[m[33m)[m HEAD@{83}: pull origin master: Fast-forward
+[33m67856de[m HEAD@{84}: commit: 폴더링 작업 완료
+[33mc43fa88[m HEAD@{85}: merge origin/master: Fast-forward
+[33m411c3e5[m HEAD@{86}: merge origin/master: Fast-forward
+[33m5940312[m HEAD@{87}: merge origin/master: Fast-forward
+[33mac41f30[m HEAD@{88}: merge origin/master: Fast-forward
+[33mc635d15[m HEAD@{89}: merge origin/master: Fast-forward
+[33m8330fc1[m HEAD@{90}: commit: 초기화작업 최종
+[33m5e77112[m HEAD@{91}: merge origin/master: Fast-forward
+[33m44cf179[m HEA

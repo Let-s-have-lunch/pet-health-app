@@ -4,8 +4,10 @@ import { router } from "expo-router";
 import { ScrollView } from "react-native";
 import HistorySection from "./components/History/HistorySection";
 import { useAuthState } from "@/app/(main)/(tabs)/components/stores/authStore";
+import { useState } from "react";
 
 function HomeScreen() {
+    const [loginModal, setLoginModal] = useState(false);
 
     const isLoggedIn = useAuthState((state) => state.isLoggedIn);
     const handleAddPet = () => {
@@ -21,7 +23,7 @@ function HomeScreen() {
         <ScrollView>
             <PetCardSection
                 isLoggedIn={isLoggedIn}
-                onPressAdd={handleAddPet()}
+                onPressAdd={handleAddPet}
             >
             </PetCardSection>
                 <HistorySection />
