@@ -21,11 +21,7 @@ function HomeScreen() {
 
     return (
         <ScrollView>
-            <PetCardSection
-                isLoggedIn={isLoggedIn}
-                onPressAdd={handleAddPet}
-            >
-            </PetCardSection>
+
                 <HistorySection />
         </ScrollView>
     );
