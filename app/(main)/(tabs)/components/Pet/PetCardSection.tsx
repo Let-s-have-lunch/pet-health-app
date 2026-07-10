@@ -21,9 +21,8 @@ type Props = {
 export default function PetCardSection({ isLoggedIn, onPressAdd }: Props) {
     return (
         <View>
-        <View>
-            {/* 등록증 */}
+            <View>{/* 등록증 */}</View>
+            {!isLoggedIn && <AddPetCard onPress={onPressAdd} />}
         </View>
-    {!isLoggedIn && <AddPetCard onPress={onPressAdd} />)}
-        </View>
+    );
 }
