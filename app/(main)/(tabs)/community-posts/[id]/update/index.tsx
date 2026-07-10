@@ -1,5 +1,5 @@
-function UpdateCommunityPostPage() {
+function UpdateCommunityPost() {
     return <></>
 }
 
-export default UpdateCommunityPostPage;
+export default UpdateCommunityPost;

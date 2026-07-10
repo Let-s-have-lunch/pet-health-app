@@ -1,24 +1,29 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { PostInputType, postSchema } from "@/schemas/post/postSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import postApi from "@/api/user/postApi";
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { twMerge } from "tailwind-merge";
-import ContentContainer from "@/components/layouts/common/ContentContainer";
 import Title from "@/components/common/title/Title";
+import ContentContainer from "@/components/layouts/common/ContentContainer";
 import TextComponent from "@/components/common/text/TextComponent";
 import FormContainer from "@/components/layouts/common/FormContainer";
 import InputGroup from "@/components/common/input/InputGroup";
 import TextareaGroup from "@/components/common/textarea/TextareaGroup";
 import Button from "@/components/common/button/Button";
+import { useCallback, useEffect, useState } from "react";
+import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 
-function CreateCommunityPostPage() {
+function UpdateCommunityPostPage() {
     const router = useRouter();
+    const { id: postId } = useLocalSearchParams<{ id: string }>();
+    const [isLoading, setIsLoading] = useState(true);
 
     const {
         control,
         handleSubmit,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<PostInputType>({
         resolver: zodResolver(postSchema),
@@ -29,13 +34,38 @@ function CreateCommunityPostPage() {
         },
     });
 
+    const loadPost = useCallback(async () => {
+        if (!postId) return;
+        try {
+            const result = await postApi.getPostById(Number(postId));
+            reset({
+                title: result.title,
+                content: result.content,
+            });
+        } catch (error) {
+            console.error(error);
+            const msg = "게시글 정보를 불러오는데 실패했습니다.";
+            if (Platform.OS === "web") {
+                alert(msg);
+            } else {
+                Alert.alert("오류", msg, [{ text: "확인", onPress: () => router.back() }]);
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    }, [postId, reset, router]);
+
+    useEffect(() => {
+        loadPost().then(() => {});
+    }, [loadPost])
+
     const onSubmit = async (data: PostInputType) => {
         try {
-            const result = await postApi.createPost(data);
-            router.replace(`/post/${result.id}`);
+            await postApi.updatePost(Number(postId), data);
+            router.replace(`/post/${postId}`);
         } catch (error) {
             console.log(error);
-            const msg = "게시글 작성에 실패했습니다.";
+            const msg = "게시글 수정에 실패했습니다.";
             if (Platform.OS === "web") {
                 alert(msg);
             } else {
@@ -44,16 +74,24 @@ function CreateCommunityPostPage() {
         }
     };
 
+    if (isLoading) {
+        return <LoadingIndicator fullScreen />;
+    }
+
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             className={twMerge("flex-1", "bg-background-paper")}>
-            <Title title={"등록"} showBackButton={true} onBackPress={() => router.push("/community-posts")} />
+            <Title
+                title={"수정"}
+                showBackButton={true}
+                onBackPress={() => router.push(`/post/${postId}`)}
+            />
             <ScrollView>
                 <ContentContainer className={"bg-transparent p-0"}>
                     <TextComponent
                         className={twMerge("font-medium", "text-xl", "text-center", "mt-9")}>
-                        내용을 작성해주세요
+                        내용을 수정해주세요
                     </TextComponent>
                     <FormContainer>
                         <Controller
@@ -84,7 +122,7 @@ function CreateCommunityPostPage() {
                                         size={"small"}
                                         id={"content"}
                                         label={"내용"}
-                                        placeholder={"자유롭게 작성해주세요."}
+                                        placeholder={"내용을 수정해주세요"}
                                         autoCapitalize={"none"}
                                         onBlur={onBlur}
                                         onChangeText={onChange}
@@ -96,14 +134,16 @@ function CreateCommunityPostPage() {
                         />
 
                         <View className={twMerge(["md:flex-row", "mt-9", "gap-3"])}>
-                            <Button variant={"outlined"} onPress={() => router.push("/community-posts")}>
+                            <Button
+                                variant={"outlined"}
+                                onPress={() => router.push(`/post/${postId}`)}>
                                 취소
                             </Button>
                             <Button
                                 variant={"contained"}
                                 onPress={handleSubmit(onSubmit)}
                                 disabled={isSubmitting}>
-                                {isSubmitting ? "등록 중..." : "등록하기"}
+                                {isSubmitting ? "수정 중..." : "수정하기"}
                             </Button>
                         </View>
                     </FormContainer>
@@ -113,4 +153,4 @@ function CreateCommunityPostPage() {
     );
 }
 
-export default CreateCommunityPostPage;
+export default UpdateCommunityPostPage;

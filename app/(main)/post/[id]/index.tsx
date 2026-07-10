@@ -12,6 +12,7 @@ import { twMerge } from "tailwind-merge";
 import postApi from "@/api/user/postApi";
 import { Feather } from "@expo/vector-icons";
 import Button from "@/components/common/button/Button";
+import CommunityPostDetailReply from "@/app/(main)/post/[id]/CommunityPostDetailReply";
 
 function CommunityPostDetailPage() {
     const router = useRouter();
@@ -128,9 +129,12 @@ function CommunityPostDetailPage() {
                 </ContentContainer>
                 <View className={twMerge(["flex-row"])}>
                     <Button>목록으로</Button>
-                    <Button>수정</Button>
+                    <Button onPress={() => router.push(`/post/${postId}/update`)}>수정</Button>
                     <Button>삭제</Button>
                 </View>
+
+                {/* 댓글 영역 */}
+                <CommunityPostDetailReply postId={post.id} />
             </ScrollView>
         </View>
     );
