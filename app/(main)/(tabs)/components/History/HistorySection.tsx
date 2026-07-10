@@ -75,6 +75,7 @@ export default function HistorySection() {
         {
             id: "walk",
             title: "산책",
+            onPress: () => router.push("/(main)/health/walk-logs"),
             renderBottom: () => (
                 <View className="flex-row justify-end items-center gap-3">
                     <Ionicons name="paw" size={22} color="#BACFCD" />
