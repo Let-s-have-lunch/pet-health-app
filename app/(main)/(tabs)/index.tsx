@@ -46,7 +46,7 @@ function HomeScreen() {
 
 
     return (
-        <ScrollView>
+        <ScrollView  showsVerticalScrollIndicator={false}>
             <PetCardSection pets={pets} isLoggedIn={isLoggedIn} onPressAdd={handleAddPet} />
             <HistorySection />
         </ScrollView>
