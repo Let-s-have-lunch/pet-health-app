@@ -11,7 +11,6 @@ export default function RootLayout() {
     const { setColorScheme } = useColorScheme();
 
     useEffect(() => {
-
         setColorScheme(theme);
     }, [theme, setColorScheme]);
 
