@@ -11,7 +11,7 @@ export interface Post {
     deletedAt: string | null;
 }
 
-export type PostUser = Pick<User, "id" | "nickname" >;
+export type PostUser = Pick<User, "id" | "nickname" | "email" >;
 
 
 export interface PostListItemType extends Post {

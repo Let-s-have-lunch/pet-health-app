@@ -16,15 +16,17 @@ import Button from "@/components/common/button/Button";
 import InputGroup from "@/components/common/input/InputGroup"; // ✅ 적용
 import { WalkLogInputType, walkLogSchema } from "@/schemas/walkLog/walkLogSchema";
 import walkLogApi from "@/api/user/walkLogApi";
+import { WalkLog } from "@/types/walkLog";
 
 interface WalkLogModalProps {
     visible: boolean;
     onClose: () => void;
     petId: number;
     reload: () => Promise<void>;
+    initialData: WalkLog | null;
 }
 
-function WalkLogModal({ visible, onClose, petId, reload }: WalkLogModalProps) {
+function WalkLogModal({ visible, onClose, petId, reload, initialData }: WalkLogModalProps) {
     const {
         control,
         reset,
@@ -41,13 +43,21 @@ function WalkLogModal({ visible, onClose, petId, reload }: WalkLogModalProps) {
 
     useEffect(() => {
         if (visible) {
-            reset({
-                walkDate: format(new Date(), "yyyyMMdd"),
-                duration: 0,
-                memo: "",
-            });
+            if (initialData) {
+                reset({
+                    walkDate: format(initialData.walkDate, "yyyyMMdd"),
+                    duration: initialData.duration,
+                    memo: initialData.memo || "",
+                });
+            } else {
+                reset({
+                    walkDate: format(new Date(), "yyyyMMdd"),
+                    duration: 0,
+                    memo: "",
+                });
+            }
         }
-    }, [visible, reset]);
+    }, [visible, reset, initialData]);
 
     const onSubmit = async (data: WalkLogInputType) => {
         try {
@@ -64,17 +74,23 @@ function WalkLogModal({ visible, onClose, petId, reload }: WalkLogModalProps) {
                 ...submitData,
                 memo: memo || undefined,
                 walkDate: formattedDate,
-            }
+            };
 
-            await walkLogApi.createWalkLog(petId, payload);
+            if (initialData) {
+                await walkLogApi.updateWalkLog(initialData.id, payload);
+            } else {
+                await walkLogApi.createWalkLog(petId, payload);
+            }
             await reload();
             onClose();
         } catch (error) {
             console.log(error);
+            const errorActionText = initialData ? "수정하는" : "등록하는";
+
             if (Platform.OS === "web") {
-                alert("산책 기록을 등록하는 중 오류가 발생했습니다.");
+                alert(`산책 기록을 ${errorActionText} 중 오류가 발생했습니다.`);
             } else {
-                Alert.alert("오류", "산책기록을 등록하는 중 오류가 발생했습니다.");
+                Alert.alert("오류", `산책 기록을 ${errorActionText} 중 오류가 발생했습니다.`);
             }
         }
     };
@@ -89,7 +105,7 @@ function WalkLogModal({ visible, onClose, petId, reload }: WalkLogModalProps) {
                         <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
                             <View className="bg-background-paper w-full max-w-xl rounded-3xl p-6 shadow-xl">
                                 <TextComponent className="text-xl font-bold mb-6">
-                                    산책 기록 등록
+                                    {initialData ? "산책 기록 수정" : "산책 기록 등록"}
                                 </TextComponent>
 
                                 <Controller
@@ -151,7 +167,13 @@ function WalkLogModal({ visible, onClose, petId, reload }: WalkLogModalProps) {
                                         wrap={true}
                                         onPress={handleSubmit(onSubmit)}
                                         disabled={isSubmitting}>
-                                        {isSubmitting ? "등록중..." : "등록"}
+                                        {initialData
+                                            ? isSubmitting
+                                                ? "수정중..."
+                                                : "수정"
+                                            : isSubmitting
+                                              ? "등록중..."
+                                              : "등록"}
                                     </Button>
                                     <Button variant={"outlined"} wrap={true} onPress={onClose}>
                                         취소

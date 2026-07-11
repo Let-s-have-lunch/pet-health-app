@@ -32,8 +32,10 @@ function WalkLogListPage() {
 
     const [chartWidth, setChartWidth] = useState(300);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedLog, setSelectedLog] = useState<WalkLog | null>(null);
 
     // 날짜 관련 기준 계산
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const today = new Date();
     const endDate = format(today, "yyyy-MM-dd");
     const startDate = format(subDays(today, 6), "yyyy-MM-dd");
@@ -41,7 +43,7 @@ function WalkLogListPage() {
 
     const last7Days = useMemo(() => {
         return Array.from({ length: 7 }, (_, i) => format(subDays(today, 6 - i), "yyyy-MM-dd"));
-    }, []);
+    }, [today]);
 
     // API 데이터 페칭
     const fetchWalkLogData = useCallback(async () => {
@@ -91,14 +93,44 @@ function WalkLogListPage() {
         setIsModalVisible(true);
     };
 
-    const handleEditLog = (id: number) => {
-        // 수정 팝업 오픈 혹은 페이지 이동 로직 작성부
-        console.log(`Edit walk log ID: ${id}`);
+    const handleEditLog = (walkLogId: number) => {
+        const targetLog = history.find(log => log.id === walkLogId);
+        if (targetLog) {
+            setIsModalVisible(true);
+            setSelectedLog(targetLog);
+        }
     };
 
-    const handleDeleteLog = async (id: number) => {
-        // 삭제 확인 컨펌 및 API 호출 로직 작성부
-        console.log(`Delete walk log ID: ${id}`);
+    const handleCloseModal = () => {
+        setIsModalVisible(false);
+        setSelectedLog(null);
+    };
+
+    const handleDeleteLog = async (walkLogId: number) => {
+        const executeDelete = async () => {
+            try {
+                await walkLogApi.deleteWalkLog(walkLogId);
+                await fetchWalkLogData();
+            } catch (error) {
+                console.log(error);
+                if (Platform.OS === "web") {
+                    alert("산책기록을 삭제하는 중 오류가 발생했습니다.");
+                } else {
+                    Alert.alert("오류", "산책기록을 삭제하는 중 오류가 발생했습니다.");
+                }
+            }
+        };
+
+        if (Platform.OS === "web") {
+            if (confirm("정말 이 산책기록을 삭제 처리 하시겠습니까?")) {
+                executeDelete().then(() => {});
+            }
+        } else {
+            Alert.alert("경고", "정말 이 산책기록을 삭제 처리 하시겠습니까?", [
+                { text: "취소", style: "cancel" },
+                { text: "삭제", style: "destructive", onPress: executeDelete },
+            ]);
+        }
     };
 
     return (
@@ -157,8 +189,7 @@ function WalkLogListPage() {
                                     width={chartWidth}
                                     height={220}
                                     domain={{ y: [0, yMax] }}
-                                    padding={{ top: 20, bottom: 30, left: 35, right: 20 }} // 왼쪽 숫자 간격 확보용 패딩 수정
-                                >
+                                    padding={{ top: 20, bottom: 30, left: 35, right: 20 }}>
                                     <VictoryAxis
                                         style={{
                                             axis: { stroke: "#D1D5DB" },
@@ -171,14 +202,15 @@ function WalkLogListPage() {
                                         tickValues={yTickValues}
                                         style={{
                                             axis: { stroke: "transparent" },
-                                            tickLabels: { fill: "#888", fontSize: 12, padding: 15 }, // 💡 그래프 선과 숫자 간격 수정 반영
+                                            tickLabels: { fill: "#888", fontSize: 12, padding: 15 },
                                             grid: { stroke: "#D1D5DB", strokeDasharray: "4, 4" },
                                         }}
                                     />
 
-                                    {/* 그래프 하단 연분홍 채우기 영역 */}
+                                    {/* 하단 연분홍 영역 (곡선 적용) */}
                                     <VictoryArea
                                         data={chartData}
+                                        interpolation="catmullRom"
                                         style={{
                                             data: {
                                                 fill: "rgba(232, 124, 113, 0.15)",
@@ -186,20 +218,37 @@ function WalkLogListPage() {
                                         }}
                                     />
 
+                                    {/* 두꺼운 반투명 배경 선 (Halo 효과) */}
                                     <VictoryLine
                                         data={chartData}
-                                        style={{
-                                            data: { stroke: "#e87c71", strokeWidth: 3 },
-                                        }}
-                                    />
-                                    <VictoryScatter
-                                        data={chartData}
-                                        size={4}
+                                        interpolation="catmullRom"
                                         style={{
                                             data: {
-                                                fill: "#FFF",
+                                                stroke: "rgba(232, 124, 113, 0.3)",
+                                                strokeWidth: 14,
+                                            },
+                                        }}
+                                    />
+
+                                    {/* 얇고 진한 뼈대 메인 선 */}
+                                    <VictoryLine
+                                        data={chartData}
+                                        interpolation="catmullRom"
+                                        style={{
+                                            data: {
                                                 stroke: "#e87c71",
                                                 strokeWidth: 2,
+                                            },
+                                        }}
+                                    />
+
+                                    {/* 꽉 차고 큼직한 점 */}
+                                    <VictoryScatter
+                                        data={chartData}
+                                        size={6}
+                                        style={{
+                                            data: {
+                                                fill: "#e87c71",
                                             },
                                         }}
                                     />
@@ -210,12 +259,13 @@ function WalkLogListPage() {
                         {/* 모달 팝업 컴포넌트 */}
                         <WalkLogModal
                             visible={isModalVisible}
-                            onClose={() => setIsModalVisible(false)}
+                            onClose={handleCloseModal}
                             petId={petId}
                             reload={fetchWalkLogData}
+                            initialData={selectedLog}
                         />
 
-                        {/* 💡 분리 및 인터페이스 개선 완료된 히스토리 섹션 */}
+                        {/* 히스토리 섹션 */}
                         <HistorySection
                             history={history}
                             onAddPress={handleAddPress}
@@ -230,5 +280,3 @@ function WalkLogListPage() {
 }
 
 export default WalkLogListPage;
-
-// TODO: 메모는 어떻게 써먹을지, 수정/삭제 기능추가. 그리고 이에 앞서 전체코드 이해하기. 특히 컴포넌트 전달 부분. 

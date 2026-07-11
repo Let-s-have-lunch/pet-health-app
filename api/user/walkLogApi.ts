@@ -26,4 +26,13 @@ const createWalkLog = async (petId: number, input: WalkLogInputType): Promise<Wa
     return response.data.data;
 };
 
-export default { getWalkLogs, getWalkLogStats, createWalkLog };
+const updateWalkLog = async (walkLogId: number, input: WalkLogInputType): Promise<WalkLog> => {
+    const response = await axiosInstance.patch(`/walk-logs/${walkLogId}`, input);
+    return response.data.data;
+}
+
+const deleteWalkLog = async (walkLogId: number): Promise<void> => {
+    await axiosInstance.delete(`/walk-logs/${walkLogId}`);
+}
+
+export default { getWalkLogs, getWalkLogStats, createWalkLog, updateWalkLog, deleteWalkLog };

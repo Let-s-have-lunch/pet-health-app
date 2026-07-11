@@ -53,16 +53,14 @@ function HistorySection({ history, onAddPress, onEditPress, onDeletePress }: Pro
                                     {format(new Date(log.walkDate), "yy.MM.dd")}
                                 </TextComponent>
                                 <View className={twMerge("flex-row gap-2")}>
-                                    <TouchableOpacity
-                                        className={twMerge("p-1")}
-                                        onPress={() => onEditPress(log.id)}>
+                                    <Button variant={"icon"} onPress={() => onEditPress(log.id)}>
                                         <Edit2 size={16} color="#718096" />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        className={twMerge("p-1")}
+                                    </Button>
+                                    <Button
+                                        variant={"icon"}
                                         onPress={() => onDeletePress(log.id)}>
                                         <Trash2 size={16} color="#F56565" />
-                                    </TouchableOpacity>
+                                    </Button>
                                 </View>
                             </View>
                         </Card>
