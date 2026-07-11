@@ -155,6 +155,7 @@ function WalkLogModal({ visible, onClose, petId, reload, initialData }: WalkLogM
                                             errorMessage={errors.duration?.message}
                                             keyboardType="numeric"
                                             placeholder="예: 30"
+                                            value={value ? String(value) : ""}
                                         />
                                     );
                                 }}
