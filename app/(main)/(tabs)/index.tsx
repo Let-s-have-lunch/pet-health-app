@@ -6,6 +6,7 @@ import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { usePetStore } from "@/stores/usePetStore";
 import petApi from "@/api/user/petApi";
 import { useEffect } from "react";
+import HistorySection from "@/components/history/HistorySection";
 
 function HomeScreen() {
     const router = useRouter();
@@ -49,7 +50,7 @@ function HomeScreen() {
     return (
         <ScrollView>
             <PetCardSection pets={pets} isLoggedIn={isLoggedIn} onPressAdd={handleAddPet} />
-            <WeightHistorySection />
+            <HistorySection />
         </ScrollView>
     );
 }

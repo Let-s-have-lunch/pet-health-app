@@ -1,20 +1,28 @@
 import { WeightLog } from "@/types/WeightLog";
+import { WeightLogInputType } from "@/schemas/weightLog/weightLogSchema";
 import axiosInstance from "../axiosInstance";
 
 export const weightLogApi = {
-    // 1. 조회: 펫별로 가져오니 getByPetId가 명확합니다.
-    getByPetId: (petId: number) =>
-        axiosInstance.get<{ data: WeightLog[] }>(`/weight-logs/pet/${petId}`),
+    // 1. 조회
+    getByPetId: (petId: number) => axiosInstance.get(`/weight-logs/pet/${petId}`),
 
-    // 2. 생성: 생성 역시 펫 데이터를 넣는 것이므로 create가 맞습니다.
-    create: (data: { petId: number; weight: number; recordDate: string }) =>
-        axiosInstance.post<WeightLog>("/weight-logs", data),
+    // 2. 통계
+    getStats: (petId: number, startDate: string, endDate: string) =>
+        axiosInstance.get(`/weight-logs/pet/${petId}/stats`, {
+            params: { startDate, endDate },
+        }),
 
-    // 3. 삭제: 삭제도 꼭 추가해두세요!
+    // 3. 생성
+    create: (petId: number, data: WeightLogInputType) =>
+        axiosInstance.post<WeightLog>("/weight-logs", { petId, ...data }),
+
+    // 4. 수정 (🚨 백엔드 스키마 검증 통과를 위해 바디에 petId 병합!)
+    update: (id: number, petId: number, data: WeightLogInputType) =>
+        axiosInstance.put<{ message: string; data: WeightLog }>(`/weight-logs/${id}`, {
+            petId,
+            ...data,
+        }),
+
+    // 5. 삭제
     delete: (id: number) => axiosInstance.delete(`/weight-logs/${id}`),
-
-    update: (id: number, data: { petId: number; weight: number; recordDate: string; memo?: string }) =>
-        axiosInstance.put<{ message: string; data: WeightLog }>(`/weight-logs/${id}`, data),
 };
-
-

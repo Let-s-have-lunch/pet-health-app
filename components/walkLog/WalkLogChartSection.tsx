@@ -40,6 +40,26 @@ function WalkLogChartSection({ stats, last7Days, displayDateRange }: Props) {
 
     return (
         <View className={twMerge("mb-10")}>
+            <View className={twMerge("w-full flex-row justify-between items-center mb-3")}>
+                <View>
+                    <TextComponent className={twMerge("text-[20px] font-bold")}>
+                        최근 일주일 통계
+                    </TextComponent>
+                    <TextComponent className={twMerge("text-[12px] text-text-secondary mt-1")}>
+                        DATE {displayDateRange}
+                    </TextComponent>
+                </View>
+                <View className={twMerge("items-end")}>
+                    {/* ✅ 3. summary 뒤에도 ?를 붙여서 에러 방지 */}
+                    <TextComponent className={twMerge("text-sm font-bold text-[#e87c71]")}>
+                        총 {stats?.summary?.totalWalks || 0}회
+                    </TextComponent>
+                    <TextComponent
+                        className={twMerge("text-sm font-bold text-success-contrast mt-1")}>
+                        총 {stats?.summary?.totalDuration || 0}분
+                    </TextComponent>
+                </View>
+            </View>
             <Card
                 shadow={"sm"}
                 className={twMerge("w-full items-center")}
@@ -47,27 +67,6 @@ function WalkLogChartSection({ stats, last7Days, displayDateRange }: Props) {
                     const { width } = event.nativeEvent.layout;
                     setChartWidth(width - 40);
                 }}>
-                <View className={twMerge("w-full flex-row justify-between items-center mb-0")}>
-                    <View>
-                        <TextComponent className={twMerge("text-[20px] font-bold")}>
-                            최근 일주일 통계
-                        </TextComponent>
-                        <TextComponent className={twMerge("text-[12px] text-text-secondary mt-1")}>
-                            DATE {displayDateRange}
-                        </TextComponent>
-                    </View>
-                    <View className={twMerge("items-end")}>
-                        {/* ✅ 3. summary 뒤에도 ?를 붙여서 에러 방지 */}
-                        <TextComponent className={twMerge("text-sm font-bold text-[#e87c71]")}>
-                            총 {stats?.summary?.totalWalks || 0}회
-                        </TextComponent>
-                        <TextComponent
-                            className={twMerge("text-sm font-bold text-success-contrast mt-1")}>
-                            총 {stats?.summary?.totalDuration || 0}분
-                        </TextComponent>
-                    </View>
-                </View>
-
                 {/* 차트 영역은 동일하게 유지 */}
                 <VictoryChart
                     width={chartWidth}

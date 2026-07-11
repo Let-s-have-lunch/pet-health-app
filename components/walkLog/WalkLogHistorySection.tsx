@@ -18,9 +18,9 @@ interface Props {
 
 function WalkLogHistorySection({ history, onAddPress, onEditPress, onDeletePress }: Props) {
     return (
-        <View className={twMerge("mb-6")}>
+        <View className={twMerge("mb-6 mt-2")}>
             <View className={twMerge("flex-row justify-between items-center mb-4")}>
-                <TextComponent className={twMerge("text-lg font-bold")}>History</TextComponent>
+                <TextComponent className={twMerge("text-xl font-bold")}>산책 기록</TextComponent>
                 <Button size={"small"} onPress={onAddPress}>
                     <Plus size={20} color="#4A5568" />
                 </Button>
@@ -64,7 +64,7 @@ function WalkLogHistorySection({ history, onAddPress, onEditPress, onDeletePress
                                         <Badge
                                             key={index}
                                             color={"error"}
-                                            textClasses={"text-error-point"}>
+                                            >
                                             {keyword}
                                         </Badge>
                                     ))}
