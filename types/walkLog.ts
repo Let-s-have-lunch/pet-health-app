@@ -1,11 +1,8 @@
 export interface WalkLog {
     id: number;
-    createdAt: string;
-    updatedAt: string;
     walkDate: string;
     duration: number;
-    memo: string | null;
-    petId: number;
+    keywords: string[];
 }
 
 export interface WalkLogStats {

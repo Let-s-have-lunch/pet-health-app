@@ -1,6 +1,6 @@
-import AddPetCard from "@/app/(main)/(tabs)/components/Pet/AddPetCard";
+import AddPetCard from "@/components/pet/AddPetCard";
 import { Pet } from "@/types/pet";
-import PetCard from "@/app/(main)/(tabs)/components/Pet/PetCard";
+import PetCard from "@/components/pet/PetCard";
 
 type Props = {
     isLoggedIn: boolean;
