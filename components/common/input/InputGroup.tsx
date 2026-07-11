@@ -18,12 +18,13 @@ function InputGroup({
     wrap,
     className,
     size = "medium",
+    children,
     ...props
 }: InputGroupProps) {
     return (
         <View className={twMerge("w-full mb-3", wrap && "flex-1", className)}>
             {label && <Label size={size}>{label}</Label>}
-            <Input hasError={!!errorMessage} size={size} {...props} />
+            {children ? children : <Input hasError={!!errorMessage} size={size} {...props} />}
             {errorMessage && <ErrorMessage size={size}>{errorMessage}</ErrorMessage>}
         </View>
     );

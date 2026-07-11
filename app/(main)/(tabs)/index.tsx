@@ -1,7 +1,7 @@
-import PetCardSection from "@/app/(main)/(tabs)/components/Pet/PetCardSection";
+import PetCardSection from "@/components/pet/PetCardSection";
 import { useRouter } from "expo-router";
 import { ScrollView } from "react-native";
-import HistorySection from "./components/History/HistorySection";
+import WeightHistorySection from "@/components/weight/WeightHistorySection";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { usePetStore } from "@/stores/usePetStore";
 import petApi from "@/api/user/petApi";
@@ -49,7 +49,7 @@ function HomeScreen() {
     return (
         <ScrollView  showsVerticalScrollIndicator={false}>
             <PetCardSection pets={pets} isLoggedIn={isLoggedIn} onPressAdd={handleAddPet} />
-            <HistorySection />
+            <WeightHistorySection />
         </ScrollView>
     );
 }
