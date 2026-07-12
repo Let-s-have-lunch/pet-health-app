@@ -29,9 +29,10 @@ export default function PetCard({ pet, onPressEdit }: Props) {
                     className={twMerge(
                         ["rounded-xl"],
                         ["border", "border-[#A6DDD0]"],
-정                        ["px-3.5", "py-2"],
+                        ["px-3.5", "py-2"],
                     )}>
-                    <TextComponent className={twMerge(["font-semibold"], ["text-[#5C9587]"], ["text-[16px]"])}>
+                    <TextComponent
+                        className={twMerge(["font-semibold"], ["text-[#5C9587]"], ["text-[16px]"])}>
                         수정
                     </TextComponent>
                 </Pressable>
