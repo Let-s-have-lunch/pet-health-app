@@ -108,3 +108,14 @@
         --info-contrast: #3A3532;
     }
 }
+
+input:focus,
+textarea:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+*:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
