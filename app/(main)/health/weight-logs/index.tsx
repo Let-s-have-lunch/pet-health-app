@@ -9,7 +9,7 @@ import { weightLogApi } from "@/api/user/weightLogApi";
 import { WeightLog } from "@/types/WeightLog";
 import WeightLogChartSection from "@/components/weight/WeightLogChartSection";
 import WeightLogModal from "@/components/weight/WeightLogModal";
-import WeightLogHistorySection from "@/components/weight/WeightHistorySection";
+import WeightLogHistorySection from "@/components/weight/PetHistorySection";
 
 function WeightLogListPage() {
     const router = useRouter();
