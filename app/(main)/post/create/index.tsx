@@ -12,9 +12,26 @@ import FormContainer from "@/components/layouts/common/FormContainer";
 import InputGroup from "@/components/common/input/InputGroup";
 import TextareaGroup from "@/components/common/textarea/TextareaGroup";
 import Button from "@/components/common/button/Button";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { useEffect } from "react";
 
 function CreateCommunityPostPage() {
     const router = useRouter();
+    const { isLoggedIn } = useAuthStore();
+
+    useEffect(() => {
+        if (!isLoggedIn) {
+            const msg = "로그인이 필요한 서비스입니다.";
+            if (Platform.OS === "web") {
+                alert(msg);
+                router.replace("/auth/login");
+            } else {
+                Alert.alert("안내", msg, [
+                    { text: "확인", onPress: () => router.replace("/auth/login") },
+                ]);
+            }
+        }
+    }, [isLoggedIn]);
 
     const {
         control,
@@ -30,6 +47,7 @@ function CreateCommunityPostPage() {
     });
 
     const onSubmit = async (data: PostInputType) => {
+        if (!isLoggedIn) return;
         try {
             const result = await postApi.createPost(data);
             router.replace(`/post/${result.id}`);
@@ -43,6 +61,10 @@ function CreateCommunityPostPage() {
             }
         }
     };
+    if (!isLoggedIn) {
+        return null;
+    }
+
 
     return (
         <KeyboardAvoidingView

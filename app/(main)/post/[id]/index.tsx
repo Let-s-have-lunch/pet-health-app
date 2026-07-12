@@ -23,6 +23,9 @@ function CommunityPostDetailPage() {
     const [post, setPost] = useState<PostListItemType | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
+    // [추가] 하위 댓글 컴포넌트에서 전달받을 댓글 총 개수 상태
+    const [replyCount, setReplyCount] = useState<number>(0);
+
     const loadPost = useCallback(async () => {
         try {
             const result = await postApi.getPostById(postId);
@@ -44,7 +47,53 @@ function CommunityPostDetailPage() {
         loadPost().then(() => {});
     }, [loadPost]);
 
-    // const isAuthor = post?.user.id === user?.id;
+    const isAuthor = post?.user.id === user?.id;
+
+    // [변경] 댓글이 있을 경우 삭제 제한 로직 추가
+    const handleDelete = () => {
+        if (replyCount > 0) {
+            const blockMsg = "댓글이 있는 게시글은 삭제할 수 없습니다.";
+            if (Platform.OS === "web") {
+                alert(blockMsg);
+            } else {
+                Alert.alert("삭제 불가", blockMsg, [{ text: "확인" }]);
+            }
+            return;
+        }
+
+        const title = "게시글 삭제";
+        const message = "정말로 이 게시글을 삭제하시겠습니까?";
+
+        if (Platform.OS === "web") {
+            const confirmDelete = window.confirm(message);
+            if (confirmDelete) {
+                executeDelete().then(() => {} );
+            }
+        } else {
+            Alert.alert(title, message, [
+                { text: "취소", style: "cancel" },
+                { text: "삭제", style: "destructive", onPress: executeDelete },
+            ]);
+        }
+    };
+
+    const executeDelete = async () => {
+        try {
+            setIsLoading(true);
+            await postApi.deletePost(postId);
+            router.push("/community-posts");
+        } catch (error) {
+            console.log(error);
+            const errorMsg = "게시글 삭제에 실패했습니다.";
+            if (Platform.OS === "web") {
+                alert(errorMsg);
+            } else {
+                Alert.alert("오류", errorMsg, [{ text: "확인" }]);
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     if (isLoading || !post) {
         return <LoadingIndicator fullScreen />;
@@ -127,14 +176,38 @@ function CommunityPostDetailPage() {
                         </Card>
                     </View>
                 </ContentContainer>
-                <View className={twMerge(["flex-row"])}>
-                    <Button>목록으로</Button>
-                    <Button onPress={() => router.push(`/post/${postId}/update`)}>수정</Button>
-                    <Button>삭제</Button>
+                <View className={twMerge(["flex-row", "px-6", "gap-1", "justify-end"])}>
+                    <Button
+                        className={twMerge(["flex-1"])}
+                        variant={"outlined"}
+                        size={"medium"}
+                        onPress={() => router.push("/community-posts")}>
+                        목록으로
+                    </Button>
+
+                    {isAuthor && (
+                        <>
+                            <Button
+                                className={twMerge(["flex-1"])}
+                                variant={"contained"}
+                                size={"medium"}
+                                color={"error"}
+                                onPress={() => router.push(`/post/${postId}/update`)}>
+                                수정
+                            </Button>
+                            <Button
+                                className={twMerge(["flex-1"])}
+                                variant={"contained"}
+                                size={"medium"}
+                                onPress={handleDelete}>
+                                삭제
+                            </Button>
+                        </>
+                    )}
                 </View>
 
-                {/* 댓글 영역 */}
-                <CommunityPostDetailReply postId={post.id} />
+                {/* [변경] 댓글 수 변경을 상위로 전달하기 위한 함수 전달 */}
+                <CommunityPostDetailReply postId={post.id} onTotalChange={setReplyCount} />
             </ScrollView>
         </View>
     );

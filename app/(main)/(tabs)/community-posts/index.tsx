@@ -124,8 +124,8 @@ function CommunityPostListPage() {
                                             "md:items-center",
                                             "bg-background-paper",
                                         ],
-                                        ["px-4", "py-3", "md:px-4"],
-                                        ["my-2", "md:my-0"],
+                                        ["px-4", "py-4", "md:px-4"],
+                                        ["my-1", "md:my-0"],
                                         ["transition-colors", "hover:bg-background-default"],
                                         ["border-b", "border-background-default"],
                                         ["rounded-xl", "md:rounded-none"],
@@ -145,11 +145,14 @@ function CommunityPostListPage() {
                                         )}
                                         onPress={() => router.push(`/post/${item.id}`)}>
                                         <TextComponent
-                                            className={twMerge([
-                                                "font-medium",
-                                                "hover:text-primary-main",
-                                                "transition-colors",
-                                            ])}
+                                            className={twMerge(
+                                                [
+                                                    "font-medium",
+                                                    "hover:text-primary-main",
+                                                    "transition-colors",
+                                                ],
+                                                ["pb-2", "md:pb-0"],
+                                            )}
                                             numberOfLines={1}>
                                             {item.title}
                                         </TextComponent>
