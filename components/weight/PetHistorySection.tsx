@@ -16,7 +16,7 @@ const getTodayString = () => {
     return `${year}-${month}-${day}`;
 };
 
-export default function WeightHistorySection() {
+export default function PetHistorySection() {
     const [isLoading, setIsLoading] = useState(true);
     const todayDate = getTodayString();
 

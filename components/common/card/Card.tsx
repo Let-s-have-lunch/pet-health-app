@@ -13,7 +13,7 @@ interface CardProps extends ViewProps {
 const getShadowStyles: Record<ShadowSize, string> = {
     none: "shadow-none",
     sm: "shadow-sm",
-    md: "shadow-[0_2px_4px_0_rgba(0,0,0,0.2)]", // NativeWind 환경에서 지원하는 임의값 문법
+    md: "shadow-[0_2px_4px_0_rgba(0,0,0,0.2)]", // NativeWind 환경에서 지원하는 임의 값 문법
     lg: "shadow-lg",
 };
 
@@ -28,7 +28,7 @@ export default function Card({
         <View
             className={twMerge(
                 "bg-background-paper",
-                "rounded-[10px]",
+                "rounded-[28px]",
                 "p-5",
                 wrap && "flex-1",
                 getShadowStyles[shadow],

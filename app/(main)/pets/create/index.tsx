@@ -15,7 +15,6 @@ import TextComponent from "@/components/common/text/TextComponent";
 
 function PetCreatePage() {
     const router = useRouter();
-
     const {
         control,
         handleSubmit,

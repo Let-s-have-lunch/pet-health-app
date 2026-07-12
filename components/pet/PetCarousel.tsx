@@ -1,15 +1,15 @@
-import { useMemo, useRef, useState } from "react";
+import { Pet } from "@/types/pet";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
     FlatList,
+    LayoutChangeEvent,
     NativeScrollEvent,
     NativeSyntheticEvent,
-    useWindowDimensions,
     View,
 } from "react-native";
-
-import AddPetCard from "./AddPetCard";
-import PetCard from "./PetCard";
-import { Pet } from "@/types/pet";
+import PetCard from "@/components/pet/PetCard";
+import AddPetCard from "@/components/pet/AddPetCard";
+import { twMerge } from "tailwind-merge";
 
 type Props = {
     pets: Pet[];
@@ -18,103 +18,100 @@ type Props = {
 
 type CarouselItem =
     | {
-    type: "pet";
-    pet: Pet;
-}
+          type: "pet";
+          pet: Pet;
+      }
     | {
-    type: "add";
-};
+          type: "add";
+      };
 
-export default function PetCarousel({
-                                        pets,
-                                        onPressAdd,
-                                    }: Props) {
-    const { width } = useWindowDimensions();
+const HORIZONTAL_PADDING = 25;
 
+export default function PetCarousel({ pets, onPressAdd }: Props) {
     const flatListRef = useRef<FlatList<CarouselItem>>(null);
-
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [containerWidth, setContainerWidth] = useState(0);
 
-    const CARD_WIDTH = Math.min(width - 32, 600);
-
-    const data = useMemo<CarouselItem[]>(() => {
-        const petItems = pets.map((pet) => ({
-            type: "pet" as const,
-            pet,
-        }));
-
-        return [...petItems, { type: "add" as const }];
+    const data = useMemo(() => {
+        return [
+            ...pets.map(pet => ({
+                type: "pet" as const,
+                pet,
+            })),
+            {
+                type: "add" as const,
+            },
+        ];
     }, [pets]);
 
-    const handleMomentumEnd = (
-        e: NativeSyntheticEvent<NativeScrollEvent>,
-    ) => {
-        const index = Math.round(
-            e.nativeEvent.contentOffset.x / CARD_WIDTH,
-        );
+    const handleLayout = (e: LayoutChangeEvent) => {
+        setContainerWidth(e.nativeEvent.layout.width);
+    };
 
+    const CARD_WIDTH = Math.max(0, containerWidth - HORIZONTAL_PADDING * 2);
+
+    const handleMomentumEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const index = Math.round(e.nativeEvent.contentOffset.x / CARD_WIDTH);
         setCurrentIndex(index);
     };
 
-    return (
-        <View>
+    useEffect(() => {
+        flatListRef.current?.scrollToOffset({
+            offset: 0,
+            animated: false,
+        });
 
+        setCurrentIndex(0);
+    }, [pets.length]);
+
+    if (CARD_WIDTH === 0) {
+        return <View onLayout={handleLayout} />;
+    }
+
+    return (
+        <View onLayout={handleLayout}>
             <FlatList
                 ref={flatListRef}
-                horizontal
-                pagingEnabled={false}
-                decelerationRate="fast"
-                disableIntervalMomentum
-                showsHorizontalScrollIndicator={false}
                 data={data}
-                keyExtractor={(_, index) => index.toString()}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={item => (item.type === "pet" ? item.pet.id.toString() : "add-card")}
+                getItemLayout={(_, index) => ({
+                    length: CARD_WIDTH,
+                    offset: CARD_WIDTH * index,
+                    index,
+                })}
                 onMomentumScrollEnd={handleMomentumEnd}
                 renderItem={({ item }) => (
                     <View
                         style={{
-                            width,
-                            paddingHorizontal: 16,
-                        }}
-                    >
+                            width: CARD_WIDTH,
+                            marginHorizontal: HORIZONTAL_PADDING,
+                        }}>
                         {item.type === "pet" ? (
-                            <PetCard
-                                pet={item.pet}
-                            />
+                            <PetCard pet={item.pet} />
                         ) : (
-                            <AddPetCard
-                                onPress={onPressAdd}
-                            />
+                            <AddPetCard onPress={onPressAdd} />
                         )}
                     </View>
                 )}
             />
 
-            {/* Indicator */}
-
-            <View
-                className="flex-row justify-center"
-                style={{
-                    marginTop: 8,
-                    marginBottom: 12,
-                }}
-            >
+            <View className={twMerge(["mt-3", "mb-3"], ["flex-row", "justify-center"])}>
                 {data.map((_, index) => (
                     <View
                         key={index}
                         style={{
-                            width: 8,
+                            width: 9,
                             height: 8,
                             borderRadius: 4,
                             marginHorizontal: 4,
-                            backgroundColor:
-                                currentIndex === index
-                                    ? "#F8A69B"
-                                    : "#D8D8D8",
+                            backgroundColor: currentIndex === index ? "#F8A69B" : "#D8D8D8",
                         }}
                     />
                 ))}
             </View>
-
         </View>
     );
 }

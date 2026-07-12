@@ -29,14 +29,13 @@ function MainHeaderMobile() {
                     <Pressable
                         className={twMerge([
                             "flex-row",
-                            "h-20",
                             "items-center",
                             "gap-1",
                             "h-full",
                         ])}>
                         <View
                             className={twMerge(
-                                ["flex-row", "h-12", "w-12", "items-center"],
+                                ["flex-row", "h-12", "w-12", "items-center", "justify-center"],
                                 ["rounded-full", "bg-success-main"],
                             )}></View>
                         <TextComponent className={twMerge(["text-xl", "font-bold"])}>
@@ -47,12 +46,12 @@ function MainHeaderMobile() {
 
                 <View className={twMerge(["flex-row", "items-center", "gap-2", "px-4"])}>
                     <Pressable
+                        onPress={onChangeTheme}
                         className={twMerge(
                             ["p-2", "rounded-full"],
-                            ["transition-all", "active:bg-background-default"],
+                            ["active:bg-background-default"],
                         )}>
                         <Ionicons
-                            onPress={onChangeTheme}
                             name={theme === "light" ? "paw" : "paw-outline"}
                             size={24}
                             className={twMerge("text-text-default")}

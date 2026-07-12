@@ -11,7 +11,6 @@ function MainLayout() {
     const isMobile = width < 768;
     const segments = useSegments();
 
-
     const currentSegment = segments[segments.length - 1];
     const isMyPage = currentSegment === "my";
     const isPostsPage = currentSegment === "community-posts";

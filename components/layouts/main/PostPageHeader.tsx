@@ -1,7 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import TextComponent from "@/components/common/text/TextComponent";
 import { View } from "react-native";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 function PostPageHeader() {
 
@@ -16,8 +16,8 @@ function PostPageHeader() {
             <View className={twMerge(["w-full", "flex-row", "items-center", "max-w-7xl"])}>
                 <View
                     className={twMerge(
-                        ["flex-row", "h-20", "items-center"],
-                        ["flex-1", "px-4", "h-full"],
+                        ["flex-row", "items-center"],
+                        ["px-4", "h-full"],
                     )}>
                     <View
                         className={twMerge(
