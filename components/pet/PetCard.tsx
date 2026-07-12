@@ -13,7 +13,7 @@ type Props = {
 
 export default function PetCard({ pet, onPressEdit }: Props) {
     return (
-        <Card shadow={"md"} style={{ width: "100%", minHeight: 320 }} className={twMerge("px-8")}>
+        <Card style={{ width: "100%", minHeight: 320 }} className={twMerge("px-8")}>
             <View
                 className={twMerge(
                     ["mt-3", "mb-8"],
@@ -69,7 +69,7 @@ export default function PetCard({ pet, onPressEdit }: Props) {
                     <InfoRow label={"품종"} value={pet.breed || "-"} />
                     <InfoRow label={"중성화"} value={pet.neutered ? "중성화" : "미완료"} />
                 </View>
-                <Ionicons name={"chevron-forward"} size={30} color={"#7F8C8D"} />
+                
             </View>
         </Card>
     );

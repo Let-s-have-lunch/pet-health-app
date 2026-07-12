@@ -98,7 +98,7 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                 )}
             />
 
-            <View className={twMerge(["mt-3", "mb-3"], ["flex-row", "justify-center"])}>
+            <View className={twMerge(["mt-7"], ["flex-row", "justify-center"])}>
                 {data.map((_, index) => (
                     <View
                         key={index}

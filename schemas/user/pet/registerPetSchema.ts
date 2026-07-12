@@ -2,7 +2,7 @@ import { z } from "zod";
 import { PetGender } from "@/types/pet";
 
 export const registerPetSchema = z.object({
-    species: z.string().min(1, "동물종을 선택해주세요."),
+    species: z.string().min(1, "동물종을 입력해주세요."),
     breed: z.string().optional(),
     name: z
         .string()

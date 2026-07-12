@@ -1,7 +1,15 @@
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { KeyboardAvoidingView, Platform, ScrollView, View, Alert } from "react-native";
+import {
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    View,
+    Alert,
+    Modal,
+    Pressable,
+} from "react-native";
 
 import Title from "@/components/common/title/Title";
 import FormContainer from "@/components/layouts/common/FormContainer";
@@ -12,6 +20,7 @@ import ErrorMessage from "@/components/common/label/ErrorMessage";
 import petApi from "@/api/user/petApi";
 import { RegisterPetInputType, registerPetSchema } from "@/schemas/user/pet/registerPetSchema";
 import TextComponent from "@/components/common/text/TextComponent";
+import { useState } from "react";
 
 function PetCreatePage() {
     const router = useRouter();
@@ -25,7 +34,7 @@ function PetCreatePage() {
         mode: "onTouched",
         defaultValues: {
             name: "",
-            species: "DOG",
+            species: "",
             breed: "",
             birthdate: "",
             gender: "MALE",
@@ -35,26 +44,30 @@ function PetCreatePage() {
         },
     });
 
-    const onSubmit = async (data: RegisterPetInputType ) => {
+    const [genderModalVisible, setGenderModalVisible] = useState(false);
+    const [neuteredModalVisible, setNeuteredModalVisible] = useState(false);
+
+    const onSubmit = async (data: RegisterPetInputType) => {
         try {
             const payload = {
                 ...data,
                 birthdate: data.birthdate
                     ? `${data.birthdate.slice(0, 4)}-${data.birthdate.slice(4, 6)}-${data.birthdate.slice(6, 8)}`
                     : undefined,
+                registrationNumber:
+                    (data.registrationNumber ?? "").trim() === ""
+                        ? undefined
+                        : data.registrationNumber,
+                profileImage:
+                    (data.profileImage ?? "").trim() === "" ? undefined : data.profileImage,
             };
 
-            console.log("보내는 데이터:", payload);
             await petApi.registerPet(payload);
 
-            Alert.alert("등록 완료", "반려동물이 등록되었습니다.", [
-                {
-                    text: "확인",
-                    onPress: () => router.back(),
-                },
-            ]);
+            router.replace("/");
         } catch (error: any) {
-            console.log(error.response?.data.errors);
+            console.log("에러", error.response?.status);
+            console.log(error.response?.data);
         }
     };
 
@@ -67,8 +80,6 @@ function PetCreatePage() {
             <ScrollView>
                 <ContentContainer className="bg-transparent p-0">
                     <FormContainer>
-
-                        {/* 프로필 이미지 */}
                         <View className="items-center mb-6">
                             <View className="w-32 h-32 rounded-xl bg-gray-200 justify-center items-center">
                                 <TextComponent>사진 등록</TextComponent>
@@ -84,7 +95,6 @@ function PetCreatePage() {
                             </Button>
                         </View>
 
-                        {/* 이름 */}
                         <Controller
                             control={control}
                             name="name"
@@ -101,7 +111,6 @@ function PetCreatePage() {
                             )}
                         />
 
-                        {/* 동물종 */}
                         <Controller
                             control={control}
                             name="species"
@@ -109,7 +118,7 @@ function PetCreatePage() {
                                 <InputGroup
                                     id="species"
                                     label="동물종"
-                                    placeholder="DOG 또는 CAT"
+                                    placeholder="예)강아지, 고양이"
                                     value={field.value}
                                     onBlur={field.onBlur}
                                     onChangeText={field.onChange}
@@ -118,7 +127,6 @@ function PetCreatePage() {
                             )}
                         />
 
-                        {/* 품종 */}
                         <Controller
                             control={control}
                             name="breed"
@@ -135,7 +143,6 @@ function PetCreatePage() {
                             )}
                         />
 
-                        {/* 생년월일 */}
                         <Controller
                             control={control}
                             name="birthdate"
@@ -154,43 +161,42 @@ function PetCreatePage() {
                             )}
                         />
 
-                        {/* 성별 */}
-                        <TextComponent className="mt-5 mb-2 font-medium">성별</TextComponent>
-
-                        {/* TODO : RadioButton으로 교체 */}
                         <Controller
                             control={control}
                             name="gender"
                             render={({ field }) => (
-                                <InputGroup
-                                    id="gender"
-                                    label="성별"
-                                    value={field.value === "MALE" ? "수컷" : "암컷"}
-                                    editable={false}
-                                    // rightIcon="chevron-down"
-                                    // onPress={() => setGenderModalVisible(true)}
-                                    errorMessage={errors.gender?.message}
-                                />
+                                <Pressable onPress={() => setGenderModalVisible(true)}>
+                                    <View pointerEvents={"none"}>
+                                        <InputGroup
+                                            id="gender"
+                                            label="성별"
+                                            value={field.value === "MALE" ? "수컷" : "암컷"}
+                                            editable={false}
+                                            onPress={() => setGenderModalVisible(true)}
+                                            errorMessage={errors.gender?.message}
+                                        />
+                                    </View>
+                                </Pressable>
                             )}
                         />
-
-                        {/* 중성화 */}
-                        <TextComponent className="mt-5 mb-2 font-medium">중성화 여부</TextComponent>
-
-                        {/* TODO : Switch 또는 RadioButton으로 교체 */}
                         <Controller
                             control={control}
                             name="neutered"
                             render={({ field }) => (
-                                <Button
-                                    variant="outlined"
-                                    onPress={() => field.onChange(!field.value)}>
-                                    {field.value ? "중성화 완료" : "중성화 미완료"}
-                                </Button>
+                                <Pressable onPress={() => setNeuteredModalVisible(true)}>
+                                    <View pointerEvents={"none"}>
+                                        <InputGroup
+                                            id="neutered"
+                                            label="중성화 여부"
+                                            value={field.value ? "완료" : "미완료"}
+                                            editable={false}
+                                            onPress={() => setNeuteredModalVisible(true)}
+                                        />
+                                    </View>
+                                </Pressable>
                             )}
                         />
 
-                        {/* 등록번호 */}
                         <Controller
                             control={control}
                             name="registrationNumber"
@@ -216,6 +222,78 @@ function PetCreatePage() {
                     </FormContainer>
                 </ContentContainer>
             </ScrollView>
+
+            <Modal visible={genderModalVisible} transparent animationType="fade">
+                <View className="flex-1 justify-center items-center bg-black/40">
+                    <View className="w-80 rounded-xl bg-white p-5">
+                        <TextComponent className="text-lg font-semibold mb-4">
+                            성별 선택
+                        </TextComponent>
+
+                        <Controller
+                            control={control}
+                            name="gender"
+                            render={({ field }) => (
+                                <>
+                                    <Button
+                                        onPress={() => {
+                                            field.onChange("MALE");
+                                            setGenderModalVisible(false);
+                                        }}>
+                                        수컷
+                                    </Button>
+
+                                    <View className="h-3" />
+
+                                    <Button
+                                        onPress={() => {
+                                            field.onChange("FEMALE");
+                                            setGenderModalVisible(false);
+                                        }}>
+                                        암컷
+                                    </Button>
+                                </>
+                            )}
+                        />
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal visible={neuteredModalVisible} transparent animationType="fade">
+                <View className="flex-1 justify-center items-center bg-black/40">
+                    <View className="w-80 rounded-xl bg-white p-5">
+                        <TextComponent className="text-lg font-semibold mb-4">
+                            중성화 여부
+                        </TextComponent>
+
+                        <Controller
+                            control={control}
+                            name="neutered"
+                            render={({ field }) => (
+                                <>
+                                    <Button
+                                        onPress={() => {
+                                            field.onChange(true);
+                                            setNeuteredModalVisible(false);
+                                        }}>
+                                        완료
+                                    </Button>
+
+                                    <View className="h-3" />
+
+                                    <Button
+                                        onPress={() => {
+                                            field.onChange(false);
+                                            setNeuteredModalVisible(false);
+                                        }}>
+                                        미완료
+                                    </Button>
+                                </>
+                            )}
+                        />
+                    </View>
+                </View>
+            </Modal>
         </KeyboardAvoidingView>
     );
 }

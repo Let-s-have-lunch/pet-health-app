@@ -13,7 +13,7 @@ interface CardProps extends ViewProps {
 const getShadowStyles: Record<ShadowSize, string> = {
     none: "shadow-none",
     sm: "shadow-sm",
-    md: "shadow-[0_2px_4px_0_rgba(0,0,0,0.2)]", // NativeWind 환경에서 지원하는 임의 값 문법
+    md: "shadow-[0_4px_16px_0_rgba(0,0,0,0.08)]",
     lg: "shadow-lg",
 };
 

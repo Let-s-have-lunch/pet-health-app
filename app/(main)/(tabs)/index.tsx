@@ -1,10 +1,10 @@
 import PetCardSection from "@/components/pet/PetCardSection";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { ScrollView } from "react-native";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { usePetStore } from "@/stores/usePetStore";
 import petApi from "@/api/user/petApi";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState, } from "react";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import HistorySection from "@/components/history/HistorySection";
 
@@ -16,31 +16,27 @@ function HomeScreen() {
     const setPets = usePetStore(state => state.setPets);
     const [ loading, setLoading ] = useState(true);
 
-
-    useEffect(() => {
+    const loadPets = useCallback(async () => {
         if (!isLoggedIn) {
             setLoading(false);
             return;
         }
-        const loadPets = async () => {
-            try {
-                const result = await petApi.getMyPetList();
-                console.log(result);
-                setPets(result);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
 
-        loadPets().then(() => {});
+        try {
+            const result = await petApi.getMyPetList();
+            setPets(result);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    },[isLoggedIn, setPets]);
 
-    }, [isLoggedIn, setPets]);
-
-    useEffect(() => {
-        console.log("Zustand pets:", pets);
-    }, [pets]);
+    useFocusEffect(
+        useCallback(() => {
+            void loadPets();
+        }, [loadPets]),
+    );
 
     const handleAddPet = () => {
         if (!isLoggedIn) {
