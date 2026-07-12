@@ -1,12 +1,12 @@
 import PetCardSection from "@/components/pet/PetCardSection";
 import { useRouter } from "expo-router";
 import { ScrollView } from "react-native";
-import WeightHistorySection from "@/components/weight/WeightHistorySection";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { usePetStore } from "@/stores/usePetStore";
 import petApi from "@/api/user/petApi";
-import { useEffect } from "react";
-import HistorySection from "@/components/history/HistorySection";
+import { useEffect, useState } from "react";
+import PetHistorySection from "@/components/weight/PetHistorySection";
+import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 
 function HomeScreen() {
     const router = useRouter();
@@ -14,10 +14,14 @@ function HomeScreen() {
     // const { pets, setPets } = usePetStore();
     const pets = usePetStore(state => state.pets);
     const setPets = usePetStore(state => state.setPets);
+    const [ loading, setLoading ] = useState(true);
 
 
     useEffect(() => {
-        if (!isLoggedIn) return;
+        if (!isLoggedIn) {
+            setLoading(false);
+            return;
+        }
         const loadPets = async () => {
             try {
                 const result = await petApi.getMyPetList();
@@ -25,10 +29,12 @@ function HomeScreen() {
                 setPets(result);
             } catch (error) {
                 console.error(error);
+            } finally {
+                setLoading(false);
             }
         };
 
-        loadPets().then(()=> {});
+        loadPets().then(() => {});
 
     }, [isLoggedIn, setPets]);
 
@@ -42,15 +48,18 @@ function HomeScreen() {
             router.push("/auth/login");
             return;
         }
-
         router.push("/pets/create");
     };
 
+    if (loading) {
+        return <LoadingIndicator />;
+    }
+
 
     return (
-        <ScrollView>
+        <ScrollView  showsVerticalScrollIndicator={false}>
             <PetCardSection pets={pets} isLoggedIn={isLoggedIn} onPressAdd={handleAddPet} />
-            <HistorySection />
+            <PetHistorySection />
         </ScrollView>
     );
 }

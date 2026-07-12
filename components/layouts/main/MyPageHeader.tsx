@@ -10,7 +10,6 @@ function MyPageHeader() {
     const { isLoggedIn, user } = useAuthStore();
 
     return (
-
         <View
             className={twMerge(
                 ["w-full", "h-20", "bg-background-default"],
@@ -18,7 +17,6 @@ function MyPageHeader() {
                 ["border-b", "border-divider"],
             )}>
             <View className={twMerge(["w-full", "flex-row", "items-center", "max-w-7xl"])}>
-
                 <View
                     className={twMerge(
                         ["flex-row", "h-20", "justify-between", "items-center"],
@@ -33,7 +31,6 @@ function MyPageHeader() {
                             "gap-2.5",
                             "w-full",
                         ])}>
-
                         <View
                             className={twMerge(
                                 ["flex-row", "h-12", "w-12", "items-center", "justify-center"],
@@ -61,7 +58,6 @@ function MyPageHeader() {
                         </View>
 
                         <View className="flex-1" />
-
 
                         <Ionicons name="chevron-forward" size={16} className="text-text-default" />
                     </Pressable>
