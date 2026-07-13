@@ -11,6 +11,7 @@ import { usePetStore } from "@/stores/usePetStore";
 export default function VetLogPage() {
     const selectedPet = usePetStore(state => state.selectedPet);
     const petId = selectedPet?.id;
+    const BACKEND_URL = "http://10.0.2.2:4000";
 
     const [data, setData] = useState<VetLogState>({
         upcoming: null,
@@ -32,7 +33,6 @@ export default function VetLogPage() {
 
     const loadData = useCallback(async () => {
         if (!petId) return;
-
         try {
             const res = await vetLogApi.getByPetId(petId);
             const records: VetRecord[] = res?.data?.data || [];
@@ -43,7 +43,7 @@ export default function VetLogPage() {
             }
 
             setData({
-                upcoming: records[0],
+                upcoming: records[0] ?? null,
                 history: records.slice(1),
             });
         } catch (e) {
@@ -53,7 +53,7 @@ export default function VetLogPage() {
 
     useFocusEffect(
         useCallback(() => {
-            loadData();
+            loadData().then(() => {})
         }, [loadData]),
     );
 
@@ -75,8 +75,14 @@ export default function VetLogPage() {
 
     // 이미지 경로 처리: 전달된 경로를 그대로 반환하거나 플레이스홀더를 반환
     const getImageUrl = (path?: string | null) => {
+        // 1. 이미지가 없으면 플레이스홀더 반환
         if (!path) return "https://via.placeholder.com/400x150/89CFF0/FFFFFF?text=No+Image";
-        return path;
+
+        // 2. 경로가 http로 시작하면(이미 전체 주소면) 그대로 반환
+        if (path.startsWith("http")) return path;
+
+        // 3. 상대 경로인 경우 서버 주소를 붙여서 반환 (이게 핵심!)
+        return `${BACKEND_URL}${path}`;
     };
 
     if (!petId) return <View className="flex-1 bg-background-default" />;
@@ -101,6 +107,7 @@ export default function VetLogPage() {
                             </TextComponent>
                         </View>
                         <View className="p-5">
+
                             <Image
                                 source={{ uri: getImageUrl(data.upcoming.receiptImage) }}
                                 className="w-full h-32 rounded-xl mb-4"
