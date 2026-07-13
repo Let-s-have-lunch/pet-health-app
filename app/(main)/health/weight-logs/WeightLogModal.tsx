@@ -134,7 +134,10 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
                                         selectTextOnFocus={true}
                                         maxLength={8}
                                         onBlur={onBlur}
-                                        onChangeText={onChange}
+                                        onChangeText={text => {
+                                            const filteredText = text.replace(/-/g, "");
+                                            onChange(filteredText);
+                                        }}
                                         value={value}
                                         errorMessage={errors.recordDate?.message}
                                     />
@@ -149,16 +152,13 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
                                         id={"weight"}
                                         label="몸무게 (kg)"
                                         onBlur={onBlur}
-                                        onChangeText={onChange}
+                                        onChangeText={text => {
+                                            const sanitized = text.replace(/[^0-9.]/g, ""); // 숫자와 . 이외 전부 제거
+                                            onChange(sanitized);
+                                        }}
                                         errorMessage={errors.weight?.message}
-                                        keyboardType="numeric"
-
-                                        // 💡 터치 시 한 번에 전체 선택! (여러 번 지울 필요 없음)
-                                        selectTextOnFocus={true}
-
-                                        // 💡 예시를 보여주어 사용자에게 입력 가이드 제공
+                                        keyboardType="decimal-pad" // 💡 numeric 보다는 소수점이 포함된 decimal-pad가 더 좋습니다.
                                         placeholder="예: 4.5"
-
                                         value={value?.toString() ?? ""}
                                     />
                                 )}
