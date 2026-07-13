@@ -19,7 +19,7 @@ interface Props {
 function WeightLogChartSection({ history }: Props) {
     const [chartWidth, setChartWidth] = useState(300);
 
-    const { chartData, yMax, yMin, dateRangeText, latestWeight } = useMemo(() => {
+    const { chartData, yMax, yMin, dateRangeText } = useMemo(() => {
         if (!history || history.length === 0) {
             return { chartData: [], yMax: 10, yMin: 0, dateRangeText: "DATE -", latestWeight: 0 };
         }
