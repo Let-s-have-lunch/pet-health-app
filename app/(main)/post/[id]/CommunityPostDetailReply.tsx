@@ -98,7 +98,7 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
     };
 
     return (
-        <View className={twMerge(["mt-10", "p-6"], ["border-t", "border-divider"])}>
+        <View className={twMerge(["mt-4", "p-6"], ["border-t", "border-divider"])}>
             <View>
                 <TextComponent className={twMerge([""])}>
                     댓글

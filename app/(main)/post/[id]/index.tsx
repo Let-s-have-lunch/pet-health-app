@@ -128,66 +128,81 @@ function CommunityPostDetailPage() {
                                         "items-center",
                                         "pb-2",
                                         "px-4",
+                                        "justify-between",
                                     ])}>
+                                    {/* 아이콘과 닉네임  */}
                                     <View
                                         className={twMerge([
+                                            "w-full",
                                             "flex-row",
                                             "items-center",
+                                            "justify-between",
                                             "gap-1",
                                             "py-2",
                                         ])}>
-                                        <View
-                                            className={twMerge([
-                                                "flex-row",
-                                                "w-6",
-                                                "h-6",
-                                                "rounded-full",
-                                                "bg-success-main",
-                                                "items-center",
-                                                "justify-center",
-                                            ])}>
-                                            <Feather name={"user"} size={14} />
-                                        </View>
+                                        <View className={twMerge(["flex-row", "items-center"])}>
+                                            <View
+                                                className={twMerge([
+                                                    "flex-row",
+                                                    "w-6",
+                                                    "h-6",
+                                                    "rounded-full",
+                                                    "bg-success-main",
+                                                    "items-center",
+                                                    "justify-center",
+                                                ])}>
+                                                <Feather name={"user"} size={14} />
+                                            </View>
 
-                                        <TextComponent
-                                            className={twMerge(["text-sm", "pr-3", "font-bold"])}>
-                                            {post.user.nickname}
-                                        </TextComponent>
-                                        <TextComponent
-                                            className={twMerge([
-                                                "text-xs",
-                                                "text-text-secondary",
-                                                "pr-3",
-                                            ])}>
-                                            {post.createdAt.substring(0, 10)}
-                                        </TextComponent>
-                                        <TextComponent
-                                            className={twMerge(["text-xs", "text-text-secondary"])}>
-                                            조회 : {post.views}
-                                        </TextComponent>
+                                            <TextComponent className={twMerge(["text-sm", "pr-3"])}>
+                                                {post.user.nickname}
+                                            </TextComponent>
+                                        </View>
+                                        {/* 날짜와 조회수 */}
+                                        <View className={twMerge(["flex-row", "justify-end"])}>
+                                            <TextComponent
+                                                className={twMerge([
+                                                    "text-sm",
+                                                    "text-text-secondary",
+                                                    "pr-1",
+                                                ])}>
+                                                {post.createdAt.substring(0, 10)}
+                                            </TextComponent>
+                                            <TextComponent
+                                                className={twMerge([
+                                                    "text-sm",
+                                                    "text-text-secondary",
+                                                    "pr-1",
+                                                ])}> | </TextComponent>
+                                            <TextComponent
+                                                className={twMerge([
+                                                    "text-sm",
+                                                    "text-text-secondary",
+                                                ])}>
+                                                조회 : {post.views}
+                                            </TextComponent>
+                                        </View>
                                     </View>
                                 </View>
 
-                                <View className={twMerge(["p-4"])}>
+                                <View className={twMerge(["p-4", "min-h-60"])}>
                                     <TextComponent
-                                        className={twMerge(["text-lg", "text-text-default",])}>
+                                        className={twMerge(["text-lg", "text-text-default"])}>
                                         {post.content}
                                     </TextComponent>
                                 </View>
                             </View>
                             <View
-                                className={twMerge([
-                                    "flex-row",
-                                    "pt-2",
-                                    "gap-1.5",
-                                    "justify-end",
-                                ])}>
+                                className={twMerge(
+                                    ["flex-row", "pt-6", "gap-1.5", "justify-end", "items-center"],
+                                    ["border-divider", "border-t"],
+                                )}>
                                 <Button
                                     className={twMerge(["flex-1", "md:flex-none"])}
                                     variant={"outlined"}
                                     size={"small"}
                                     onPress={() => router.push("/posts")}>
-                                    목록
+                                    목록으로
                                 </Button>
 
                                 {isAuthor && (

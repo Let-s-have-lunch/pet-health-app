@@ -3,7 +3,7 @@ import { PaginationResponseType } from "@/types/common";
 import { Post, PostListItemType} from "@/types/post";
 import { PostInputType } from "@/schemas/post/postSchema";
 
-const getPostList = async (page = 1, size = 20): Promise<PaginationResponseType<PostListItemType>> => {
+const getPostList = async (page = 1, size = 15): Promise<PaginationResponseType<PostListItemType>> => {
     const response = await axiosInstance.get("/post", {
         params: { page, size },
     });
