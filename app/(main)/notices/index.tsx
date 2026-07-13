@@ -9,6 +9,7 @@ import TextComponent from "@/components/common/text/TextComponent";
 import Pagination from "@/components/common/pagination/Pagination";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
+import { hidden } from "nativewind/dist/metro/picocolors";
 
 function NoticeListPage() {
     const [list, setList] = useState<Notice[]>([]);
@@ -57,100 +58,105 @@ function NoticeListPage() {
                 className={"bg-background-paper"}
             />
 
-            {isLoading ? (
-                <LoadingIndicator />
-            ) : (
-                <ContentContainer className={"overflow-hidden flex-1"}>
-                    <View
+            <ContentContainer className={"overflow-hidden flex-1"}>
+                <View
+                    className={twMerge(
+                        ["hidden", "md:flex"],
+                        ["flex-row", "items-center", "px-4", "py-3"],
+                        [
+                            "border-divider",
+                            "border-b",
+                            "bg-primary-main",
+                            "bg-[#FFFFFF]/30",
+                            "rounded-t-xl",
+                        ],
+                    )}>
+                    <TextComponent
                         className={twMerge(
-                            ["flex-row", "items-center", "px-4", "py-3"],
-                            [
-                                "border-divider",
-                                "border-b",
-                                "bg-primary-main",
-                                "border-primary-main",
-                                "rounded-t-xl",
-                            ],
+                            ["hidden", "md:flex", "w-12"],
+                            ["font-bold", "text-text-secondary"],
                         )}>
-                        <TextComponent
-                            className={twMerge(
-                                ["hidden", "md:flex", "w-12"],
-                                ["font-bold", "text-text-secondary"],
-                            )}>
-                            ID
-                        </TextComponent>
-                        <TextComponent
-                            className={twMerge(
-                                ["flex-1"],
-                                ["font-bold", "text-text-secondary", "px-2"],
-                            )}>
-                            제목
-                        </TextComponent>
-                        <TextComponent
-                            className={twMerge(
-                                ["w-24"],
-                                ["font-bold", "text-text-secondary", "text-center"],
-                            )}>
-                            등록일
-                        </TextComponent>
-                    </View>
+                        ID
+                    </TextComponent>
+                    <TextComponent
+                        className={twMerge(
+                            ["flex-1"],
+                            ["font-bold", "text-text-secondary", "px-2"],
+                        )}>
+                        제목
+                    </TextComponent>
+                    <TextComponent
+                        className={twMerge(
+                            ["w-24"],
+                            ["font-bold", "text-text-secondary", "text-center"],
+                        )}>
+                        등록일
+                    </TextComponent>
+                </View>
 
-                    <ScrollView className={"flex-1"}>
-                        {list.length === 0 && (
-                            <View className={twMerge("py-10", "justify-center", "items-center")}>
-                                <TextComponent className={"text-text-secondary"}>
-                                    등록된 공지사항이 없습니다.
-                                </TextComponent>
-                            </View>
-                        )}
-                        {list.map((item, index) => (
-                            <View
-                                key={item.id}
-                                className={twMerge(
-                                    "flex-row",
-                                    "items-center",
-                                    "px-4",
-                                    "py-3",
+                <ScrollView className={"flex-1"}>
+                    {isLoading && (
+                        <View className={"py-20"}>
+                            <LoadingIndicator />
+                        </View>
+                    )}
+                    {list.length === 0 && (
+                        <View className={twMerge("py-20", "justify-center", "items-center")}>
+                            <TextComponent className={"text-text-secondary"}>
+                                등록된 공지사항이 없습니다.
+                            </TextComponent>
+                        </View>
+                    )}
+                    {list.map((item, index) => (
+                        <View
+                            key={item.id}
+                            className={twMerge(
+                                ["my-1", "md:my-0"],
+                                ["flex-col", "md:flex-row", "md:items-center", "px-4", "py-3"],
+                                [
                                     "transition-all",
                                     "bg-background-paper",
                                     "border-b",
                                     "border-primary-light",
-                                    "hover:bg-primary-light",
-                                    index === list.length - 1 && ["rounded-b-xl", "border-b-0"],
+                                    "hover:bg-background-default",
+                                    "rounded-xl",
+                                    "md:rounded-none",
+                                ],
+                                index === list.length - 1 && ["md:rounded-b-xl", "border-b-0"],
+                            )}>
+                            <TextComponent
+                                className={twMerge(
+                                    ["hidden", "md:flex", "w-12"],
+                                    ["text-center", "text-text-secondary"],
                                 )}>
+                                {item.id}
+                            </TextComponent>
+                            <Pressable
+                                className={twMerge("flex-1", "justify-center", "px-2")}
+                                onPress={() => router.push(`/notices/${item.id}`)}>
                                 <TextComponent
-                                    className={twMerge(
-                                        ["hidden", "md:flex", "w-12"],
-                                        ["text-center", "text-text-secondary"],
-                                    )}>
-                                    {item.id}
+                                    className={twMerge([
+                                        "font-bold",
+                                        "transition-all",
+                                        "hover:text-primary-main",
+                                        ["pb-2", "md:pb-0"],
+                                    ])}
+                                    numberOfLines={1}>
+                                    {item.title}
                                 </TextComponent>
-                                <Pressable
-                                    className={twMerge("flex-1", "justify-center", "px-2")}
-                                    onPress={() => router.push(`/notices/${item.id}`)}>
-                                    <TextComponent
-                                        className={twMerge([
-                                            "font-bold",
-                                            "transition-all",
-                                            "hover:text-primary-main",
-                                        ])}
-                                        numberOfLines={1}>
-                                        {item.title}
-                                    </TextComponent>
-                                </Pressable>
-                                <TextComponent
-                                    className={twMerge("w-24", [
-                                        "text-sm",
-                                        "text-text-secondary",
-                                        "text-center",
-                                    ])}>
-                                    {item.createdAt.substring(0, 10)}
-                                </TextComponent>
-                            </View>
-                        ))}
-                    </ScrollView>
-                </ContentContainer>
-            )}
+                            </Pressable>
+                            <TextComponent
+                                className={twMerge("w-24", [
+                                    "text-sm",
+                                    "text-text-secondary",
+                                    "text-center",
+                                ])}>
+                                {item.createdAt.substring(0, 10)}
+                            </TextComponent>
+                        </View>
+                    ))}
+                </ScrollView>
+            </ContentContainer>
 
             <Pagination
                 currentPage={currentPage}
