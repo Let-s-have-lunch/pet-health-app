@@ -1,12 +1,16 @@
-import { View, TextInput, Pressable, Alert, Image, ScrollView } from "react-native";
+import { View, TextInput, Pressable, Alert, Image, ScrollView, Platform } from "react-native";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 import TextComponent from "../../../../../components/common/text/TextComponent";
 import { vetLogApi } from "@/api/user/vetLogApi";
+import { usePetStore } from "@/stores/usePetStore";
 
 export default function VetLogCreatePage() {
+    const selectedPet = usePetStore(state => state.selectedPet);
+    const petId = selectedPet?.id;
+
     const [hospitalName, setHospitalName] = useState("");
     const [visitPurpose, setVisitPurpose] = useState("");
     const [visitDate, setVisitDate] = useState(new Date().toISOString().split("T")[0]);
@@ -17,6 +21,17 @@ export default function VetLogCreatePage() {
     const [memo, setMemo] = useState("");
 
     const [image, setImage] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!petId) {
+            if (Platform.OS === "web") {
+                alert("선택된 반려동물이 없습니다.");
+            } else {
+                Alert.alert("알림", "선택된 반려동물이 없습니다.");
+            }
+            router.back();
+        }
+    }, [petId]);
 
     // 사진 선택
     const pickImage = async () => {
@@ -33,9 +48,14 @@ export default function VetLogCreatePage() {
     };
 
     const onSubmit = async () => {
+        if (!petId) {
+            Alert.alert("오류", "선택된 반려동물이 없습니다.");
+            return;
+        }
+
         try {
             await vetLogApi.create({
-                petId: 1,
+                petId: petId,
                 visitDate: visitDate,
                 hospitalName,
                 visitPurpose: visitPurpose,
@@ -53,10 +73,16 @@ export default function VetLogCreatePage() {
         }
     };
 
+    if (!petId) {
+        return <View className="flex-1 bg-black/50" />;
+    }
+
     return (
         <View className="flex-1 justify-center items-center bg-black/50 p-5">
             <ScrollView className="w-full bg-background-paper p-6 rounded-2xl flex-grow-0">
-                <TextComponent className="text-lg font-bold mb-4">병원 기록 등록</TextComponent>
+                <TextComponent className="text-lg font-bold mb-4">
+                    {selectedPet?.name} 병원 기록 등록
+                </TextComponent>
 
                 {/* 이미지 */}
                 <TextComponent className="text-sm mb-1">반려동물 사진</TextComponent>

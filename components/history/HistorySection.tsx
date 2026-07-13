@@ -16,7 +16,11 @@ const getTodayString = () => {
     return `${year}-${month}-${day}`;
 };
 
-export default function HistorySection() {
+type HistorySectionProps = {
+    petId?: number;
+};
+
+export default function HistorySection({petId}: HistorySectionProps) {
     const [isLoading, setIsLoading] = useState(true);
     const todayDate = getTodayString();
 
@@ -29,9 +33,10 @@ export default function HistorySection() {
     });
 
     const loadDashboard = useCallback(async () => {
+        if (!petId) return;
+
         try {
             setIsLoading(true);
-            const petId = 1; // 실제 선택된 펫 ID 변수로 대체 가능
 
             // 1. 기존 대시보드 데이터 호출
             const dashboardResult = await getHomeDashboard(petId, todayDate);
@@ -78,7 +83,7 @@ export default function HistorySection() {
         } finally {
             setIsLoading(false);
         }
-    }, [todayDate]);
+    }, [petId, todayDate]);
 
     // 🐶 useEffect 대신 useFocusEffect 적용 (화면으로 돌아올 때 즉시 새로고침)
     useFocusEffect(
@@ -204,7 +209,6 @@ export default function HistorySection() {
                 ))}
             </View>
 
-            {/*<MedicalHistorySection />*/}
         </ScrollView>
     );
 }

@@ -8,6 +8,7 @@ export interface VetRecord {
     treatment?: string;
     cost?: number;
     memo?: string;
+    receiptImage?: string | null;
 }
 
 export interface VetLogState {
