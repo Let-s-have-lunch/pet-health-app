@@ -1,4 +1,4 @@
-import { WeightLog } from "@/types/WeightLog";
+import { WeightLog } from "@/types/weightLog";
 import { WeightLogInputType } from "@/schemas/weightLog/weightLogSchema";
 import axiosInstance from "../axiosInstance";
 

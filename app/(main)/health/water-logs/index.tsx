@@ -3,7 +3,7 @@ import {  useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import Title from "../../../../components/common/title/Title";
 
-import { WaterIntakeLog } from "@/types/WaterIntakeLog";
+import { WaterIntakeLog } from "@/types/waterIntakeLog";
 import WaterLogChartSection from "@/app/(main)/health/water-logs/WaterLogChartSection";
 import { twMerge } from "tailwind-merge";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
@@ -12,7 +12,6 @@ import WaterLogModal from "@/app/(main)/health/water-logs/WaterLogModal";
 import waterIntakeApi from "@/api/user/waterIntakeApi";
 import WaterLogHistorySection from "@/app/(main)/health/water-logs/WaterLogHistorySection";
 
-const getTodayString = () => new Date().toISOString().split("T")[0];
 
 export default function WaterLogListPage() {
     const router = useRouter();

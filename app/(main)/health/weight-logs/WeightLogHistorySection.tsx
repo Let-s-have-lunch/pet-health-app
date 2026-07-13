@@ -6,7 +6,7 @@ import TextComponent from "@/components/common/text/TextComponent";
 import Button from "@/components/common/button/Button";
 import Card from "@/components/common/card/Card";
 import Badge from "@/components/common/badge/Badge"; // 👈 Badge 컴포넌트 추가
-import { WeightLog } from "@/types/WeightLog";
+import { WeightLog } from "@/types/weightLog";
 import { format } from "date-fns";
 import { StyleColorType } from "@/types/style"; // 👈 타입 추가
 

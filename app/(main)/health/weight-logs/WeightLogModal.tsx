@@ -15,8 +15,9 @@ import Button from "@/components/common/button/Button";
 import InputGroup from "@/components/common/input/InputGroup";
 import Title from "@/components/common/title/Title";
 import { weightLogApi } from "@/api/user/weightLogApi";
-import { WeightLog } from "@/types/WeightLog";
+import { WeightLog } from "@/types/weightLog";
 import { WeightLogInputType, weightLogSchema } from "@/schemas/weightLog/weightLogSchema";
+import { isAxiosError } from "axios";
 
 interface WeightLogModalProps {
     visible: boolean;
@@ -87,6 +88,16 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
         } catch (error) {
             console.log(error);
             const errorActionText = initialData ? "수정하는" : "등록하는";
+
+            // 💡 몸무게는 1일 1기록이므로 409 에러 처리를 반드시 해야 합니다!
+            if (isAxiosError(error)) {
+                if (error?.response?.status === 409) {
+                    const msg =
+                        "이미 해당 날짜에 기록된 몸무게가 있습니다. 리스트에서 기존 기록을 수정해 주세요.";
+                    Platform.OS === "web" ? alert(msg) : Alert.alert("등록 실패", msg);
+                    return; // 에러 띄우고 종료
+                }
+            }
 
             if (Platform.OS === "web") {
                 alert(`몸무게 기록을 ${errorActionText} 중 오류가 발생했습니다.`);

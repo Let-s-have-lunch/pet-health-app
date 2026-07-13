@@ -3,8 +3,10 @@ import { useCallback, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { router, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { DashboardData, getHomeDashboard } from "@/api/home";
+import { DashboardData, getHomeDashboard } from "@/api/user/dashboardApi";
 import TextComponent from "@/components/common/text/TextComponent";
+import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
+import { format, formatDate } from "date-fns";
 
 const getTodayString = () => {
     const today = new Date();
@@ -26,8 +28,6 @@ export default function HistorySection() {
         const petId = 1;
 
         try {
-            setIsLoading(true);
-
             // 💡 불필요한 호출을 지우고, 대시보드 데이터 딱 하나만 가져오기!
             const dashboardResult = await getHomeDashboard(petId, todayDate);
 
@@ -59,6 +59,7 @@ export default function HistorySection() {
         {
             id: "walk",
             title: "산책",
+            dateLabel: data ? data.walk.date : "-",
             onPress: () => router.push("/health/walk-logs"),
             renderBottom: () => (
                 <View className="flex-row justify-end items-center gap-3">
@@ -72,19 +73,31 @@ export default function HistorySection() {
         {
             id: "weight",
             title: "몸무게",
+            dateLabel: data?.weight?.date ? format(new Date(data.weight.date), "yyyy-MM-dd") : "-",
             onPress: () => router.push("/(main)/health/weight-logs"),
-            renderBottom: () => (
-                <View className="flex-row justify-end items-center gap-1">
-                    <Ionicons name="fitness" size={22} color="#D9A05B" />
-                    <TextComponent className="font-bold text-2xl" style={{ color: "#2C2C2C" }}>
-                        {data?.weight.value ?? 0}kg
-                    </TextComponent>
-                </View>
-            ),
+            renderBottom: () =>
+                data?.weight?.value ? (
+                    // 💡 기록이 있을 때 (원래 스타일)
+                    <View className="flex-row justify-end items-center gap-1">
+                        <Ionicons name="fitness" size={22} color="#D9A05B" />
+                        <TextComponent className="font-bold text-2xl" style={{ color: "#2C2C2C" }}>
+                            {data.weight.value}kg
+                        </TextComponent>
+                    </View>
+                ) : (
+                    // 💡 기록이 없을 때 (병원 '기록 없음'과 완벽히 동일한 스타일)
+                    <View className="flex-row justify-end items-center gap-1">
+                        <Ionicons name="fitness" size={20} color="#D1D1D1" />
+                        <TextComponent className="text-sm" style={{ color: "#7F8C8D" }}>
+                            기록 없음
+                        </TextComponent>
+                    </View>
+                ),
         },
         {
             id: "water",
             title: "물",
+            dateLabel: data ? data.water.date : "-",
             onPress: () => router.push("/(main)/health/water-logs"),
             renderBottom: () => (
                 <View className={twMerge("flex-row", "justify-end", "items-center", "gap-1.5")}>
@@ -100,6 +113,9 @@ export default function HistorySection() {
         {
             id: "vet",
             title: "병원",
+            dateLabel: data?.vetRecord?.time
+                ? format(new Date(data.vetRecord.time), "yyyy-MM-dd")
+                : "-",
             onPress: () => router.push("/(main)/health/vet-records"),
             renderBottom: () =>
                 data?.vetRecord ? (
@@ -128,13 +144,7 @@ export default function HistorySection() {
     ];
 
     if (isLoading) {
-        return (
-            <View
-                className={twMerge(["flex-1", "justify-center", "items-center"])}
-                style={{ backgroundColor: "#F1EBE4" }}>
-                <ActivityIndicator size={"large"} color={"#BACFCD"} />
-            </View>
-        );
+        return <LoadingIndicator />;
     }
 
     return (
@@ -154,15 +164,13 @@ export default function HistorySection() {
                             "rounded-[28px]",
                             "bg-background-paper",
                         ])}>
-                        <View className="flex-row justify-between items-start">
-                            <View>
-                                <TextComponent className="font-bold text-base text-text-default">
-                                    {card.title}
-                                </TextComponent>
-                                <TextComponent className="text-xs mt-1 text-text-secondary">
-                                    {data?.date}
-                                </TextComponent>
-                            </View>
+                        <View>
+                            <TextComponent className="font-bold text-base text-text-default">
+                                {card.title}
+                            </TextComponent>
+                            <TextComponent className="text-xs mt-1 text-text-secondary">
+                                {card.dateLabel}
+                            </TextComponent>
                         </View>
 
                         {card.renderBottom()}
