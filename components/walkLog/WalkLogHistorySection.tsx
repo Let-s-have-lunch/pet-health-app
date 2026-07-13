@@ -76,7 +76,7 @@ function WalkLogHistorySection({ history, onAddPress, onEditPress, onDeletePress
                     <Card
                         shadow={"sm"}
                         className={twMerge("text-center text-gray-400 py-6 text-sm")}>
-                        기록된 산책이 없습니다.
+                        <TextComponent>기록된 산책이 없습니다.</TextComponent>
                     </Card>
                 )}
             </View>
