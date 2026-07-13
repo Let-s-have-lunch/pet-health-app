@@ -87,12 +87,17 @@ function PetCreatePage() {
 
                             <Button
                                 variant="outlined"
-                                className="mt-3"
+                                size={"small"}
+                                textClassName={"font-semibold text-text-default"}
+                                className="w-32 h-10 mt-3 border-primary-main"
                                 onPress={() => {
                                     // TODO : 이미지 선택
                                 }}>
                                 사진 선택
                             </Button>
+
+                             {/*TODO: 사진 등록 기능*/}
+
                         </View>
 
                         <Controller
@@ -215,7 +220,10 @@ function PetCreatePage() {
                         {errors.root?.message && <ErrorMessage>{errors.root.message}</ErrorMessage>}
 
                         <View className="mt-8">
-                            <Button onPress={handleSubmit(onSubmit)} disabled={isSubmitting}>
+                            <Button
+                                onPress={handleSubmit(onSubmit)}
+                                disabled={isSubmitting}
+                                textClassName={"font-semibold "}>
                                 등록하기
                             </Button>
                         </View>
@@ -224,7 +232,7 @@ function PetCreatePage() {
             </ScrollView>
 
             <Modal visible={genderModalVisible} transparent animationType="fade">
-                <View className="flex-1 justify-center items-center bg-black/40">
+                <View className="flex-1 justify-center items-center white bg-black/40">
                     <View className="w-80 rounded-xl bg-white p-5">
                         <TextComponent className="text-lg font-semibold mb-4">
                             성별 선택
