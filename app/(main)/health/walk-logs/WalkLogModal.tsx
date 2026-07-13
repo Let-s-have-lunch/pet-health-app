@@ -33,7 +33,7 @@ const WALK_KEYWORDS = [
 interface WalkLogModalProps {
     visible: boolean;
     onClose: () => void;
-    petId: number;
+    petId: number | undefined;
     reload: () => Promise<void>;
     initialData: WalkLog | null;
 }
@@ -72,6 +72,7 @@ function WalkLogModal({ visible, onClose, petId, reload, initialData }: WalkLogM
     }, [visible, reset, initialData]);
 
     const onSubmit = async (data: WalkLogInputType) => {
+        if (!petId) return;
         try {
             const { walkDate, ...submitData } = data;
 

@@ -8,14 +8,15 @@ import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
 import { WalkLog, WalkLogStats } from "@/types/walkLog";
 import walkLogApi from "@/api/user/walkLogApi";
-import WalkLogModal from "@/components/walkLog/WalkLogModal";
-import WalkLogHistorySection from "@/components/walkLog/WalkLogHistorySection";
-import WalkLogChartSection from "@/components/walkLog/WalkLogChartSection";
+import WalkLogModal from "@/app/(main)/health/walk-logs/WalkLogModal";
+import WalkLogHistorySection from "@/app/(main)/health/walk-logs/WalkLogHistorySection";
+import WalkLogChartSection from "@/app/(main)/health/walk-logs/WalkLogChartSection";
+import { usePetStore } from "@/stores/usePetStore";
 
 function WalkLogListPage() {
     const router = useRouter();
-
-    const petId = 1;
+    const { selectedPet } = usePetStore();
+    const petId = selectedPet?.id;
 
     const [stats, setStats] = useState<WalkLogStats | null>(null);
     const [history, setHistory] = useState<WalkLog[]>([]);
@@ -61,8 +62,6 @@ function WalkLogListPage() {
     useEffect(() => {
         fetchWalkLogData().then();
     }, [fetchWalkLogData]);
-
-
 
     // 💡 HistorySection용 액션 핸들러 함수들
     const handleAddPress = () => {
@@ -112,7 +111,7 @@ function WalkLogListPage() {
     return (
         <View className={twMerge("flex-1 bg-background-default")}>
             <Title
-                title={"초코의 산책 기록"}
+                title={selectedPet ? `${selectedPet.name}의 산책 기록` : "산책 기록"}
                 showBackButton={true}
                 onBackPress={() => router.push("/")}
                 className={"bg-background-paper"}

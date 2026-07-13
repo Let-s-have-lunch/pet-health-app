@@ -1,42 +1,42 @@
+import { WaterIntakeLog } from "@/types/waterIntakeLog";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { WaterLogInputType, waterLogSchema } from "@/schemas/waterLog/waterLogSchema";
+import { format } from "date-fns";
 import React, { useEffect } from "react";
 import {
-    Modal,
-    View,
-    Platform,
-    KeyboardAvoidingView,
-    Keyboard,
     Alert,
+    Keyboard,
+    KeyboardAvoidingView,
+    Modal,
+    Platform,
     Pressable,
+    View,
 } from "react-native";
-import { format } from "date-fns";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Button from "@/components/common/button/Button";
-import InputGroup from "@/components/common/input/InputGroup";
+import waterIntakeApi from "@/api/user/waterIntakeApi";
 import Title from "@/components/common/title/Title";
-import { weightLogApi } from "@/api/user/weightLogApi";
-import { WeightLog } from "@/types/WeightLog";
-import { WeightLogInputType, weightLogSchema } from "@/schemas/weightLog/weightLogSchema";
+import InputGroup from "@/components/common/input/InputGroup";
+import Button from "@/components/common/button/Button";
 
-interface WeightLogModalProps {
+interface WaterLogModalProps {
     visible: boolean;
     onClose: () => void;
-    petId: number;
+    petId: number | undefined;
     reload: () => Promise<void>;
-    initialData: WeightLog | null;
+    initialData: WaterIntakeLog | null;
 }
 
-function WeightLogModal({ visible, onClose, petId, reload, initialData }: WeightLogModalProps) {
+function WaterLogModal({ visible, onClose, petId, reload, initialData }: WaterLogModalProps) {
     const {
         control,
         reset,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm<WeightLogInputType>({
-        resolver: zodResolver(weightLogSchema),
+    } = useForm<WaterLogInputType>({
+        resolver: zodResolver(waterLogSchema),
         defaultValues: {
             recordDate: format(new Date(), "yyyyMMdd"),
-            weight: "", // 💡 0 대신 빈 문자열로 변경
+            amount: 0,
             memo: "",
         },
     });
@@ -46,20 +46,21 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
             if (initialData) {
                 reset({
                     recordDate: format(new Date(initialData.recordDate), "yyyyMMdd"),
-                    weight: initialData.weight, // 수정 모드일 때는 기존 몸무게 표시
+                    amount: initialData.amount,
                     memo: initialData.memo || "",
                 });
             } else {
                 reset({
                     recordDate: format(new Date(), "yyyyMMdd"),
-                    weight: "", // 💡 등록 모드일 때는 깔끔하게 비워두기
+                    amount: 0,
                     memo: "",
                 });
             }
         }
     }, [visible, reset, initialData]);
 
-    const onSubmit = async (data: WeightLogInputType) => {
+    const onSubmit = async (data: WaterLogInputType) => {
+        if (!petId) return;
         try {
             const { recordDate, memo, ...submitData } = data;
 
@@ -77,9 +78,9 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
             };
 
             if (initialData) {
-                await weightLogApi.update(initialData.id, petId, payload);
+                await waterIntakeApi.updateWaterLog(initialData.id, payload);
             } else {
-                await weightLogApi.create(petId, payload);
+                await waterIntakeApi.createWaterLog(petId, payload);
             }
 
             await reload();
@@ -89,9 +90,9 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
             const errorActionText = initialData ? "수정하는" : "등록하는";
 
             if (Platform.OS === "web") {
-                alert(`몸무게 기록을 ${errorActionText} 중 오류가 발생했습니다.`);
+                alert(`음수량 기록을 ${errorActionText} 중 오류가 발생했습니다.`);
             } else {
-                Alert.alert("오류", `몸무게 기록을 ${errorActionText} 중 오류가 발생했습니다.`);
+                Alert.alert("오류", `음수량 기록을 ${errorActionText} 중 오류가 발생했습니다.`);
             }
         }
     };
@@ -108,7 +109,7 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
                         onPress={e => e.stopPropagation()}
                         className="bg-background-paper w-full max-w-xl rounded-3xl p-6 shadow-xl">
                         <Title
-                            title={initialData ? "몸무게 기록 수정" : "몸무게 기록 등록"}
+                            title={initialData ? "음수량 기록 수정" : "음수량 기록 등록"}
                             className={"h-auto pb-6 mb-6"}
                         />
 
@@ -116,41 +117,43 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
                             <Controller
                                 control={control}
                                 name={"recordDate"}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <InputGroup
-                                        id={"recordDate"}
-                                        label="날짜 (YYYY-MM-DD)"
-                                        selectTextOnFocus={true}
-                                        maxLength={8}
-                                        onBlur={onBlur}
-                                        onChangeText={onChange}
-                                        value={value}
-                                        errorMessage={errors.recordDate?.message}
-                                    />
-                                )}
+                                render={({ field: { onChange, onBlur, value } }) => {
+                                    return (
+                                        <InputGroup
+                                            id={"recordDate"}
+                                            label="날짜 (YYYY-MM-DD)"
+                                            selectTextOnFocus={true}
+                                            maxLength={8}
+                                            onBlur={onBlur}
+                                            keyboardType={"number-pad"}
+                                            onChangeText={text => {
+                                                const filteredText = text.replace(/-/g, "");
+                                                onChange(filteredText);
+                                            }}
+                                            value={value}
+                                            errorMessage={errors.recordDate?.message}
+                                        />
+                                    );
+                                }}
                             />
 
                             <Controller
                                 control={control}
-                                name={"weight"}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <InputGroup
-                                        id={"weight"}
-                                        label="몸무게 (kg)"
-                                        onBlur={onBlur}
-                                        onChangeText={onChange}
-                                        errorMessage={errors.weight?.message}
-                                        keyboardType="numeric"
-
-                                        // 💡 터치 시 한 번에 전체 선택! (여러 번 지울 필요 없음)
-                                        selectTextOnFocus={true}
-
-                                        // 💡 예시를 보여주어 사용자에게 입력 가이드 제공
-                                        placeholder="예: 4.5"
-
-                                        value={value?.toString() ?? ""}
-                                    />
-                                )}
+                                name={"amount"}
+                                render={({ field: { onChange, onBlur, value } }) => {
+                                    return (
+                                        <InputGroup
+                                            id={"amount"}
+                                            label="음수량 (ml)"
+                                            onBlur={onBlur}
+                                            onChangeText={val => onChange(Number(val))}
+                                            errorMessage={errors.amount?.message}
+                                            keyboardType="numeric"
+                                            placeholder="예: 30"
+                                            value={value ? String(value) : ""}
+                                        />
+                                    );
+                                }}
                             />
 
                             <Controller
@@ -195,4 +198,4 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
     );
 }
 
-export default WeightLogModal;
+export default WaterLogModal;

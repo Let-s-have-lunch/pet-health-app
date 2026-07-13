@@ -1,18 +1,29 @@
 import axiosInstance from "../axiosInstance";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
+import axios from "axios";
+
+const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
+
 
 export const vetLogApi = {
     // 1. 병원 기록 생성 (POST /vet-records)
-    create: async (data: {
-        petId: number;
-        visitDate: string;
-        hospitalName: string;
-        visitPurpose: string;
-        diagnosis?: string;
-        treatment?: string;
-        cost?: number;
-        memo?: string;
-    }) => {
-        return await axiosInstance.post("/vet-records", data);
+    create: async (formData: FormData) => {
+        console.log(formData);
+        const { token } = useAuthStore.getState();
+
+        const response = await fetch(BASE_URL + "/vet-records", {
+            method: "POST",
+            body: formData,
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("업로드 실패");
+        }
+
+        return await response.json();
     },
 
     // 2. 특정 반려동물의 전체 기록 조회 (GET /vet-records/pet/:petId)
@@ -29,6 +40,7 @@ export const vetLogApi = {
     update: async (
         id: number,
         data: {
+            petId?: number;
             hospitalName?: string;
             visitPurpose?: string;
             visitDate?: string;
@@ -42,16 +54,7 @@ export const vetLogApi = {
     },
 
     // 5. 병원 기록 삭제 (DELETE /vet-records/:id)
-    remove: async (id: number) => {
-        return await axiosInstance.delete(`/vet-records/${id}`);
-    },
-    // 이미지 첨부
-    createWithImage: (formData: FormData) =>
-        axiosInstance.post("/vet-logs", formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        }),
+    delete: (id: number) => axiosInstance.delete(`/vet-records/${id}`),
 
     updateWithImage: (id: number, formData: FormData) =>
         axiosInstance.put(`/vet-logs/${id}`, formData, {

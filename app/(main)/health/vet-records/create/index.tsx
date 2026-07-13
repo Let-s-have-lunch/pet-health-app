@@ -54,21 +54,47 @@ export default function VetLogCreatePage() {
         }
 
         try {
-            await vetLogApi.create({
-                petId: petId,
-                visitDate: visitDate,
-                hospitalName,
-                visitPurpose: visitPurpose,
-                diagnosis,
-                treatment,
-                cost: Number(cost || 0),
-                memo,
-            });
+            // 💡 이미지와 텍스트를 담을 단일 FormData 생성
+            const formData = new FormData();
+
+            // 1. 텍스트 데이터 담기 (FormData는 무조건 문자열로 변환해서 보내야 함)
+            formData.append("petId", String(petId));
+            formData.append("visitDate", visitDate);
+            formData.append("hospitalName", hospitalName);
+            formData.append("visitPurpose", visitPurpose);
+
+            // 빈 값이 아닐 때만 담기
+            if (diagnosis) formData.append("diagnosis", diagnosis);
+            if (treatment) formData.append("treatment", treatment);
+            if (cost) formData.append("cost", String(cost));
+            if (memo) formData.append("memo", memo);
+
+            if (image) {
+                console.log("이미지 데이터가 있어서 append 합니다:", image);
+
+                if (Platform.OS === "web") {
+                    const response = await fetch(image);
+                    const blob = await response.blob();
+
+                    const file = new File([blob], "receipt.jpg", { type: "image/jpeg" });
+                    formData.append("image", file);
+                } else {
+                    const file = {
+                        uri: image,
+                        name: "receipt.jpg",
+                        type: "image/jpeg",
+                    };
+                    formData.append("image", file as any);
+                }
+            }
+
+            // 3. 백엔드로 딱 한 번만 전송!
+            await vetLogApi.create(formData);
 
             Alert.alert("성공", "기록이 등록되었습니다.");
             router.back();
         } catch (error) {
-            console.log(error);
+            console.log("업로드 에러:", error);
             Alert.alert("오류", "등록에 실패했습니다.");
         }
     };

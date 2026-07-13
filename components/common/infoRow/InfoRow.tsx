@@ -10,12 +10,12 @@ type RowProps = {
 export default function InfoRow({ label, value }: RowProps) {
     return (
         <View className={twMerge(["mb-2"], ["flex-row", "items-center"])}>
-            <TextComponent className={twMerge(["w-[80px]"], ["text-[17px]"], ["text-text-secondary"])}>
+            <TextComponent className={twMerge(["w-[80px]"], ["text-[16px]"], ["text-text-secondary"])}>
                 {label}
             </TextComponent>
             <TextComponent
                 numberOfLines={1}
-                className={twMerge(["flex-1"], ["text-[17px]"], ["font-semibold"])}>
+                className={twMerge(["flex-1"], ["text-[16px]"], ["font-semibold"])}>
                 {value}
             </TextComponent>
         </View>

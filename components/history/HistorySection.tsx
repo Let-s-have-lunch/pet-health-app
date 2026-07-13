@@ -3,10 +3,12 @@ import { useCallback, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { router, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { DashboardData, getHomeDashboard } from "@/api/home";
-import { waterIntakeApi } from "@/api/user/waterIntakeApi";
-import { weightLogApi } from "@/api/user/weightLogApi";
+import { DashboardData, getHomeDashboard } from "@/api/user/dashboardApi";
 import TextComponent from "@/components/common/text/TextComponent";
+import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
+import { format } from "date-fns";
+import { usePetStore } from "@/stores/usePetStore";
+
 
 const getTodayString = () => {
     const today = new Date();
@@ -16,61 +18,28 @@ const getTodayString = () => {
     return `${year}-${month}-${day}`;
 };
 
-type HistorySectionProps = {
-    petId?: number;
-};
-
-export default function HistorySection({petId}: HistorySectionProps) {
+export default function HistorySection() {
     const [isLoading, setIsLoading] = useState(true);
     const todayDate = getTodayString();
+    const { selectedPet } = usePetStore();
+    const petId = selectedPet?.id;
 
-    const [data, setData] = useState<DashboardData | null>({
-        date: todayDate,
-        walk: { count: 0 },
-        weight: { value: 0 }, // 🐶 여기에 최신 몸무게가 담길 예정
-        water: { totalAmount: 0 },
-        vetRecord: null,
-    });
+    // 💡 초기값을 null로 깔끔하게 세팅
+    const [data, setData] = useState<DashboardData | null>(null);
 
     const loadDashboard = useCallback(async () => {
-        if (!petId) return;
+        if (!petId) {
+            setIsLoading(false);
+            return;
+        }
 
         try {
-            setIsLoading(true);
-
-            // 1. 기존 대시보드 데이터 호출
+            // 💡 불필요한 호출을 지우고, 대시보드 데이터 딱 하나만 가져오기!
             const dashboardResult = await getHomeDashboard(petId, todayDate);
-            // 2. 💧 펫의 전체 음수량 기록 리스트 호출
-            const waterLogsResult = await waterIntakeApi.getByPetId(petId);
-            // 3. 🐶 펫의 전체 몸무게 기록 리스트 호출
-            const weightLogsResult = await weightLogApi.getByPetId(petId);
 
             if (dashboardResult.success) {
-                let latestWaterAmount = 0;
-                let latestWeightValue = 0; // 🐶 최신 몸무게 변수 초기화
-
-                // 💧 전체 리스트 중 가장 최근(배열의 마지막)에 등록된 음수량 기록 찾기
-                if (waterLogsResult?.data?.data && waterLogsResult.data.data.length > 0) {
-                    const logs = waterLogsResult.data.data;
-                    latestWaterAmount = logs[logs.length - 1].amount;
-                }
-
-                // 🐶 전체 리스트 중 가장 최근(배열의 첫 번째)에 등록된 몸무게 기록 찾기
-                if (weightLogsResult?.data?.data && weightLogsResult.data.data.length > 0) {
-                    const weightLogs = weightLogsResult.data.data;
-                    latestWeightValue = weightLogs[0].weight;
-                }
-
-                // 대시보드 상태 세팅할 때 물, 몸무게 최신 데이터로 변경해 주기
-                setData({
-                    ...dashboardResult.data,
-                    water: {
-                        totalAmount: latestWaterAmount,
-                    },
-                    weight: {
-                        value: latestWeightValue,
-                    },
-                });
+                // 백엔드에서 이미 다 가공해서 줬으니, 그대로 꽂아 넣으면 끝!
+                setData(dashboardResult.data);
             }
         } catch (error) {
             console.error(error);
@@ -83,7 +52,7 @@ export default function HistorySection({petId}: HistorySectionProps) {
         } finally {
             setIsLoading(false);
         }
-    }, [petId, todayDate]);
+    }, [petId, todayDate]); // 의존성 배열도 깔끔하게 유지
 
     useFocusEffect(
         useCallback(() => {
@@ -96,6 +65,7 @@ export default function HistorySection({petId}: HistorySectionProps) {
         {
             id: "walk",
             title: "산책",
+            dateLabel: data ? data.walk.date : "-",
             onPress: () => router.push("/health/walk-logs"),
             renderBottom: () => (
                 <View className="flex-row justify-end items-center gap-3">
@@ -109,20 +79,31 @@ export default function HistorySection({petId}: HistorySectionProps) {
         {
             id: "weight",
             title: "몸무게",
+            dateLabel: data?.weight?.date ? format(new Date(data.weight.date), "yyyy-MM-dd") : "-",
             onPress: () => router.push("/(main)/health/weight-logs"),
-            renderBottom: () => (
-                <View className="flex-row justify-end items-center gap-1">
-                    <Ionicons name="fitness" size={22} color="#D9A05B" />
-                    <TextComponent className="font-bold text-2xl" style={{ color: "#2C2C2C" }}>
-                        {data?.weight.value ?? 0}kg
-                    </TextComponent>
-                </View>
-            ),
+            renderBottom: () =>
+                data?.weight?.value ? (
+                    // 💡 기록이 있을 때 (원래 스타일)
+                    <View className="flex-row justify-end items-center gap-1">
+                        <Ionicons name="fitness" size={22} color="#D9A05B" />
+                        <TextComponent className="font-bold text-2xl" style={{ color: "#2C2C2C" }}>
+                            {data.weight.value}kg
+                        </TextComponent>
+                    </View>
+                ) : (
+                    // 💡 기록이 없을 때 (병원 '기록 없음'과 완벽히 동일한 스타일)
+                    <View className="flex-row justify-end items-center gap-1">
+                        <Ionicons name="fitness" size={20} color="#D1D1D1" />
+                        <TextComponent className="text-sm" style={{ color: "#7F8C8D" }}>
+                            기록 없음
+                        </TextComponent>
+                    </View>
+                ),
         },
         {
             id: "water",
             title: "물",
-            // 🚀 [기획 수정] 모달 대신 몸무게처럼 그래프/리스트가 있는 상세 페이지로 이동!
+            dateLabel: data ? data.water.date : "-",
             onPress: () => router.push("/(main)/health/water-logs"),
             renderBottom: () => (
                 <View className={twMerge("flex-row", "justify-end", "items-center", "gap-1.5")}>
@@ -138,6 +119,9 @@ export default function HistorySection({petId}: HistorySectionProps) {
         {
             id: "vet",
             title: "병원",
+            dateLabel: data?.vetRecord?.time
+                ? format(new Date(data.vetRecord.time), "yyyy-MM-dd")
+                : "-",
             onPress: () => router.push("/(main)/health/vet-records"),
             renderBottom: () =>
                 data?.vetRecord ? (
@@ -166,13 +150,7 @@ export default function HistorySection({petId}: HistorySectionProps) {
     ];
 
     if (isLoading) {
-        return (
-            <View
-                className={twMerge(["flex-1", "justify-center", "items-center"])}
-                style={{ backgroundColor: "#F1EBE4" }}>
-                <ActivityIndicator size={"large"} color={"#BACFCD"} />
-            </View>
-        );
+        return <LoadingIndicator />;
     }
 
     return (
@@ -189,25 +167,22 @@ export default function HistorySection({petId}: HistorySectionProps) {
                             "p-5",
                             "mb-4",
                             "justify-between",
-                            "border border-divider rounded-[10px]",
+                            "rounded-[28px]",
                             "bg-background-paper",
                         ])}>
-                        <View className="flex-row justify-between items-start">
-                            <View>
-                                <TextComponent className="font-bold text-base text-text-default">
-                                    {card.title}
-                                </TextComponent>
-                                <TextComponent className="text-xs mt-1 text-text-secondary">
-                                    {data?.date}
-                                </TextComponent>
-                            </View>
+                        <View>
+                            <TextComponent className="font-bold text-base text-text-default">
+                                {card.title}
+                            </TextComponent>
+                            <TextComponent className="text-xs mt-1 text-text-secondary">
+                                {card.dateLabel}
+                            </TextComponent>
                         </View>
 
                         {card.renderBottom()}
                     </Pressable>
                 ))}
             </View>
-
         </ScrollView>
     );
 }
