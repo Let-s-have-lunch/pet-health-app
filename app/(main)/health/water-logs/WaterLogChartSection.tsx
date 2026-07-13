@@ -59,8 +59,10 @@ export default function WaterLogChartSection({ historyData }: WaterLogChartSecti
     return (
         <View className={twMerge("mb-6")}>
             <View className={twMerge("w-full mb-3")}>
-                <TextComponent
-                    className={twMerge("text-[14px] font-bold text-text-secondary px-1")}>
+                <TextComponent className={twMerge("text-[20px] font-bold")}>
+                    음수량 변화
+                </TextComponent>
+                <TextComponent className={twMerge("text-[12px] text-text-secondary mt-1")}>
                     {dateRangeText}
                 </TextComponent>
             </View>
