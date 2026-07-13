@@ -176,7 +176,7 @@ function CommunityPostDetailPage() {
                         </Card>
                     </View>
 
-                    <View className={twMerge(["flex-row", "px-6", "pt-2", "gap-1", "justify-end"])}>
+                    <View className={twMerge(["flex-row", "px-6", "pt-2", "gap-1.5", "justify-end"])}>
                         <Button
                             className={twMerge(["flex-1"])}
                             variant={"outlined"}

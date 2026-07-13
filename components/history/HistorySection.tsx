@@ -73,7 +73,7 @@ export default function HistorySection({petId}: HistorySectionProps) {
                 });
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
             const msg = "대시보드 데이터를 불러오는데 실패했습니다.";
             if (Platform.OS === "web") {
                 alert(msg);
@@ -85,7 +85,6 @@ export default function HistorySection({petId}: HistorySectionProps) {
         }
     }, [petId, todayDate]);
 
-    // 🐶 useEffect 대신 useFocusEffect 적용 (화면으로 돌아올 때 즉시 새로고침)
     useFocusEffect(
         useCallback(() => {
             loadDashboard().then(() => {});
@@ -177,8 +176,8 @@ export default function HistorySection({petId}: HistorySectionProps) {
     }
 
     return (
-        <ScrollView className="flex-1 pt-7 bg-background-default">
-            <View className="flex-row flex-wrap justify-between px-5 mt-6">
+        <ScrollView className="flex-1 pt-1.8 bg-background-default">
+            <View className="flex-row flex-wrap justify-between mt-6">
                 {cardConfig.map(card => (
                     <Pressable
                         key={card.id}

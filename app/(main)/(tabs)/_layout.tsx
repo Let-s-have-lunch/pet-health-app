@@ -13,7 +13,7 @@ function MainLayout() {
 
     const currentSegment = segments[segments.length - 1];
     const isMyPage = currentSegment === "my";
-    const isPostsPage = currentSegment === "community-posts";
+    const isPostsPage = currentSegment === "posts";
 
     return (
         <View className={"flex-1 bg-background-default"}>

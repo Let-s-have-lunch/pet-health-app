@@ -115,7 +115,3 @@ textarea:focus {
     box-shadow: none !important;
 }
 
-*:focus {
-    outline: none !important;
-    box-shadow: none !important;
-}

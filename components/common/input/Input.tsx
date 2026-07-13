@@ -21,7 +21,7 @@ function Input({
                 INPUT_SIZE_STYLE[size],
                 hasError
                     ? "border-error-main"
-                    : "border-divider focus:border-primary-main",
+                    : "border-primary-main focus:border-primary-main",
                 className,
             )}
             placeholderClassName={twMerge("text-text-secondary", placeholderClassName)}
