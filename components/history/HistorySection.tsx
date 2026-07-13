@@ -4,8 +4,6 @@ import { twMerge } from "tailwind-merge";
 import { router, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { DashboardData, getHomeDashboard } from "@/api/home";
-import { waterIntakeApi } from "@/api/user/waterIntakeApi";
-import { weightLogApi } from "@/api/user/weightLogApi";
 import TextComponent from "@/components/common/text/TextComponent";
 
 const getTodayString = () => {
@@ -20,55 +18,19 @@ export default function HistorySection() {
     const [isLoading, setIsLoading] = useState(true);
     const todayDate = getTodayString();
 
-    const [data, setData] = useState<DashboardData | null>({
-        date: todayDate,
-        walk: { count: 0 },
-        weight: { value: 0 }, // 🐶 여기에 최신 몸무게가 담길 예정
-        water: { totalAmount: 0 },
-        vetRecord: null,
-    });
+    const [data, setData] = useState<DashboardData | null>(null);
 
     const loadDashboard = useCallback(async () => {
-        try {
-            setIsLoading(true);
-            const petId = 1; // 실제 선택된 펫 ID 변수로 대체 가능
+        const petId = 1;
 
-            // 1. 기존 대시보드 데이터 호출
+        try {
             const dashboardResult = await getHomeDashboard(petId, todayDate);
-            // 2. 💧 펫의 전체 음수량 기록 리스트 호출
-            const waterLogsResult = await waterIntakeApi.getByPetId(petId);
-            // 3. 🐶 펫의 전체 몸무게 기록 리스트 호출
-            const weightLogsResult = await weightLogApi.getByPetId(petId);
 
             if (dashboardResult.success) {
-                let latestWaterAmount = 0;
-                let latestWeightValue = 0; // 🐶 최신 몸무게 변수 초기화
-
-                // 💧 전체 리스트 중 가장 최근(배열의 마지막)에 등록된 음수량 기록 찾기
-                if (waterLogsResult?.data?.data && waterLogsResult.data.data.length > 0) {
-                    const logs = waterLogsResult.data.data;
-                    latestWaterAmount = logs[logs.length - 1].amount;
-                }
-
-                // 🐶 전체 리스트 중 가장 최근(배열의 첫 번째)에 등록된 몸무게 기록 찾기
-                if (weightLogsResult?.data?.data && weightLogsResult.data.data.length > 0) {
-                    const weightLogs = weightLogsResult.data.data;
-                    latestWeightValue = weightLogs[0].weight;
-                }
-
-                // 대시보드 상태 세팅할 때 물, 몸무게 최신 데이터로 변경해 주기
-                setData({
-                    ...dashboardResult.data,
-                    water: {
-                        totalAmount: latestWaterAmount,
-                    },
-                    weight: {
-                        value: latestWeightValue,
-                    },
-                });
+                setData(dashboardResult.data);
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
             const msg = "대시보드 데이터를 불러오는데 실패했습니다.";
             if (Platform.OS === "web") {
                 alert(msg);
@@ -80,7 +42,6 @@ export default function HistorySection() {
         }
     }, [todayDate]);
 
-    // 🐶 useEffect 대신 useFocusEffect 적용 (화면으로 돌아올 때 즉시 새로고침)
     useFocusEffect(
         useCallback(() => {
             loadDashboard().then(() => {});
@@ -185,6 +146,7 @@ export default function HistorySection() {
                             "p-5",
                             "mb-4",
                             "justify-between",
+                            "border border-none rounded-[10px]",
                             "rounded-[28px]",
                             "bg-background-paper",
                             "rounded-[28px]"
