@@ -16,7 +16,11 @@ const getTodayString = () => {
     return `${year}-${month}-${day}`;
 };
 
-export default function HistorySection() {
+type HistorySectionProps = {
+    petId?: number;
+};
+
+export default function HistorySection({petId}: HistorySectionProps) {
     const [isLoading, setIsLoading] = useState(true);
     const todayDate = getTodayString();
 
@@ -29,9 +33,10 @@ export default function HistorySection() {
     });
 
     const loadDashboard = useCallback(async () => {
+        if (!petId) return;
+
         try {
             setIsLoading(true);
-            const petId = 1; // 실제 선택된 펫 ID 변수로 대체 가능
 
             // 1. 기존 대시보드 데이터 호출
             const dashboardResult = await getHomeDashboard(petId, todayDate);
@@ -68,7 +73,7 @@ export default function HistorySection() {
                 });
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
             const msg = "대시보드 데이터를 불러오는데 실패했습니다.";
             if (Platform.OS === "web") {
                 alert(msg);
@@ -78,9 +83,8 @@ export default function HistorySection() {
         } finally {
             setIsLoading(false);
         }
-    }, [todayDate]);
+    }, [petId, todayDate]);
 
-    // 🐶 useEffect 대신 useFocusEffect 적용 (화면으로 돌아올 때 즉시 새로고침)
     useFocusEffect(
         useCallback(() => {
             loadDashboard().then(() => {});
@@ -185,9 +189,8 @@ export default function HistorySection() {
                             "p-5",
                             "mb-4",
                             "justify-between",
-                            "rounded-[28px]",
+                            "border border-divider rounded-[10px]",
                             "bg-background-paper",
-                            "rounded-[28px]"
                         ])}>
                         <View className="flex-row justify-between items-start">
                             <View>
@@ -205,7 +208,6 @@ export default function HistorySection() {
                 ))}
             </View>
 
-            {/*<MedicalHistorySection />*/}
         </ScrollView>
     );
 }

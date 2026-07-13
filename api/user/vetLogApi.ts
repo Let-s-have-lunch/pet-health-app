@@ -45,4 +45,18 @@ export const vetLogApi = {
     remove: async (id: number) => {
         return await axiosInstance.delete(`/vet-records/${id}`);
     },
+    // 이미지 첨부
+    createWithImage: (formData: FormData) =>
+        axiosInstance.post("/vet-logs", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }),
+
+    updateWithImage: (id: number, formData: FormData) =>
+        axiosInstance.put(`/vet-logs/${id}`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }),
 };

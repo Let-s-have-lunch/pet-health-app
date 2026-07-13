@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { View, ScrollView, Platform, Alert } from "react-native";
 import { twMerge } from "tailwind-merge";
 import Title from "@/components/common/title/Title";
@@ -10,16 +10,29 @@ import { WeightLog } from "@/types/WeightLog";
 import WeightLogChartSection from "@/components/weight/WeightLogChartSection";
 import WeightLogModal from "@/components/weight/WeightLogModal";
 import WeightLogHistorySection from "@/components/weight/PetHistorySection";
+import { usePetStore } from "@/stores/usePetStore";
 
 function WeightLogListPage() {
     const router = useRouter();
-    const petId = 1;
+    const selectedPet = usePetStore(state => state.selectedPet);
+    const petId = selectedPet?.id;
 
     const [history, setHistory] = useState<WeightLog[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedLog, setSelectedLog] = useState<WeightLog | null>(null);
+
+    // 💡 1. 펫 ID가 없을 때 무한 로딩에 빠지지 않도록 메인으로 돌려보내기
+    useEffect(() => {
+        if (!petId) {
+            if (Platform.OS === "web") {
+                alert("선택된 반려동물이 없습니다.");
+            } else {
+                Alert.alert("알림", "선택된 반려동물이 없습니다.");
+            }
+            router.push("/");
+        }
+    }, [petId, router]);
 
     // API 데이터 페칭
     const fetchWeightLogData = useCallback(async () => {
@@ -49,7 +62,6 @@ function WeightLogListPage() {
         }, [fetchWeightLogData]),
     );
 
-    // 💡 Action Handler Functions
     const handleAddPress = () => {
         setIsModalVisible(true);
     };
@@ -91,10 +103,16 @@ function WeightLogListPage() {
         }
     };
 
+    // 💡 2. TS 에러 방지: petId가 없으면 빈 화면(로딩) 렌더링
+    if (!petId) {
+        return <LoadingIndicator />;
+    }
+
     return (
         <View className={twMerge("flex-1 bg-background-default")}>
             <Title
-                title={"초코의 몸무게"}
+                // 💡 3. 하드코딩된 '초코' 대신 실제 반려동물 이름 적용
+                title={selectedPet ? `${selectedPet.name}의 몸무게` : "몸무게 기록"}
                 showBackButton={true}
                 onBackPress={() => router.push("/")}
                 className={"bg-background-paper"}
@@ -105,7 +123,6 @@ function WeightLogListPage() {
             ) : (
                 <ScrollView>
                     <ContentContainer className={"overflow-hidden flex-1"}>
-                        {/* 📊 차트 섹션 */}
                         <WeightLogChartSection history={history} />
 
                         {/* 모달 팝업 컴포넌트 */}
