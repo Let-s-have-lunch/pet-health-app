@@ -3,9 +3,9 @@ export type StyleVariantType = "contained" | "outlined" | "text" | "icon";
 export type StyleSizeType = "small" | "medium" | "large";
 
 export const BUTTON_SIZE_STYLE = {
-    small: "px-3 py-2",
-    medium: "px-5 py-3",
-    large: "px-8 py-5",
+    small: "px-3 py-1", // small: "px-3 py-2",
+    medium: "px-5 py-2", // medium: "px-5 py-3",
+    large: "px-8 py-3", //  large: "px-8 py-5"
 };
 
 export const INPUT_SIZE_STYLE = {

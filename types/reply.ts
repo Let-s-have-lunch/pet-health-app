@@ -9,11 +9,14 @@ export interface Reply {
     userId: number;
 }
 
-
 export type ReplyListUser = Pick<User, "id" | "nickname">;
 
 export interface ReplyListItemType extends Reply {
     user: ReplyListUser;
 }
 
+export type ReplyUser = Pick<User, "id" | "nickname" | "email">;
 
+export interface ReplyItemType extends Reply {
+    user: ReplyUser;
+}

@@ -1,5 +1,5 @@
 import axiosInstance from "@/api/axiosInstance";
-import { Reply, ReplyItemType, ReplyListItemType } from "@/types/reply";
+import { Reply, ReplyListItemType } from "@/types/reply";
 import { PaginationResponseType } from "@/types/common";
 
 const createReply = async (postId: number, content: string): Promise<Reply> => {

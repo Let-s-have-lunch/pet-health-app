@@ -11,7 +11,6 @@ const getPostList = async (page = 1, size = 20): Promise<PaginationResponseType<
 };
 
 const getPostById = async (postId: number): Promise<Post> => {
-    // TODO 타입확인하고 Prisma  추가 하기
     const response = await axiosInstance.get(`/post/${postId}`);
     return response.data.data;
 };

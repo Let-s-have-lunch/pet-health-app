@@ -1,7 +1,7 @@
 import TextComponent from "@/components/common/text/TextComponent";
 
-function CommunityPostDetailReplyListPage() {
+function CommunityPostDetailReplyList() {
     return <TextComponent></TextComponent>
 }
 
-export default CommunityPostDetailReplyListPage
+export default CommunityPostDetailReplyList
