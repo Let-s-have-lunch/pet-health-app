@@ -7,9 +7,9 @@ import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
 import { weightLogApi } from "@/api/user/weightLogApi";
 import { WeightLog } from "@/types/WeightLog";
-import WeightLogChartSection from "@/components/weight/WeightLogChartSection";
-import WeightLogModal from "@/components/weight/WeightLogModal";
-import WeightLogHistorySection from "@/components/weight/PetHistorySection";
+import WeightLogChartSection from "@/app/(main)/health/weight-logs/WeightLogChartSection";
+import WeightLogModal from "@/app/(main)/health/weight-logs/WeightLogModal";
+import WeightLogHistorySection from "@/app/(main)/health/weight-logs/WeightLogHistorySection";
 import { usePetStore } from "@/stores/usePetStore";
 
 function WeightLogListPage() {

@@ -8,9 +8,9 @@ import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
 import { WalkLog, WalkLogStats } from "@/types/walkLog";
 import walkLogApi from "@/api/user/walkLogApi";
-import WalkLogModal from "@/components/walkLog/WalkLogModal";
-import WalkLogHistorySection from "@/components/walkLog/WalkLogHistorySection";
-import WalkLogChartSection from "@/components/walkLog/WalkLogChartSection";
+import WalkLogModal from "@/app/(main)/health/walk-logs/WalkLogModal";
+import WalkLogHistorySection from "@/app/(main)/health/walk-logs/WalkLogHistorySection";
+import WalkLogChartSection from "@/app/(main)/health/walk-logs/WalkLogChartSection";
 
 function WalkLogListPage() {
     const router = useRouter();
