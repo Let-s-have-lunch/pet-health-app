@@ -4,8 +4,6 @@ import { twMerge } from "tailwind-merge";
 import { router, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { DashboardData, getHomeDashboard } from "@/api/home";
-import { waterIntakeApi } from "@/api/user/waterIntakeApi";
-import { weightLogApi } from "@/api/user/weightLogApi";
 import TextComponent from "@/components/common/text/TextComponent";
 
 const getTodayString = () => {
@@ -16,61 +14,26 @@ const getTodayString = () => {
     return `${year}-${month}-${day}`;
 };
 
-type HistorySectionProps = {
-    petId?: number;
-};
-
-export default function HistorySection({petId}: HistorySectionProps) {
+export default function HistorySection() {
     const [isLoading, setIsLoading] = useState(true);
     const todayDate = getTodayString();
 
-    const [data, setData] = useState<DashboardData | null>({
-        date: todayDate,
-        walk: { count: 0 },
-        weight: { value: 0 }, // 🐶 여기에 최신 몸무게가 담길 예정
-        water: { totalAmount: 0 },
-        vetRecord: null,
-    });
+    // 💡 초기값을 null로 깔끔하게 세팅
+    const [data, setData] = useState<DashboardData | null>(null);
 
     const loadDashboard = useCallback(async () => {
-        if (!petId) return;
+        // 💡 [TODO] 나중에 Zustand 완벽하게 세팅되면 아래 1 대신 selectedPet.id 로 변경!
+        const petId = 1;
 
         try {
             setIsLoading(true);
 
-            // 1. 기존 대시보드 데이터 호출
+            // 💡 불필요한 호출을 지우고, 대시보드 데이터 딱 하나만 가져오기!
             const dashboardResult = await getHomeDashboard(petId, todayDate);
-            // 2. 💧 펫의 전체 음수량 기록 리스트 호출
-            const waterLogsResult = await waterIntakeApi.getByPetId(petId);
-            // 3. 🐶 펫의 전체 몸무게 기록 리스트 호출
-            const weightLogsResult = await weightLogApi.getByPetId(petId);
 
             if (dashboardResult.success) {
-                let latestWaterAmount = 0;
-                let latestWeightValue = 0; // 🐶 최신 몸무게 변수 초기화
-
-                // 💧 전체 리스트 중 가장 최근(배열의 마지막)에 등록된 음수량 기록 찾기
-                if (waterLogsResult?.data?.data && waterLogsResult.data.data.length > 0) {
-                    const logs = waterLogsResult.data.data;
-                    latestWaterAmount = logs[logs.length - 1].amount;
-                }
-
-                // 🐶 전체 리스트 중 가장 최근(배열의 첫 번째)에 등록된 몸무게 기록 찾기
-                if (weightLogsResult?.data?.data && weightLogsResult.data.data.length > 0) {
-                    const weightLogs = weightLogsResult.data.data;
-                    latestWeightValue = weightLogs[0].weight;
-                }
-
-                // 대시보드 상태 세팅할 때 물, 몸무게 최신 데이터로 변경해 주기
-                setData({
-                    ...dashboardResult.data,
-                    water: {
-                        totalAmount: latestWaterAmount,
-                    },
-                    weight: {
-                        value: latestWeightValue,
-                    },
-                });
+                // 백엔드에서 이미 다 가공해서 줬으니, 그대로 꽂아 넣으면 끝!
+                setData(dashboardResult.data);
             }
         } catch (error) {
             console.error(error);
@@ -83,7 +46,7 @@ export default function HistorySection({petId}: HistorySectionProps) {
         } finally {
             setIsLoading(false);
         }
-    }, [petId, todayDate]);
+    }, [todayDate]); // 의존성 배열도 깔끔하게 유지
 
     useFocusEffect(
         useCallback(() => {
@@ -122,7 +85,6 @@ export default function HistorySection({petId}: HistorySectionProps) {
         {
             id: "water",
             title: "물",
-            // 🚀 [기획 수정] 모달 대신 몸무게처럼 그래프/리스트가 있는 상세 페이지로 이동!
             onPress: () => router.push("/(main)/health/water-logs"),
             renderBottom: () => (
                 <View className={twMerge("flex-row", "justify-end", "items-center", "gap-1.5")}>
