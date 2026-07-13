@@ -1,0 +1,130 @@
+import React, { useMemo, useState } from "react";
+import { View } from "react-native";
+import { twMerge } from "tailwind-merge";
+import Card from "@/components/common/card/Card";
+import TextComponent from "@/components/common/text/TextComponent";
+import {
+    VictoryArea,
+    VictoryAxis,
+    VictoryChart,
+    VictoryLine,
+    VictoryScatter,
+} from "victory-native";
+import { WaterIntakeLog } from "@/types/WaterIntakeLog";
+
+interface WaterLogChartSectionProps {
+    historyData: WaterIntakeLog[];
+}
+
+export default function WaterLogChartSection({ historyData }: WaterLogChartSectionProps) {
+    const [chartWidth, setChartWidth] = useState(300);
+
+    // 💡 부모에서 넘어온 데이터를 가공하여 차트에 필요한 상태값 반환
+    const { chartData, yMax, yTickValues, dateRangeText } = useMemo(() => {
+        if (!historyData || historyData.length === 0) {
+            return {
+                chartData: [],
+                yMax: 150,
+                yTickValues: [0, 50, 100, 150],
+                dateRangeText: "DATE -",
+            };
+        }
+
+        // 최신 날짜순 정렬 후 최근 7개만 자르고 다시 과거->최신순으로 뒤집기 (차트 렌더링용)
+        const sorted = [...historyData]
+            .sort((a, b) => b.recordDate.localeCompare(a.recordDate) || b.id - a.id)
+            .slice(0, 7)
+            .reverse();
+
+        const data = sorted.map(item => {
+            const parts = item.recordDate.split(/[-/T]/);
+            const label =
+                parts.length >= 2
+                    ? `${parseInt(parts[1], 10)}/${parseInt(parts[2], 10)}`
+                    : item.recordDate;
+            return { x: label, y: item.amount || 0 };
+        });
+
+        const dateText =
+            data.length > 0 ? `DATE ${data[0].x} ~ ${data[data.length - 1].x}` : "DATE -";
+
+        const actualMax = Math.max(...data.map(d => d.y), 0);
+        const step = actualMax > 200 ? 100 : 50;
+        const max = Math.max(150, Math.ceil(actualMax / step) * step);
+        const ticks = Array.from({ length: max / step + 1 }, (_, i) => i * step);
+
+        return { chartData: data, yMax: max, yTickValues: ticks, dateRangeText: dateText };
+    }, [historyData]);
+
+    return (
+        <View className={twMerge("mb-6")}>
+            <View className={twMerge("w-full mb-3")}>
+                <TextComponent
+                    className={twMerge("text-[14px] font-bold text-text-secondary px-1")}>
+                    {dateRangeText}
+                </TextComponent>
+            </View>
+
+            <Card
+                shadow={"sm"}
+                className={twMerge("w-full items-center bg-background-paper p-2")}
+                onLayout={event => {
+                    const { width } = event.nativeEvent.layout;
+                    setChartWidth(width - 40);
+                }}>
+                {chartData.length > 0 ? (
+                    <VictoryChart
+                        width={chartWidth}
+                        height={220}
+                        domain={{ y: [0, yMax] }}
+                        padding={{ top: 20, bottom: 30, left: 35, right: 20 }}>
+                        <VictoryAxis
+                            style={{
+                                axis: { stroke: "#D1D5DB" },
+                                tickLabels: { fill: "#888", fontSize: 12, padding: 10 },
+                                grid: { stroke: "transparent" },
+                            }}
+                        />
+                        <VictoryAxis
+                            dependentAxis
+                            tickValues={yTickValues}
+                            style={{
+                                axis: { stroke: "transparent" },
+                                tickLabels: { fill: "#888", fontSize: 12, padding: 15 },
+                                grid: { stroke: "#D1D5DB", strokeDasharray: "4, 4" },
+                            }}
+                        />
+                        <VictoryArea
+                            data={chartData}
+                            interpolation="catmullRom"
+                            style={{ data: { fill: "rgba(232, 124, 113, 0.15)" } }}
+                        />
+                        <VictoryLine
+                            data={chartData}
+                            interpolation="catmullRom"
+                            style={{
+                                data: { stroke: "rgba(232, 124, 113, 0.3)", strokeWidth: 14 },
+                            }}
+                        />
+                        <VictoryLine
+                            data={chartData}
+                            interpolation="catmullRom"
+                            style={{ data: { stroke: "#e87c71", strokeWidth: 2 } }}
+                        />
+                        <VictoryScatter
+                            data={chartData}
+                            size={6}
+                            style={{ data: { fill: "#e87c71" } }}
+                        />
+                    </VictoryChart>
+                ) : (
+                    <View className="h-[220px] justify-center items-center">
+                        <TextComponent className="text-center text-text-secondary">
+                            기록이 없습니다.
+                        </TextComponent>
+                    </View>
+                )}
+            </Card>
+        </View>
+    );
+}
