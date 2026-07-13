@@ -1,5 +1,6 @@
 import axiosInstance from "../axiosInstance";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
+import axios from "axios";
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 
@@ -39,6 +40,7 @@ export const vetLogApi = {
     update: async (
         id: number,
         data: {
+            petId?: number;
             hospitalName?: string;
             visitPurpose?: string;
             visitDate?: string;
@@ -52,9 +54,7 @@ export const vetLogApi = {
     },
 
     // 5. 병원 기록 삭제 (DELETE /vet-records/:id)
-    remove: async (id: number) => {
-        return await axiosInstance.delete(`/vet-records/${id}`);
-    },
+    delete: (id: number) => axiosInstance.delete(`/vet-records/${id}`),
 
     updateWithImage: (id: number, formData: FormData) =>
         axiosInstance.put(`/vet-logs/${id}`, formData, {

@@ -17,12 +17,16 @@ import WaterIntakeEditModal from "@/components/common/water/WaterIntakeEditModal
 
 import { waterIntakeApi } from "@/api/user/waterIntakeApi";
 import { WaterIntakeLog } from "@/types/WaterIntakeLog";
+import { usePetStore } from "@/stores/usePetStore";
 
 const screenWidth = Dimensions.get("window").width;
 
 const getTodayString = () => new Date().toISOString().split("T")[0];
 
 export default function WaterLogListPage() {
+    const selectedPet = usePetStore(state => state.selectedPet);
+    const petId = selectedPet?.id;
+
     const [historyData, setHistoryData] = useState<WaterIntakeLog[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -31,9 +35,11 @@ export default function WaterLogListPage() {
     const [selectedLogData, setSelectedLogData] = useState<WaterIntakeLog | null>(null);
 
     const fetchData = async () => {
+        if (!petId) return;
+
         try {
             setIsLoading(true);
-            const response = await waterIntakeApi.getByPetId(1);
+            const response = await waterIntakeApi.getByPetId(petId);
             setHistoryData(response.data.data || []);
         } catch (error) {
             console.log(error);
@@ -83,11 +89,20 @@ export default function WaterLogListPage() {
 
     useFocusEffect(
         useCallback(() => {
+            if (!petId) {
+                if (Platform.OS === "web") {
+                    alert("선택된 반려동물이 없습니다.");
+                } else {
+                    Alert.alert("알림", "선택된 반려동물이 없습니다.");
+                }
+                router.back();
+                return;
+            }
+
             void fetchData();
-        }, []),
+        }, [petId]),
     );
 
-    // 최신 날짜가 맨 앞(index 0)으로 오도록 정렬 (증감량 계산용)
     const sortedHistory = [...historyData].sort((a, b) => {
         const dateCompare = b.recordDate.localeCompare(a.recordDate);
         if (dateCompare !== 0) return dateCompare;
@@ -96,7 +111,6 @@ export default function WaterLogListPage() {
 
     const chartWidth = Math.max(screenWidth - 72, 200);
 
-    // 차트용 데이터는 왼쪽이 과거, 오른쪽이 최신이 되도록 뒤집기
     const chartRecords = [...sortedHistory].slice(0, 7).reverse();
 
     const chartLabels = chartRecords.map(item => {
@@ -111,10 +125,14 @@ export default function WaterLogListPage() {
             ? `DATE ${chartLabels[0]} ~ ${chartLabels[chartLabels.length - 1]}`
             : "DATE -";
 
+    if (!petId) {
+        return <View className="flex-1 bg-background-default" />;
+    }
+
     return (
         <>
             <Title
-                title={"초코의 음수량"}
+                title={`${selectedPet?.name || "반려동물"}의 음수량`}
                 showBackButton={true}
                 onBackPress={() => router.push("/")}
             />
@@ -150,10 +168,9 @@ export default function WaterLogListPage() {
                                         backgroundGradientFromOpacity: 0,
                                         backgroundGradientToOpacity: 0,
 
-                                        // 💡 [핵심 수정] 기존에 쓰셨던 음수량 파란색상(#A9C6D9) 적용
                                         color: (opacity = 1) => `rgba(169, 198, 217, ${opacity})`,
                                         fillShadowGradient: `rgba(169, 198, 217, 1)`,
-                                        fillShadowGradientOpacity: 0.25, // 물처럼 부드럽게 채워지는 투명도
+                                        fillShadowGradientOpacity: 0.25,
 
                                         labelColor: () => "#7F8C8D",
                                         propsForDots: {
@@ -270,7 +287,7 @@ export default function WaterLogListPage() {
                         recordDate: selectedLogData?.recordDate ?? getTodayString(),
                         amount: selectedLogData?.amount ?? 0,
                         memo: selectedLogData?.memo ?? undefined,
-                        petId: selectedLogData?.petId ?? 1,
+                        petId: selectedLogData?.petId ?? petId,
                     }}
                 />
             )}
