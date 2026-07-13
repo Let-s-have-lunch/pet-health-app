@@ -172,7 +172,7 @@ export default function HistorySection() {
     }
 
     return (
-        <ScrollView className="flex-1 pt-7 bg-background-default">
+        <ScrollView className="flex-1 pt-1.8 bg-background-default">
             <View className="flex-row flex-wrap justify-between mt-6">
                 {cardConfig.map(card => (
                     <Pressable
@@ -187,6 +187,7 @@ export default function HistorySection() {
                             "justify-between",
                             "border border-divider rounded-[10px]",
                             "bg-background-paper",
+                            "rounded-[28px]"
                         ])}>
                         <View className="flex-row justify-between items-start">
                             <View>
