@@ -170,10 +170,10 @@ function ReplyItem({ item, onRefresh, isLast }: ReplyItemProps) {
                 {/* 본인 댓글일 때만 수정/삭제 버튼 노출 */}
                 {isAuthor && !isEditing && (
                     <View className={twMerge(["flex-row", "gap-2"])}>
-                        <Button variant="text" size="small" onPress={() => setIsEditing(true)}>
+                        <Button variant={"contained"} size="small"  onPress={() => setIsEditing(true)}>
                             수정
                         </Button>
-                        <Button variant="text" size="small" color="error" onPress={handleDelete}>
+                        <Button variant={"contained"} size="small" color={"error"} onPress={handleDelete}>
                             삭제
                         </Button>
                     </View>

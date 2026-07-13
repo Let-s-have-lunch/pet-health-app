@@ -175,39 +175,40 @@ function CommunityPostDetailPage() {
                             </View>
                         </Card>
                     </View>
+
+                    <View className={twMerge(["flex-row", "px-6", "pt-2", "gap-1", "justify-end"])}>
+                        <Button
+                            className={twMerge(["flex-1"])}
+                            variant={"outlined"}
+                            size={"medium"}
+                            onPress={() => router.push("/community-posts")}>
+                            목록
+                        </Button>
+
+                        {isAuthor && (
+                            <>
+                                <Button
+                                    className={twMerge(["flex-1"])}
+                                    variant={"contained"}
+                                    size={"medium"}
+                                    onPress={() => router.push(`/post/${postId}/update`)}>
+                                    수정
+                                </Button>
+                                <Button
+                                    className={twMerge(["flex-1"])}
+                                    variant={"contained"}
+                                    size={"medium"}
+                                    color={"error"}
+                                    onPress={handleDelete}>
+                                    삭제
+                                </Button>
+                            </>
+                        )}
+                    </View>
+
+                    {/* [변경] 댓글 수 변경을 상위로 전달하기 위한 함수 전달 */}
+                    <CommunityPostDetailReply postId={post.id} onTotalChange={setReplyCount} />
                 </ContentContainer>
-                <View className={twMerge(["flex-row", "px-6", "gap-1", "justify-end"])}>
-                    <Button
-                        className={twMerge(["flex-1"])}
-                        variant={"outlined"}
-                        size={"medium"}
-                        onPress={() => router.push("/community-posts")}>
-                        목록으로
-                    </Button>
-
-                    {isAuthor && (
-                        <>
-                            <Button
-                                className={twMerge(["flex-1"])}
-                                variant={"contained"}
-                                size={"medium"}
-                                color={"error"}
-                                onPress={() => router.push(`/post/${postId}/update`)}>
-                                수정
-                            </Button>
-                            <Button
-                                className={twMerge(["flex-1"])}
-                                variant={"contained"}
-                                size={"medium"}
-                                onPress={handleDelete}>
-                                삭제
-                            </Button>
-                        </>
-                    )}
-                </View>
-
-                {/* [변경] 댓글 수 변경을 상위로 전달하기 위한 함수 전달 */}
-                <CommunityPostDetailReply postId={post.id} onTotalChange={setReplyCount} />
             </ScrollView>
         </View>
     );

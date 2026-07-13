@@ -98,46 +98,62 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
     };
 
     return (
-        <View className={twMerge(["mt-10", "pt-6"], ["border-t", "border-divider"])}>
+        <View className={twMerge(["mt-10", "pt-3"], ["border-t", "border-divider"])}>
             {!isLoading && total === 0 ? (
-                <View className={twMerge([
-                    "bg-background-paper",
-                    "p-8",
-                    "rounded-xl",
-                    "border",
-                    "border-divider",
-                    "justify-center",
-                    "items-center",
-                    "mb-6"
-                ])}>
-                    <Ionicons name={"chatbox-outline"} size={32} color={"#9CA3AF"} className={"mb-2"} />
+                <View
+                    className={twMerge([
+                        "bg-background-paper",
+                        "p-8",
+                        "rounded-xl",
+                        "border",
+                        "border-divider",
+                        "justify-center",
+                        "items-center",
+                        "mb-6",
+                    ])}>
+                    <Ionicons
+                        name={"chatbox-outline"}
+                        size={32}
+                        color={"#9CA3AF"}
+                        className={"mb-2"}
+                    />
                     <TextComponent className={twMerge(["mt-2", "text-text-secondary", "text-sm"])}>
                         등록된 댓글이 없습니다.
                     </TextComponent>
                 </View>
             ) : (
-                <View className="mb-6">
+                <View className="m-6">
                     <TouchableOpacity
                         activeOpacity={0.7}
                         onPress={toggleExpand}
-                        className={twMerge([
-                            "flex-row",
-                            "justify-between",
-                            "items-center",
-                            "py-3",
-                            "px-4",
-                            "mb-2",
-                            "bg-background-default",
-                            "rounded-xl",
-                            "border",
-                            "border-divider"
-                        ])}
-                    >
+                        className={twMerge(
+                            [
+                                "flex-row",
+                                "justify-between",
+                                "items-center",
+                                "py-3",
+                                "px-4",
+                                "mb-2",
+                                "bg-background-paper",
+                            ],
+                            ["rounded-xl", "border", "border-divider"],
+                        )}>
+                        <View></View>
                         <View className={twMerge(["flex-row", "items-center", "gap-1.5"])}>
-                            <TextComponent className={twMerge(["text-base", "font-semibold", "text-text-default"])}>
+                            <TextComponent
+                                className={twMerge([
+                                    "text-base",
+                                    "font-semibold",
+                                    "text-text-default",
+                                ])}>
                                 전체 댓글
                             </TextComponent>
-                            <TextComponent className={twMerge(["text-base", "font-bold", "text-primary-main"])}>
+                            <TextComponent
+                                className={twMerge([
+                                    "text-base",
+                                    "font-bold",
+                                    "text-primary-main",
+                                ])}>
                                 {total}
                             </TextComponent>
                         </View>
@@ -164,8 +180,7 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
                 </View>
             )}
 
-            {/* 3. [위치 변경] 댓글을 처음 작성하는 입력란을 목록 컴포넌트보다 아래에 둠 */}
-            <View className={twMerge(["mb-6", "pt-4", "border-t", "border-divider"])}>
+            <View className={twMerge(["mx-6"])}>
                 <Controller
                     control={control}
                     name={"content"}
@@ -179,9 +194,10 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
                         />
                     )}
                 />
-                <View className={twMerge(["flex-row", "justify-end", "mt-3"])}>
+                <View className={twMerge(["flex-row", "justify-end", "mt-1"])}>
                     <Button
-                        variant={"outlined"}
+                        className={twMerge(["flex-1"])}
+                        variant={"contained"}
                         color={"primary"}
                         disabled={isSubmitting}
                         onPress={handleSubmit(onSubmit)}>
