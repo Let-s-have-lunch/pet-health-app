@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -20,14 +20,17 @@ import ErrorMessage from "@/components/common/label/ErrorMessage";
 import petApi from "@/api/user/petApi";
 import { RegisterPetInputType, registerPetSchema } from "@/schemas/user/pet/registerPetSchema";
 import TextComponent from "@/components/common/text/TextComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function PetCreatePage() {
     const router = useRouter();
+    const { petId } = useLocalSearchParams<{ petId: string }>();
+
     const {
         control,
         handleSubmit,
         setError,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<RegisterPetInputType>({
         resolver: zodResolver(registerPetSchema),
@@ -47,6 +50,30 @@ function PetCreatePage() {
     const [genderModalVisible, setGenderModalVisible] = useState(false);
     const [neuteredModalVisible, setNeuteredModalVisible] = useState(false);
 
+    useEffect(() => {
+        if (!petId) return;
+
+        const loadPet = async () => {
+            try {
+                const pet = await petApi.getPet(Number(petId));
+
+                reset({
+                    name: pet.name,
+                    species: pet.species,
+                    breed: pet.breed ?? "",
+                    birthdate: pet.birthdate ? pet.birthdate.slice(0, 10).replaceAll("-", "") : "",
+                    gender: pet.gender,
+                    neutered: pet.neutered,
+                    registrationNumber: pet.registrationNumber ?? "",
+                    profileImage: pet.profileImage ?? "",
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        loadPet().then(() => {});
+    }, [petId, reset]);
+
     const onSubmit = async (data: RegisterPetInputType) => {
         try {
             const payload = {
@@ -62,12 +89,17 @@ function PetCreatePage() {
                     (data.profileImage ?? "").trim() === "" ? undefined : data.profileImage,
             };
 
-            await petApi.registerPet(payload);
+            if (petId) {
+                await petApi.updatePet(Number(petId), payload);
+            } else {
+                await petApi.registerPet(payload);
+            }
 
             router.replace("/");
         } catch (error: any) {
-            console.log("에러", error.response?.status);
+            console.log(error.response?.status);
             console.log(error.response?.data);
+            console.log(error.response?.data?.message);
         }
     };
 
@@ -75,7 +107,7 @@ function PetCreatePage() {
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             className="flex-1 bg-background-paper">
-            <Title title="반려동물 등록" showBackButton onBackPress={() => router.back()} />
+            <Title title="반려동물 등록" showBackButton onBackPress={() => router.replace("/")} />
 
             <ScrollView>
                 <ContentContainer className="bg-transparent p-0">
@@ -96,8 +128,7 @@ function PetCreatePage() {
                                 사진 선택
                             </Button>
 
-                             {/*TODO: 사진 등록 기능*/}
-
+                            {/*TODO: 사진 등록 기능*/}
                         </View>
 
                         <Controller
@@ -224,7 +255,7 @@ function PetCreatePage() {
                                 onPress={handleSubmit(onSubmit)}
                                 disabled={isSubmitting}
                                 textClassName={"font-semibold "}>
-                                등록하기
+                                {petId ? "수정하기" : "등록하기"}
                             </Button>
                         </View>
                     </FormContainer>
