@@ -185,7 +185,7 @@ export default function HistorySection() {
                             "p-5",
                             "mb-4",
                             "justify-between",
-                            "border border-divider rounded-[10px]",
+                            "rounded-[28px]",
                             "bg-background-paper",
                             "rounded-[28px]"
                         ])}>
