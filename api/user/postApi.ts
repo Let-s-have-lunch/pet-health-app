@@ -10,7 +10,7 @@ const getPostList = async (page = 1, size = 20): Promise<PaginationResponseType<
     return response.data.data;
 };
 
-const getPostById = async (postId: number): Promise<Post> => {
+const getPostById = async (postId: number): Promise<PostListItemType> => {
     const response = await axiosInstance.get(`/post/${postId}`);
     return response.data.data;
 };

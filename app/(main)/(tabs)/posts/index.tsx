@@ -50,7 +50,7 @@ function CommunityPostListPage() {
     return (
         <View className={twMerge(["flex-1", "w-full"])}>
             <ScrollView className={twMerge(["flex-1", "w-full"])}>
-                <TextComponent className={twMerge(["font-medium", "text-left", "p-4"])}>
+                <TextComponent className={twMerge(["font-medium", "text-left", "p-4", "text-lg"])}>
                     반려동물의 정보를 같이 공유하는 커뮤니티 입니다.
                 </TextComponent>
                 <View className={twMerge(["p-0"])}>
@@ -148,6 +148,7 @@ function CommunityPostListPage() {
                                             className={twMerge(
                                                 [
                                                     "font-medium",
+                                                    "text-base",
                                                     "hover:text-primary-main",
                                                     "transition-colors",
                                                 ],
@@ -230,16 +231,9 @@ function CommunityPostListPage() {
             <Button
                 isFloating
                 isCircle
-                className={twMerge([
-                    "absolute",
-                    "bottom-6",
-                    "right-6",
-                    "z-50",
-                    "bg-success-main",
-                    "shadow-lg",
-                ])}
+                color={"success"}
                 onPress={() => router.push("/post/create")}>
-                <Feather name={"edit-3"} size={22} className={"text-success-contrast"} />
+                <Feather name={"plus"} size={22} />
             </Button>
         </View>
     );

@@ -99,6 +99,41 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
 
     return (
         <View className={twMerge(["mt-10", "p-6"], ["border-t", "border-divider"])}>
+            <View>
+                <TextComponent className={twMerge([""])}>
+                    댓글
+                </TextComponent>
+            </View>
+
+            <View className={twMerge(["mb-6"])}>
+                <Controller
+                    control={control}
+                    name={"content"}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextareaGroup
+                            placeholder={"타인을 존중하는 바른 말을 사용해주세요"}
+                            value={value}
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                            errorMessage={errors.content?.message}
+                            textInputClassName={"min-h-2"}
+                        />
+                    )}
+                />
+
+                <View className={twMerge(["w-24"])}>
+                    <Button
+                        className={twMerge(["flex-1", "rounded-0"])}
+                        variant={"contained"}
+                        color={"primary"}
+                        size={"small"}
+                        disabled={isSubmitting}
+                        onPress={handleSubmit(onSubmit)}>
+                        {isSubmitting ? "댓글 작성 중..." : "댓글작성"}
+                    </Button>
+                </View>
+            </View>
+
             {!isLoading && total === 0 ? (
                 <View
                     className={twMerge([
@@ -108,7 +143,7 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
                         "border-divider",
                         "justify-center",
                         "items-center",
-                        "bg-[#FFFFFF]/30"
+                        "bg-[#FFFFFF]/30",
                     ])}>
                     <Ionicons
                         name={"chatbox-outline"}
@@ -125,15 +160,13 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
                     <TouchableOpacity
                         activeOpacity={0.7}
                         onPress={toggleExpand}
-                        className={twMerge(
-                            [
-                                "flex-row",
-                                "justify-between",
-                                "items-center",
-                                "py-3",
-                                "px-4",
-                            ]
-                        )}>
+                        className={twMerge([
+                            "flex-row",
+                            "justify-between",
+                            "items-center",
+                            "py-3",
+                            "px-4",
+                        ])}>
                         <View className={twMerge(["flex-row", "items-center", "gap-1.5"])}>
                             <TextComponent
                                 className={twMerge([
@@ -153,10 +186,7 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
                             </TextComponent>
                         </View>
 
-                        <Ionicons
-                            name={isExpanded ? "chevron-up" : "chevron-down"}
-                            size={20}
-                        />
+                        <Ionicons name={isExpanded ? "chevron-up" : "chevron-down"} size={20} />
                     </TouchableOpacity>
 
                     {isExpanded && (
@@ -173,32 +203,6 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
                     )}
                 </View>
             )}
-
-            <View className={twMerge(["mt-6"])}>
-                <Controller
-                    control={control}
-                    name={"content"}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <TextareaGroup
-                            placeholder={"타인을 존중하는 바른 말을 사용해주세요"}
-                            value={value}
-                            onChangeText={onChange}
-                            onBlur={onBlur}
-                            errorMessage={errors.content?.message}
-                        />
-                    )}
-                />
-                <View className={twMerge(["flex-row", "justify-end", "mt-1"])}>
-                    <Button
-                        className={twMerge(["flex-1"])}
-                        variant={"contained"}
-                        color={"primary"}
-                        disabled={isSubmitting}
-                        onPress={handleSubmit(onSubmit)}>
-                        {isSubmitting ? "댓글 작성 중..." : "댓글작성"}
-                    </Button>
-                </View>
-            </View>
         </View>
     );
 }
