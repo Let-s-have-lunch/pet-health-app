@@ -33,7 +33,7 @@ export default function PetCard({ pet, onPressEdit }: Props) {
                     className={twMerge(
                         ["rounded-xl"],
                         ["border", "border-[#A6DDD0]"],
-                        ["px-3.5", "py-2"],
+                        ["px-3.5", "py-1.5"],
                     )}>
                     <TextComponent
                         className={twMerge(["font-semibold"], ["text-[#5C9587]"], ["text-[16px]"])}>
@@ -53,7 +53,7 @@ export default function PetCard({ pet, onPressEdit }: Props) {
                 ) : (
                     <View
                         className={twMerge(
-                            ["h-40", "w-40"],
+                            ["h-32", "w-32"],
                             ["items-center", "justify-center"],
                             ["rounded-[22px]"],
                             ["bg-[#F6C5BE]"],

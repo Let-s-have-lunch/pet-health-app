@@ -10,6 +10,7 @@ import {
 import PetCard from "@/components/pet/PetCard";
 import AddPetCard from "@/components/pet/AddPetCard";
 import { twMerge } from "tailwind-merge";
+import { router } from "expo-router";
 
 type Props = {
     pets: Pet[];
@@ -26,6 +27,15 @@ type CarouselItem =
       };
 
 const HORIZONTAL_PADDING = 0;
+
+const handleEditPet = (petId: number) => {
+    router.push({
+        pathname: "/pets/create",
+        params: {
+            petId,
+        },
+    });
+};
 
 export default function PetCarousel({ pets, onPressAdd }: Props) {
     const flatListRef = useRef<FlatList<CarouselItem>>(null);
@@ -90,7 +100,7 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                             marginHorizontal: HORIZONTAL_PADDING,
                         }}>
                         {item.type === "pet" ? (
-                            <PetCard pet={item.pet} />
+                            <PetCard pet={item.pet} onPressEdit={() => handleEditPet(item.pet.id)}/>
                         ) : (
                             <AddPetCard onPress={onPressAdd} />
                         )}

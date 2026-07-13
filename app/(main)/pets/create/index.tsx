@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -20,14 +20,18 @@ import ErrorMessage from "@/components/common/label/ErrorMessage";
 import petApi from "@/api/user/petApi";
 import { RegisterPetInputType, registerPetSchema } from "@/schemas/user/pet/registerPetSchema";
 import TextComponent from "@/components/common/text/TextComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function PetCreatePage() {
     const router = useRouter();
+    const { petId } = useLocalSearchParams<{ petId: string }>();
+    const isEditMode = !!petId;
+
     const {
         control,
         handleSubmit,
         setError,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<RegisterPetInputType>({
         resolver: zodResolver(registerPetSchema),
@@ -46,14 +50,63 @@ function PetCreatePage() {
 
     const [genderModalVisible, setGenderModalVisible] = useState(false);
     const [neuteredModalVisible, setNeuteredModalVisible] = useState(false);
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleDelete = async () => {
+        if (!petId) return;
+        setIsDeleting(true);
+
+        try {
+            await petApi.deletePet(Number(petId));
+            setDeleteModalVisible(false);
+            router.replace("/");
+
+        } catch (error) {
+            console.log(error);
+            Alert.alert("삭제 실패", "반려동물 삭제 중 오류가 발생했습니다.");
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
+    useEffect(() => {
+        if (!petId) return;
+
+        const loadPet = async () => {
+            if (!isEditMode) return;
+
+            try {
+                const pet = await petApi.getPet(Number(petId));
+
+                reset({
+                    name: pet.name,
+                    species: pet.species,
+                    breed: pet.breed ?? "",
+                    birthdate: pet.birthdate ? pet.birthdate.slice(0, 10).replaceAll("-", "") : "",
+                    gender: pet.gender,
+                    neutered: pet.neutered,
+                    registrationNumber: pet.registrationNumber ?? "",
+                    profileImage: pet.profileImage ?? "",
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        loadPet().then(() => {});
+    }, [petId, reset]);
 
     const onSubmit = async (data: RegisterPetInputType) => {
         try {
             const payload = {
                 ...data,
+
+                // YYYYMMDD -> YYYY-MM-DD
                 birthdate: data.birthdate
                     ? `${data.birthdate.slice(0, 4)}-${data.birthdate.slice(4, 6)}-${data.birthdate.slice(6, 8)}`
                     : undefined,
+
+                // 빈 문자열이면 DB에는 null(undefined)처리
                 registrationNumber:
                     (data.registrationNumber ?? "").trim() === ""
                         ? undefined
@@ -62,12 +115,17 @@ function PetCreatePage() {
                     (data.profileImage ?? "").trim() === "" ? undefined : data.profileImage,
             };
 
-            await petApi.registerPet(payload);
+            if (isEditMode) {
+                await petApi.updatePet(Number(petId), payload);
+            } else {
+                await petApi.registerPet(payload);
+            }
 
             router.replace("/");
         } catch (error: any) {
-            console.log("에러", error.response?.status);
+            console.log(error.response?.status);
             console.log(error.response?.data);
+            console.log(error.response?.data?.message);
         }
     };
 
@@ -75,7 +133,11 @@ function PetCreatePage() {
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             className="flex-1 bg-background-paper">
-            <Title title="반려동물 등록" showBackButton onBackPress={() => router.back()} />
+            <Title
+                title={isEditMode ? "반려동물 수정" : "반려동물 등록"}
+                showBackButton
+                onBackPress={() => router.replace("/")}
+            />
 
             <ScrollView>
                 <ContentContainer className="bg-transparent p-0">
@@ -87,12 +149,16 @@ function PetCreatePage() {
 
                             <Button
                                 variant="outlined"
-                                className="mt-3"
+                                size={"small"}
+                                textClassName={"font-semibold text-text-default"}
+                                className="w-32 h-10 mt-3 border-primary-main"
                                 onPress={() => {
                                     // TODO : 이미지 선택
                                 }}>
                                 사진 선택
                             </Button>
+
+                            {/*TODO: 사진 등록 기능*/}
                         </View>
 
                         <Controller
@@ -101,7 +167,7 @@ function PetCreatePage() {
                             render={({ field }) => (
                                 <InputGroup
                                     id="name"
-                                    label="이름"
+                                    label="이름 *"
                                     placeholder="이름을 입력해주세요."
                                     value={field.value}
                                     onBlur={field.onBlur}
@@ -110,15 +176,49 @@ function PetCreatePage() {
                                 />
                             )}
                         />
-
+                        <Controller
+                            control={control}
+                            name="birthdate"
+                            render={({ field }) => (
+                                <InputGroup
+                                    id="birthdate"
+                                    label="생년월일"
+                                    placeholder="생년월일 예) 20260101"
+                                    keyboardType="number-pad"
+                                    maxLength={8}
+                                    value={field.value}
+                                    onBlur={field.onBlur}
+                                    onChangeText={field.onChange}
+                                    errorMessage={errors.birthdate?.message}
+                                />
+                            )}
+                        />
+                        <Controller
+                            control={control}
+                            name="gender"
+                            render={({ field }) => (
+                                <Pressable onPress={() => setGenderModalVisible(true)}>
+                                    <View pointerEvents={"none"}>
+                                        <InputGroup
+                                            id="gender"
+                                            label="성별 *"
+                                            value={field.value === "MALE" ? "수컷" : "암컷"}
+                                            editable={false}
+                                            onPress={() => setGenderModalVisible(true)}
+                                            errorMessage={errors.gender?.message}
+                                        />
+                                    </View>
+                                </Pressable>
+                            )}
+                        />
                         <Controller
                             control={control}
                             name="species"
                             render={({ field }) => (
                                 <InputGroup
                                     id="species"
-                                    label="동물종"
-                                    placeholder="예)강아지, 고양이"
+                                    label="어떤 동물을 키우시나요? *"
+                                    placeholder="예)강아지, 고양이, 토끼 등"
                                     value={field.value}
                                     onBlur={field.onBlur}
                                     onChangeText={field.onChange}
@@ -134,7 +234,7 @@ function PetCreatePage() {
                                 <InputGroup
                                     id="breed"
                                     label="품종"
-                                    placeholder="품종을 입력해주세요."
+                                    placeholder="예) 강아지: 푸들"
                                     value={field.value}
                                     onBlur={field.onBlur}
                                     onChangeText={field.onChange}
@@ -145,49 +245,13 @@ function PetCreatePage() {
 
                         <Controller
                             control={control}
-                            name="birthdate"
-                            render={({ field }) => (
-                                <InputGroup
-                                    id="birthdate"
-                                    label="생년월일"
-                                    placeholder="YYYYMMDD"
-                                    keyboardType="number-pad"
-                                    maxLength={8}
-                                    value={field.value}
-                                    onBlur={field.onBlur}
-                                    onChangeText={field.onChange}
-                                    errorMessage={errors.birthdate?.message}
-                                />
-                            )}
-                        />
-
-                        <Controller
-                            control={control}
-                            name="gender"
-                            render={({ field }) => (
-                                <Pressable onPress={() => setGenderModalVisible(true)}>
-                                    <View pointerEvents={"none"}>
-                                        <InputGroup
-                                            id="gender"
-                                            label="성별"
-                                            value={field.value === "MALE" ? "수컷" : "암컷"}
-                                            editable={false}
-                                            onPress={() => setGenderModalVisible(true)}
-                                            errorMessage={errors.gender?.message}
-                                        />
-                                    </View>
-                                </Pressable>
-                            )}
-                        />
-                        <Controller
-                            control={control}
                             name="neutered"
                             render={({ field }) => (
                                 <Pressable onPress={() => setNeuteredModalVisible(true)}>
                                     <View pointerEvents={"none"}>
                                         <InputGroup
                                             id="neutered"
-                                            label="중성화 여부"
+                                            label="중성화 수술은 했나요?"
                                             value={field.value ? "완료" : "미완료"}
                                             editable={false}
                                             onPress={() => setNeuteredModalVisible(true)}
@@ -203,8 +267,8 @@ function PetCreatePage() {
                             render={({ field }) => (
                                 <InputGroup
                                     id="registrationNumber"
-                                    label="동물등록번호"
-                                    placeholder="선택 입력"
+                                    label="인식표가 있다면 번호를 알려주세요"
+                                    placeholder="12자리 또는 15자리"
                                     value={field.value}
                                     onBlur={field.onBlur}
                                     onChangeText={field.onChange}
@@ -214,9 +278,21 @@ function PetCreatePage() {
                         />
                         {errors.root?.message && <ErrorMessage>{errors.root.message}</ErrorMessage>}
 
-                        <View className="mt-8">
-                            <Button onPress={handleSubmit(onSubmit)} disabled={isSubmitting}>
-                                등록하기
+                        <View className="mt-8 flex-row gap-3">
+                            {isEditMode && (
+                                <Button
+                                    variant="outlined"
+                                    className="flex-1"
+                                    onPress={() => setDeleteModalVisible(true)}>
+                                    삭제
+                                </Button>
+                            )}
+
+                            <Button
+                                className="flex-1"
+                                onPress={handleSubmit(onSubmit)}
+                                disabled={isSubmitting}>
+                                {isEditMode ? "수정하기" : "등록하기"}
                             </Button>
                         </View>
                     </FormContainer>
@@ -224,7 +300,7 @@ function PetCreatePage() {
             </ScrollView>
 
             <Modal visible={genderModalVisible} transparent animationType="fade">
-                <View className="flex-1 justify-center items-center bg-black/40">
+                <View className="flex-1 justify-center items-center white bg-black/40">
                     <View className="w-80 rounded-xl bg-white p-5">
                         <TextComponent className="text-lg font-semibold mb-4">
                             성별 선택
@@ -291,6 +367,44 @@ function PetCreatePage() {
                                 </>
                             )}
                         />
+                    </View>
+                </View>
+            </Modal>
+            <Modal visible={deleteModalVisible} transparent animationType="fade">
+                <View className="flex-1 justify-center items-center bg-black/40">
+                    <View className="w-80 rounded-2xl bg-white">
+                        <View className="px-5 py-4 border-b border-gray-200 flex-row justify-between items-center">
+                            <TextComponent className="text-lg font-semibold">
+                                반려동물 삭제
+                            </TextComponent>
+
+                            <Pressable onPress={() => setDeleteModalVisible(false)}>
+                                <TextComponent className="text-xl">✕</TextComponent>
+                            </Pressable>
+                        </View>
+
+                        <View className="py-10 items-center">
+                            <TextComponent className="text-red-400 text-center text-[17px]">
+                                정말로{"\n"} 삭제하시겠습니까?
+                            </TextComponent>
+                        </View>
+
+                        <View className="flex-row gap-3 px-5 pb-5">
+                            <Button
+                                variant="outlined"
+                                className="flex-1"
+                                onPress={() => setDeleteModalVisible(false)}>
+                                취소
+                            </Button>
+
+                            <Button
+                                className="flex-1 bg-[#F2C6C2]"
+                                onPress={handleDelete}
+                                disabled={isDeleting}
+                            variant={"text"}>
+                                삭제
+                            </Button>
+                        </View>
                     </View>
                 </View>
             </Modal>

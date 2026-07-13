@@ -76,7 +76,7 @@ function WeightLogChartSection({ history }: Props) {
             <View className={twMerge("w-full mb-3")}>
                 <View>
                     <TextComponent className={twMerge("text-[20px] font-bold")}>
-                        최근 몸무게 변화
+                        몸무게 변화
                     </TextComponent>
                     <TextComponent className={twMerge("text-[12px] text-text-secondary mt-1")}>
                         {dateRangeText}
