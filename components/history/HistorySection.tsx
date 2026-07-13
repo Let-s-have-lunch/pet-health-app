@@ -189,7 +189,7 @@ export default function HistorySection({petId}: HistorySectionProps) {
                             "p-5",
                             "mb-4",
                             "justify-between",
-                            "border border-divider rounded-[10px]",
+                            "rounded-[28px]",
                             "bg-background-paper",
                         ])}>
                         <View className="flex-row justify-between items-start">
@@ -207,7 +207,6 @@ export default function HistorySection({petId}: HistorySectionProps) {
                     </Pressable>
                 ))}
             </View>
-
         </ScrollView>
     );
 }
