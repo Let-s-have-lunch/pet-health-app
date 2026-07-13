@@ -1,39 +1,43 @@
 import { View, TextInput, Pressable, Alert, Image, ScrollView, Platform } from "react-native";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 import TextComponent from "../../../../../components/common/text/TextComponent";
 import { vetLogApi } from "@/api/user/vetLogApi";
-import { usePetStore } from "@/stores/usePetStore"; // 💡 전역 스토어 추가
+import { usePetStore } from "@/stores/usePetStore";
 
-export default function VetLogCreatePage() {
+export default function VetLogUpdatePage() {
     const selectedPet = usePetStore(state => state.selectedPet);
     const petId = selectedPet?.id;
 
-    const [hospitalName, setHospitalName] = useState("");
-    const [visitPurpose, setVisitPurpose] = useState("");
-    const [visitDate, setVisitDate] = useState(new Date().toISOString().split("T")[0]);
+    const params = useLocalSearchParams();
+    const id = params.id as string;
 
-    const [diagnosis, setDiagnosis] = useState("");
-    const [treatment, setTreatment] = useState("");
-    const [cost, setCost] = useState("");
-    const [memo, setMemo] = useState("");
+    const [hospitalName, setHospitalName] = useState((params.hospitalName as string) || "");
+    const [visitPurpose, setVisitPurpose] = useState((params.visitPurpose as string) || "");
+    const [visitDate, setVisitDate] = useState(
+        (params.visitDate as string) || new Date().toISOString().split("T")[0],
+    );
 
-    const [image, setImage] = useState<string | null>(null);
+    const [diagnosis, setDiagnosis] = useState((params.diagnosis as string) || "");
+    const [treatment, setTreatment] = useState((params.treatment as string) || "");
+    const [cost, setCost] = useState((params.cost as string) || "");
+    const [memo, setMemo] = useState((params.memo as string) || "");
+    const [image, setImage] = useState<string | null>((params.receiptImage as string) || null);
 
     useEffect(() => {
-        if (!petId) {
+        if (!petId || !id) {
+            const message = !petId ? "선택된 반려동물이 없습니다." : "수정할 기록의 ID가 없습니다.";
             if (Platform.OS === "web") {
-                alert("선택된 반려동물이 없습니다.");
+                alert(message);
             } else {
-                Alert.alert("알림", "선택된 반려동물이 없습니다.");
+                Alert.alert("알림", message);
             }
             router.back();
         }
-    }, [petId]);
+    }, [petId, id]);
 
-    // 사진 선택
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -48,40 +52,54 @@ export default function VetLogCreatePage() {
     };
 
     const onSubmit = async () => {
-        if (!petId) {
-            Alert.alert("오류", "선택된 반려동물이 없습니다.");
+        // 💡 수정 페이지이므로 record id(id)만 확실히 있으면 됩니다.
+        if (!id) {
+            Alert.alert("오류", "수정할 기록의 정보가 없습니다.");
             return;
         }
 
         try {
-            await vetLogApi.create({
-                petId: petId,
-                visitDate: visitDate,
+            const payload = {
+                visitDate,
                 hospitalName,
-                visitPurpose: visitPurpose,
+                visitPurpose,
                 diagnosis,
                 treatment,
                 cost: Number(cost || 0),
                 memo,
-            });
+            };
 
-            Alert.alert("성공", "기록이 등록되었습니다.");
+            await vetLogApi.update(Number(id), payload);
+
+            if (Platform.OS === "web") {
+                alert("기록이 수정되었습니다.");
+            } else {
+                Alert.alert("성공", "기록이 수정되었습니다.");
+            }
+
             router.back();
         } catch (error) {
-            console.log(error);
-            Alert.alert("오류", "등록에 실패했습니다.");
+            console.log("수정 에러:", error);
+
+            if (Platform.OS === "web") {
+                alert("수정에 실패했습니다.");
+            } else {
+                Alert.alert("오류", "수정에 실패했습니다.");
+            }
         }
     };
 
-    if (!petId) {
+    if (!petId || !id) {
         return <View className="flex-1 bg-black/50" />;
     }
 
     return (
         <View className="flex-1 justify-center items-center bg-black/50 p-5">
-            <ScrollView className="w-full bg-background-paper p-6 rounded-2xl flex-grow-0">
+            <ScrollView
+                className="w-full bg-background-paper p-6 rounded-2xl flex-grow-0"
+                keyboardShouldPersistTaps="handled">
                 <TextComponent className="text-lg font-bold mb-4">
-                    {selectedPet?.name} 병원 기록 등록
+                    {selectedPet?.name} 병원 기록 수정
                 </TextComponent>
 
                 <TextComponent className="text-sm mb-1">반려동물 사진</TextComponent>
@@ -109,7 +127,6 @@ export default function VetLogCreatePage() {
                 )}
 
                 <TextComponent className="text-sm mb-1">병원 이름</TextComponent>
-
                 <TextInput
                     className="border border-divider p-3 rounded-lg mb-3"
                     value={hospitalName}
@@ -117,7 +134,6 @@ export default function VetLogCreatePage() {
                 />
 
                 <TextComponent className="text-sm mb-1">방문 목적</TextComponent>
-
                 <TextInput
                     className="border border-divider p-3 rounded-lg mb-3"
                     value={visitPurpose}
@@ -125,7 +141,6 @@ export default function VetLogCreatePage() {
                 />
 
                 <TextComponent className="text-sm mb-1">방문 날짜</TextComponent>
-
                 <TextInput
                     className="border border-divider p-3 rounded-lg mb-3"
                     value={visitDate}
@@ -133,7 +148,6 @@ export default function VetLogCreatePage() {
                 />
 
                 <TextComponent className="text-sm mb-1">진단 내용</TextComponent>
-
                 <TextInput
                     className="border border-divider p-3 rounded-lg mb-3"
                     value={diagnosis}
@@ -141,7 +155,6 @@ export default function VetLogCreatePage() {
                 />
 
                 <TextComponent className="text-sm mb-1">치료 내용</TextComponent>
-
                 <TextInput
                     className="border border-divider p-3 rounded-lg mb-3"
                     value={treatment}
@@ -149,7 +162,6 @@ export default function VetLogCreatePage() {
                 />
 
                 <TextComponent className="text-sm mb-1">진료 비용</TextComponent>
-
                 <TextInput
                     keyboardType="numeric"
                     className="border border-divider p-3 rounded-lg mb-3"
@@ -158,7 +170,6 @@ export default function VetLogCreatePage() {
                 />
 
                 <TextComponent className="text-sm mb-1">메모</TextComponent>
-
                 <TextInput
                     multiline
                     className="border border-divider p-3 rounded-lg mb-6"
@@ -177,7 +188,7 @@ export default function VetLogCreatePage() {
                         className="flex-1 p-3 bg-secondary-main rounded-lg"
                         onPress={onSubmit}>
                         <TextComponent className="text-center text-white font-bold">
-                            등록
+                            수정
                         </TextComponent>
                     </Pressable>
                 </View>

@@ -1,4 +1,4 @@
-import { View, ScrollView, Pressable, Image, Platform, Alert } from "react-native";
+import { View, ScrollView, Pressable, Image, Alert, Platform } from "react-native";
 import { useState, useCallback, useEffect } from "react";
 import { useFocusEffect, router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -7,10 +7,12 @@ import { vetLogApi } from "../../../../api/user/vetLogApi";
 import { VetLogState, VetRecord } from "../../../../types/vetRecord";
 import Title from "../../../../components/common/title/Title";
 import { usePetStore } from "@/stores/usePetStore";
+import { waterIntakeApi } from "@/api/user/waterIntakeApi";
 
 export default function VetLogPage() {
     const selectedPet = usePetStore(state => state.selectedPet);
     const petId = selectedPet?.id;
+    const BACKEND_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 
     const [data, setData] = useState<VetLogState>({
         upcoming: null,
@@ -32,7 +34,6 @@ export default function VetLogPage() {
 
     const loadData = useCallback(async () => {
         if (!petId) return;
-
         try {
             const res = await vetLogApi.getByPetId(petId);
             const records: VetRecord[] = res?.data?.data || [];
@@ -43,7 +44,7 @@ export default function VetLogPage() {
             }
 
             setData({
-                upcoming: records[0],
+                upcoming: records[0] ?? null,
                 history: records.slice(1),
             });
         } catch (e) {
@@ -53,9 +54,34 @@ export default function VetLogPage() {
 
     useFocusEffect(
         useCallback(() => {
-            loadData();
+            loadData().then(() => {});
         }, [loadData]),
     );
+
+    const handleDelete = async (id: number) => {
+        const processDelete = async () => {
+            try {
+                await vetLogApi.delete(id);
+                await loadData();
+            } catch (error) {
+                console.error("삭제 중 에러:", error);
+                Platform.OS === "web"
+                    ? alert("삭제에 실패했습니다.")
+                    : Alert.alert("오류", "삭제에 실패했습니다.");
+            }
+        };
+
+        if (Platform.OS === "web") {
+            if (confirm("정말 삭제하시겠습니까?")) {
+                await processDelete();
+            }
+        } else {
+            Alert.alert("삭제", "정말 삭제하시겠습니까?", [
+                { text: "취소", style: "cancel" },
+                { text: "삭제", style: "destructive", onPress: processDelete },
+            ]);
+        }
+    };
 
     const formatLongDate = (dateString: string) => {
         const date = parseValidDate(dateString);
@@ -73,10 +99,10 @@ export default function VetLogPage() {
         return `${year}.${month}.${day}`;
     };
 
-    // 이미지 경로 처리: 전달된 경로를 그대로 반환하거나 플레이스홀더를 반환
     const getImageUrl = (path?: string | null) => {
         if (!path) return "https://via.placeholder.com/400x150/89CFF0/FFFFFF?text=No+Image";
-        return path;
+        if (path.startsWith("http")) return path;
+        return `${BACKEND_URL}${path}`;
     };
 
     if (!petId) return <View className="flex-1 bg-background-default" />;
@@ -91,14 +117,46 @@ export default function VetLogPage() {
                 />
             </View>
 
-            <ScrollView className="flex-1 bg-background-main" contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 24, paddingBottom: 40 }}>
+            <ScrollView
+                className="flex-1 bg-background-main"
+                contentContainerStyle={{
+                    paddingHorizontal: 20,
+                    paddingTop: 24,
+                    paddingBottom: 40,
+                }}>
                 {/* 1. 상단 카드 */}
                 {data.upcoming ? (
                     <View className="bg-background-paper rounded-[20px] overflow-hidden mb-8 shadow-sm">
-                        <View className="bg-primary-main px-5 py-4">
+                        <View className="bg-primary-main px-5 py-4 flex-row justify-between items-center">
                             <TextComponent className="text-[16px] font-bold text-text-default">
                                 {formatLongDate(data.upcoming.visitDate)}
                             </TextComponent>
+                            <View className="flex-row items-center gap-3">
+                                <Pressable
+                                    onPress={() =>
+                                        router.push({
+                                            pathname: "/(main)/health/vet-records/create",
+                                            params: {
+                                                id: data.upcoming!.id,
+                                                hospitalName: data.upcoming!.hospitalName,
+                                                visitPurpose: data.upcoming!.visitPurpose,
+                                                visitDate: data.upcoming!.visitDate,
+                                                diagnosis: data.upcoming!.diagnosis,
+                                                treatment: data.upcoming!.treatment,
+                                                cost: data.upcoming!.cost,
+                                                memo: data.upcoming!.memo,
+                                                receiptImage: data.upcoming!.receiptImage,
+                                            },
+                                        })
+                                    }>
+                                    <Ionicons name="pencil" size={16} color="#4A5568" />
+                                </Pressable>
+                                <Pressable
+                                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                                    onPress={() => handleDelete(data.upcoming!.id)}>
+                                    <Ionicons name="trash-outline" size={16} color="#4A5568" />
+                                </Pressable>
+                            </View>
                         </View>
                         <View className="p-5">
                             <Image
@@ -110,7 +168,8 @@ export default function VetLogPage() {
                                 {data.upcoming.visitPurpose}
                             </TextComponent>
                             <TextComponent className="text-[14px] text-text-secondary leading-5">
-                                {data.upcoming.memo || `${data.upcoming.hospitalName}에 다녀왔습니다.`}
+                                {data.upcoming.memo ||
+                                    `${data.upcoming.hospitalName}에 다녀왔습니다.`}
                             </TextComponent>
                         </View>
                     </View>
@@ -118,35 +177,45 @@ export default function VetLogPage() {
                     <Pressable
                         onPress={() => router.push("/(main)/health/vet-records/create")}
                         className="bg-background-paper rounded-[20px] h-[150px] items-center justify-center mb-8 border border-dashed border-gray-300">
-                        <TextComponent className="text-text-secondary">기록을 추가해주세요</TextComponent>
+                        <TextComponent className="text-text-secondary">
+                            기록을 추가해주세요
+                        </TextComponent>
                     </Pressable>
                 )}
 
                 {/* 2. 방문기록 리스트 */}
                 <View className="flex-row items-center justify-between mb-4">
-                    <TextComponent className="text-[18px] font-bold text-text-default">방문기록</TextComponent>
+                    <TextComponent className="text-[18px] font-bold text-text-default">
+                        방문기록
+                    </TextComponent>
                     <Pressable
                         onPress={() => router.push("/(main)/health/vet-records/create")}
                         className="bg-secondary-main px-3 py-1 rounded-full">
-                        <TextComponent className="text-[12px] font-bold text-text-default">+ 추가</TextComponent>
+                        <TextComponent className="text-[12px] font-bold text-text-default">
+                            + 추가
+                        </TextComponent>
                     </Pressable>
                 </View>
 
                 {data.history?.length > 0 ? (
                     data.history.map(item => (
-                        <View key={item.id} className="bg-background-paper rounded-[16px] flex-row items-center px-5 py-4 mb-3 shadow-sm">
-                            <TextComponent className="flex-1 text-[15px] font-bold text-text-default" numberOfLines={1}>
+                        <View
+                            key={item.id}
+                            className="bg-background-paper rounded-[16px] flex-row items-center px-5 py-4 mb-3 shadow-sm">
+                            <TextComponent
+                                className="flex-1 text-[15px] font-bold text-text-default"
+                                numberOfLines={1}>
                                 {item.visitPurpose || item.hospitalName}
                             </TextComponent>
-                            <View className="flex-row items-center ml-2">
-                                <TextComponent className="text-[12px] text-text-secondary mr-3">
+                            <View className="flex-row items-center ml-2 gap-2">
+                                <TextComponent className="text-[12px] text-text-secondary mr-2">
                                     {formatShortDate(item.visitDate)}
                                 </TextComponent>
                                 <Pressable
                                     className="p-1"
                                     onPress={() =>
                                         router.push({
-                                            pathname: "/(main)/health/vet-records/create",
+                                            pathname: "/(main)/health/vet-records/[id]",
                                             params: {
                                                 id: item.id,
                                                 hospitalName: item.hospitalName,
@@ -161,6 +230,12 @@ export default function VetLogPage() {
                                         })
                                     }>
                                     <Ionicons name="pencil" size={16} color="#888" />
+                                </Pressable>
+                                <Pressable
+                                    className="p-1"
+                                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                                    onPress={() => handleDelete(item.id)}>
+                                    <Ionicons name="trash-outline" size={16} color="#888" />
                                 </Pressable>
                             </View>
                         </View>
