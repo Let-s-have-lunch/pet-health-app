@@ -98,18 +98,17 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
     };
 
     return (
-        <View className={twMerge(["mt-10", "pt-3"], ["border-t", "border-divider"])}>
+        <View className={twMerge(["mt-10", "p-6"], ["border-t", "border-divider"])}>
             {!isLoading && total === 0 ? (
                 <View
                     className={twMerge([
-                        "bg-background-paper",
                         "p-8",
                         "rounded-xl",
                         "border",
                         "border-divider",
                         "justify-center",
                         "items-center",
-                        "mb-6",
+                        "bg-[#FFFFFF]/30"
                     ])}>
                     <Ionicons
                         name={"chatbox-outline"}
@@ -118,11 +117,11 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
                         className={"mb-2"}
                     />
                     <TextComponent className={twMerge(["mt-2", "text-text-secondary", "text-sm"])}>
-                        등록된 댓글이 없습니다.
+                        아직 등록된 댓글이 없습니다.
                     </TextComponent>
                 </View>
             ) : (
-                <View className="m-6">
+                <View className={twMerge(["bg-background-paper", "rounded-xl"])}>
                     <TouchableOpacity
                         activeOpacity={0.7}
                         onPress={toggleExpand}
@@ -133,12 +132,8 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
                                 "items-center",
                                 "py-3",
                                 "px-4",
-                                "mb-2",
-                                "bg-background-paper",
-                            ],
-                            ["rounded-xl", "border", "border-divider"],
+                            ]
                         )}>
-                        <View></View>
                         <View className={twMerge(["flex-row", "items-center", "gap-1.5"])}>
                             <TextComponent
                                 className={twMerge([
@@ -161,7 +156,6 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
                         <Ionicons
                             name={isExpanded ? "chevron-up" : "chevron-down"}
                             size={20}
-                            color={"#4B5563"}
                         />
                     </TouchableOpacity>
 
@@ -180,7 +174,7 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
                 </View>
             )}
 
-            <View className={twMerge(["mx-6"])}>
+            <View className={twMerge(["mt-6"])}>
                 <Controller
                     control={control}
                     name={"content"}
