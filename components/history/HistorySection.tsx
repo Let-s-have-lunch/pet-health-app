@@ -28,7 +28,11 @@ export default function HistorySection() {
     const [data, setData] = useState<DashboardData | null>(null);
 
     const loadDashboard = useCallback(async () => {
-        if (!petId) return;
+        if (!petId) {
+            setIsLoading(false);
+            return;
+        }
+
         try {
             // 💡 불필요한 호출을 지우고, 대시보드 데이터 딱 하나만 가져오기!
             const dashboardResult = await getHomeDashboard(petId, todayDate);
