@@ -13,9 +13,11 @@ type Props = {
 
 export default function PetCard({ pet, onPressEdit }: Props) {
     return (
-        <Card shadow={"none"}
+        <Card
+            className={twMerge(["rounded-[28px]"],["px-8"])}
+            shadow={"none"}
             style={{ width: "100%", minHeight: 320 }}
-            className={twMerge("px-8")}>
+        >
             <View
                 className={twMerge(
                     ["mt-3", "mb-8"],

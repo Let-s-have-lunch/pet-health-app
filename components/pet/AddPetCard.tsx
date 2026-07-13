@@ -10,7 +10,7 @@ type Props = {
 
 export default function AddPetCard({ onPress }: Props) {
     return (
-        <Card style={{ width: "100%", minHeight: 320 }}>
+        <Card className={"rounded-[28px]"} style={{ width: "100%", minHeight: 320 }}>
             <Pressable
                 onPress={onPress}
                 className={twMerge(["items-center", "justify-center"], ["py-5"])}>
