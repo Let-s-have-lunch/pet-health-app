@@ -25,7 +25,7 @@ type CarouselItem =
           type: "add";
       };
 
-const HORIZONTAL_PADDING = 25;
+const HORIZONTAL_PADDING = 0;
 
 export default function PetCarousel({ pets, onPressAdd }: Props) {
     const flatListRef = useRef<FlatList<CarouselItem>>(null);
