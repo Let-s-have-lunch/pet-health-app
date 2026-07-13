@@ -1,4 +1,4 @@
-import { View, ScrollView, Pressable, Image, Platform, Alert } from "react-native";
+import { View, ScrollView, Pressable, Image, Alert } from "react-native";
 import { useState, useCallback, useEffect } from "react";
 import { useFocusEffect, router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -11,7 +11,7 @@ import { usePetStore } from "@/stores/usePetStore";
 export default function VetLogPage() {
     const selectedPet = usePetStore(state => state.selectedPet);
     const petId = selectedPet?.id;
-    const BACKEND_URL = "http://10.0.2.2:4000";
+    const BACKEND_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 
     const [data, setData] = useState<VetLogState>({
         upcoming: null,
