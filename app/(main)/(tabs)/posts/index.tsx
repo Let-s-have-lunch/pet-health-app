@@ -49,8 +49,8 @@ function CommunityPostListPage() {
     const totalPage = Math.ceil(total / pageSize) || 1;
 
     return (
-        <View className={twMerge(["flex-1", "w-full", "mb-0"])}>
-            <TextComponent className={twMerge(["font-medium", "text-left", "p-4", "text-lg"])}>
+        <View className={twMerge(["flex-1", "w-full", "m-0"])}>
+            <TextComponent className={twMerge(["font-medium", "text-left", "pb-4", "text-base"])}>
                 반려동물의 정보를 같이 공유하는 커뮤니티 입니다.
             </TextComponent>
             <View className={twMerge(["overflow-hidden", "flex-1"])}>
@@ -219,13 +219,6 @@ function CommunityPostListPage() {
                         })}
                     </View>
                 </ScrollView>
-                <Button
-                    isFloating
-                    isCircle
-                    color={"success"}
-                    onPress={() => router.push("/post/create")}>
-                    <Feather name={"plus"} size={22} />
-                </Button>
             </View>
             <Pagination
                 currentPage={currentPage}
@@ -234,6 +227,13 @@ function CommunityPostListPage() {
                     router.setParams({ page: String(newPage), size: String(pageSize) })
                 }
             />
+            <Button
+                isFloating
+                isCircle
+                color={"success"}
+                onPress={() => router.push("/post/create")}>
+                <Feather name={"plus"} size={22} />
+            </Button>
         </View>
     );
 }

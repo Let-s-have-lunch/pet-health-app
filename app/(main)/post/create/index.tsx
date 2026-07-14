@@ -84,7 +84,6 @@ function CreateCommunityPostPage() {
                             render={({ field: { onChange, onBlur, value } }) => {
                                 return (
                                     <InputGroup
-                                        size={"small"}
                                         id={"title"}
                                         label={"제목"}
                                         placeholder={"제목을 입력해주세요"}
@@ -103,7 +102,6 @@ function CreateCommunityPostPage() {
                             render={({ field: { onChange, onBlur, value } }) => {
                                 return (
                                     <TextareaGroup
-                                        size={"small"}
                                         id={"content"}
                                         label={"내용"}
                                         placeholder={"자유롭게 작성해주세요."}
@@ -113,15 +111,19 @@ function CreateCommunityPostPage() {
                                         value={value}
                                         errorMessage={errors.content?.message}
                                     />
-                                );
+                                );24
                             }}
                         />
 
-                        <View className={twMerge(["md:flex-row", "mt-9", "gap-3"])}>
-                            <Button variant={"outlined"} onPress={() => router.push("/posts")}>
+                        <View className={twMerge(["flex-row", "gap-3", "justify-end"])}>
+                            <Button
+                                className={twMerge(["min-w-28", "flex-1", "md:flex-none"])}
+                                variant={"outlined"}
+                                onPress={() => router.push("/posts")}>
                                 취소
                             </Button>
                             <Button
+                                className={twMerge(["min-w-28", "flex-1", "md:flex-none"])}
                                 variant={"contained"}
                                 onPress={handleSubmit(onSubmit)}
                                 disabled={isSubmitting}>
