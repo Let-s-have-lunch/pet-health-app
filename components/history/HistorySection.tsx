@@ -1,5 +1,5 @@
 import { ActivityIndicator, Alert, Platform, Pressable, ScrollView, View } from "react-native";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { router, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,7 +8,6 @@ import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import { format } from "date-fns";
 import { usePetStore } from "@/stores/usePetStore";
-
 
 const getTodayString = () => {
     const today = new Date();
@@ -21,7 +20,7 @@ const getTodayString = () => {
 export default function HistorySection() {
     const [isLoading, setIsLoading] = useState(true);
     const todayDate = getTodayString();
-    const { selectedPet } = usePetStore();
+    const { selectedPet, isAddCardSelected } = usePetStore();
     const petId = selectedPet?.id;
 
     // 💡 초기값을 null로 깔끔하게 세팅
@@ -53,6 +52,17 @@ export default function HistorySection() {
             setIsLoading(false);
         }
     }, [petId, todayDate]); // 의존성 배열도 깔끔하게 유지
+
+    useEffect(() => {
+        if (isAddCardSelected) {
+            setData(null);
+            return;
+        }
+
+        if (!selectedPet) return;
+
+        void loadDashboard();
+    }, [isAddCardSelected, selectedPet, loadDashboard]);
 
     useFocusEffect(
         useCallback(() => {

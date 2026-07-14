@@ -127,10 +127,6 @@ function AdminUserUpdatePage() {
         }
     };
 
-    if (isLoading) {
-        return <LoadingIndicator fullScreen />;
-    }
-
     return (
         <View className={twMerge("flex-1", "w-full")}>
             <Title
@@ -140,157 +136,164 @@ function AdminUserUpdatePage() {
             />
             <ScrollView className={"flex-1"}>
                 <Card>
-                    <TextComponent className={twMerge("mb-4", ["text-lg", "font-bold"])}>
-                        계정정보
-                    </TextComponent>
+                    {isLoading ? (
+                        <LoadingIndicator />
+                    ) : (
+                        <>
+                            <TextComponent className={twMerge("mb-4", ["text-lg", "font-bold"])}>
+                                계정정보
+                            </TextComponent>
 
-                    <Controller
-                        control={control}
-                        name={"password"}
-                        render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                                <InputGroup
-                                    id={"password"}
-                                    label={"비밀번호"}
-                                    placeholder={"6자 이상 입력해주세요."}
-                                    onBlur={onBlur}
-                                    onChangeText={onChange} // HTML onChange 속성 => React-Native onChangeText 속성
-                                    secureTextEntry={true}
-                                    value={value}
-                                    errorMessage={errors.password?.message}
+                            <Controller
+                                control={control}
+                                name={"password"}
+                                render={({ field: { onChange, onBlur, value } }) => {
+                                    return (
+                                        <InputGroup
+                                            id={"password"}
+                                            label={"비밀번호"}
+                                            placeholder={"6자 이상 입력해주세요."}
+                                            onBlur={onBlur}
+                                            onChangeText={onChange} // HTML onChange 속성 => React-Native onChangeText 속성
+                                            secureTextEntry={true}
+                                            value={value}
+                                            errorMessage={errors.password?.message}
+                                        />
+                                    );
+                                }}
+                            />
+
+                            <Controller
+                                control={control}
+                                name={"email"}
+                                render={({ field: { onChange, onBlur, value } }) => {
+                                    return (
+                                        <InputGroup
+                                            id={"email"}
+                                            label={"이메일"}
+                                            placeholder={"이메일을 입력해주세요."}
+                                            keyboardType={"email-address"}
+                                            autoCapitalize={"none"}
+                                            onBlur={onBlur}
+                                            onChangeText={onChange}
+                                            value={value}
+                                            errorMessage={errors.email?.message}
+                                        />
+                                    );
+                                }}
+                            />
+
+                            <View className={twMerge("border-b", "border-divider", "my-6")}></View>
+
+                            <TextComponent className={twMerge("mb-4", ["text-lg", "font-bold"])}>
+                                개인 정보
+                            </TextComponent>
+
+                            <View className={twMerge("flex-col", "md:flex-row", "md:gap-4")}>
+                                <Controller
+                                    control={control}
+                                    name={"nickname"}
+                                    render={({ field: { onChange, onBlur, value } }) => {
+                                        return (
+                                            <InputGroup
+                                                wrap={true}
+                                                id={"nickname"}
+                                                label={"닉네임"}
+                                                placeholder={"서비스에서 사용할 닉네임 2~10자"}
+                                                onBlur={onBlur}
+                                                onChangeText={onChange}
+                                                value={value}
+                                                errorMessage={errors.nickname?.message}
+                                            />
+                                        );
+                                    }}
                                 />
-                            );
-                        }}
-                    />
+                            </View>
 
-                    <Controller
-                        control={control}
-                        name={"email"}
-                        render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                                <InputGroup
-                                    id={"email"}
-                                    label={"이메일"}
-                                    placeholder={"이메일을 입력해주세요."}
-                                    keyboardType={"email-address"}
-                                    autoCapitalize={"none"}
-                                    onBlur={onBlur}
-                                    onChangeText={onChange}
-                                    value={value}
-                                    errorMessage={errors.email?.message}
+                            <View className={twMerge("flex-col", "md:flex-row", "md:gap-4")}>
+                                <Controller
+                                    control={control}
+                                    name={"birthdate"}
+                                    render={({ field: { onChange, onBlur, value } }) => {
+                                        return (
+                                            <InputGroup
+                                                wrap={true}
+                                                id={"birthdate"}
+                                                label={"생년월일 (선택)"}
+                                                placeholder={"YYYYMMDD (예: 19951225)"}
+                                                onBlur={onBlur}
+                                                onChangeText={onChange}
+                                                value={value}
+                                                keyboardType={"number-pad"}
+                                                maxLength={8}
+                                                errorMessage={errors.birthdate?.message}
+                                            />
+                                        );
+                                    }}
                                 />
-                            );
-                        }}
-                    />
+                            </View>
 
-                    <View className={twMerge("border-b", "border-divider", "my-6")}></View>
+                            <View className={twMerge("border-t", "border-divider", "my-6")}>
+                                <TextComponent
+                                    className={twMerge("mt-4", ["text-lg", "font-bold"])}>
+                                    권한
+                                </TextComponent>
+                            </View>
 
-                    <TextComponent className={twMerge("mb-4", ["text-lg", "font-bold"])}>
-                        개인 정보
-                    </TextComponent>
+                            <View className={twMerge("flex-col", "md:flex-row", "md:gap-4")}>
+                                <Controller
+                                    control={control}
+                                    name="role"
+                                    render={({ field: { onChange, value } }) => {
+                                        return (
+                                            <SelectGroup
+                                                options={[
+                                                    { label: "관리자 (ADMIN)", value: "ADMIN" },
+                                                    { label: "사용자 (USER)", value: "USER" },
+                                                ]}
+                                                label="권한 설정"
+                                                placeholder="권한을 선택해주세요"
+                                                value={value}
+                                                onSelect={onChange}
+                                                errorMessage={errors.role?.message}
+                                                wrap={true}
+                                            />
+                                        );
+                                    }}
+                                />
+                            </View>
 
-                    <View className={twMerge("flex-col", "md:flex-row", "md:gap-4")}>
-                        <Controller
-                            control={control}
-                            name={"nickname"}
-                            render={({ field: { onChange, onBlur, value } }) => {
-                                return (
-                                    <InputGroup
-                                        wrap={true}
-                                        id={"nickname"}
-                                        label={"닉네임"}
-                                        placeholder={"서비스에서 사용할 닉네임 2~10자"}
-                                        onBlur={onBlur}
-                                        onChangeText={onChange}
-                                        value={value}
-                                        errorMessage={errors.nickname?.message}
-                                    />
-                                );
-                            }}
-                        />
-                    </View>
+                            {errors.root?.message && (
+                                <ErrorMessage className={twMerge("mt-2", "text-center")}>
+                                    {errors.root?.message}
+                                </ErrorMessage>
+                            )}
 
-                    <View className={twMerge("flex-col", "md:flex-row", "md:gap-4")}>
-                        <Controller
-                            control={control}
-                            name={"birthdate"}
-                            render={({ field: { onChange, onBlur, value } }) => {
-                                return (
-                                    <InputGroup
-                                        wrap={true}
-                                        id={"birthdate"}
-                                        label={"생년월일 (선택)"}
-                                        placeholder={"YYYYMMDD (예: 19951225)"}
-                                        onBlur={onBlur}
-                                        onChangeText={onChange}
-                                        value={value}
-                                        keyboardType={"number-pad"}
-                                        maxLength={8}
-                                        errorMessage={errors.birthdate?.message}
-                                    />
-                                );
-                            }}
-                        />
-                    </View>
-
-                    <View className={twMerge("border-t", "border-divider", "my-6")}>
-                        <TextComponent className={twMerge("mt-4", ["text-lg", "font-bold"])}>
-                            권한
-                        </TextComponent>
-                    </View>
-
-                    <View className={twMerge("flex-col", "md:flex-row", "md:gap-4")}>
-                        <Controller
-                            control={control}
-                            name="role"
-                            render={({ field: { onChange, value } }) => {
-                                return (
-                                    <SelectGroup
-                                        options={[
-                                            { label: "관리자 (ADMIN)", value: "ADMIN" },
-                                            { label: "사용자 (USER)", value: "USER" },
-                                        ]}
-                                        label="권한 설정"
-                                        placeholder="권한을 선택해주세요"
-                                        value={value}
-                                        onSelect={onChange}
-                                        errorMessage={errors.role?.message}
-                                        wrap={true}
-                                    />
-                                );
-                            }}
-                        />
-                    </View>
-
-                    {errors.root?.message && (
-                        <ErrorMessage className={twMerge("mt-2", "text-center")}>
-                            {errors.root?.message}
-                        </ErrorMessage>
+                            <View
+                                className={twMerge("mt-10", [
+                                    "flex-row",
+                                    "justify-end",
+                                    "items-center",
+                                    "gap-3",
+                                ])}>
+                                <Button
+                                    size={"small"}
+                                    color={"secondary"}
+                                    variant={"outlined"}
+                                    onPress={() => router.push("/admin/users")}>
+                                    취소
+                                </Button>
+                                <Button
+                                    size={"small"}
+                                    color={"primary"}
+                                    variant={"contained"}
+                                    onPress={handleSubmit(onSubmit)}
+                                    disabled={isSubmitting}>
+                                    {isSubmitting ? "수정 중..." : "수정"}
+                                </Button>
+                            </View>
+                        </>
                     )}
-
-                    <View
-                        className={twMerge("mt-10", [
-                            "flex-row",
-                            "justify-end",
-                            "items-center",
-                            "gap-3",
-                        ])}>
-                        <Button
-                            size={"small"}
-                            color={"secondary"}
-                            variant={"outlined"}
-                            onPress={() => router.push("/admin/users")}>
-                            취소
-                        </Button>
-                        <Button
-                            size={"small"}
-                            color={"primary"}
-                            variant={"contained"}
-                            onPress={handleSubmit(onSubmit)}
-                            disabled={isSubmitting}>
-                            {isSubmitting ? "수정 중..." : "수정"}
-                        </Button>
-                    </View>
                 </Card>
             </ScrollView>
         </View>

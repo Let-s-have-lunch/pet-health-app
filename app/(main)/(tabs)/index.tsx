@@ -19,6 +19,7 @@ function HomeScreen() {
     const setSelectedPet = usePetStore(state => state.setSelectedPet);
 
     const [loading, setLoading] = useState(true);
+    const accessToken = useAuthStore(state => state.token);
 
     const loadPets = useCallback(async () => {
         if (!isLoggedIn) {
