@@ -64,53 +64,50 @@ function MyInquiryListPage() {
                 title="나의 1:1 문의 게시판"
                 showBackButton={true}
                 onBackPress={() => router.push("/my")}
-                className={"bg-background-paper"}>
-            </Title>
-
+                className={"bg-background-paper"}></Title>
             <ContentContainer className={"overflow-hidden flex-1"}>
-                <View
-                    className={twMerge(
-                        ["hidden", "md:flex"],
-                        ["flex-row", "items-center", "px-4", "py-3"],
-                        [
-                            "border-divider",
-                            "border-b",
-                            "bg-[#ffffff]/30",
-                            "border-divider",
-                            "rounded-t-xl",
-                        ],
-                    )}>
-                    <TextComponent
-                        className={twMerge(
-                            ["hidden", "md:flex", "w-12"],
-                            ["font-bold", "text-text-secondary"],
-                        )}>
-                        ID
-                    </TextComponent>
-                    <TextComponent
-                        className={twMerge(
-                            ["flex-1"],
-                            ["font-bold", "text-text-secondary", "px-2", ""],
-                        )}>
-                        제목
-                    </TextComponent>
-                    <TextComponent
-                        className={twMerge(
-                            ["w-24"],
-                            ["font-bold", "text-text-secondary", "text-center"],
-                        )}>
-                        등록일
-                    </TextComponent>
-                    <TextComponent
-                        className={twMerge(
-                            ["w-24"],
-                            ["font-bold", "text-text-secondary", "text-center"],
-                        )}>
-                        답변
-                    </TextComponent>
-                </View>
-
                 <ScrollView className={"flex-1"}>
+                    <View
+                        className={twMerge(
+                            ["hidden", "md:flex"],
+                            ["flex-row", "items-center", "px-4", "py-3"],
+                            [
+                                "bg-background-light",
+                                "border-b",
+                                "border-divider",
+                                "rounded-t-xl",
+                            ],
+                        )}>
+                        <TextComponent
+                            className={twMerge(
+                                ["hidden", "md:flex", "w-12"],
+                                ["font-bold", "text-text-secondary"],
+                            )}>
+                            ID
+                        </TextComponent>
+                        <TextComponent
+                            className={twMerge(
+                                ["flex-1"],
+                                ["font-bold", "text-text-secondary", "px-2", ""],
+                            )}>
+                            제목
+                        </TextComponent>
+                        <TextComponent
+                            className={twMerge(
+                                ["w-24"],
+                                ["font-bold", "text-text-secondary", "text-center"],
+                            )}>
+                            등록일
+                        </TextComponent>
+                        <TextComponent
+                            className={twMerge(
+                                ["w-24"],
+                                ["font-bold", "text-text-secondary", "text-center"],
+                            )}>
+                            답변
+                        </TextComponent>
+                    </View>
+
                     {isLoading && (
                         <View className={"py-20"}>
                             <LoadingIndicator />
@@ -137,7 +134,7 @@ function MyInquiryListPage() {
                                 "bg-background-paper",
                                 ["border-b", "border-background-default"],
                                 ["rounded-xl", "md:rounded-none"],
-                                "hover:bg-background-default",
+                                "hover:bg-background-light",
                                 index === list.length - 1 && ["md:rounded-b-xl", "border-b-0"],
                             )}>
                             <TextComponent
@@ -192,14 +189,14 @@ function MyInquiryListPage() {
                     onPress={() => router.push("/inquiry/create")}>
                     <Feather name={"plus"} size={22} />
                 </Button>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPage}
+                    onPageChange={newPage =>
+                        router.setParams({ page: String(newPage), size: String(pageSize) })
+                    }
+                />
             </ContentContainer>
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPage}
-                onPageChange={newPage =>
-                    router.setParams({ page: String(newPage), size: String(pageSize) })
-                }
-            />
         </View>
     );
 }

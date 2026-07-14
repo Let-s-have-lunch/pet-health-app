@@ -35,8 +35,7 @@ function CommunityPostDetailReplyListPage({
     }
 
     return (
-        <View className={twMerge(["p-4", "rounded-xl"])}>
-
+        <View className="py-2">
             {list.map((reply, index) => (
                 <ReplyItem
                     key={reply.id || index}
@@ -47,7 +46,7 @@ function CommunityPostDetailReplyListPage({
             ))}
 
             {totalPage > 1 && (
-                <View className={twMerge(["py-4", "mt-2"])}>
+                <View className="py-4 mt-2">
                     <Pagination
                         currentPage={currentPage}
                         totalPages={totalPage}
@@ -72,7 +71,8 @@ interface ReplyItemProps {
     isLast: boolean;
 }
 
-function ReplyItem({ item, onRefresh, isLast }: ReplyItemProps) {
+// 💡 여기서 export를 추가했습니다!
+export function ReplyItem({ item, onRefresh, isLast }: ReplyItemProps) {
     const { user } = useAuthStore();
     const isAuthor = item.user.id === user?.id;
 
@@ -80,7 +80,6 @@ function ReplyItem({ item, onRefresh, isLast }: ReplyItemProps) {
     const [editContent, setEditContent] = useState(item.content);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // 댓글 수정 처리
     const handleUpdate = async () => {
         if (!editContent.trim()) {
             alert("내용을 입력해주세요.");
@@ -105,7 +104,6 @@ function ReplyItem({ item, onRefresh, isLast }: ReplyItemProps) {
         }
     };
 
-    // 댓글 삭제 alert 창
     const handleDelete = () => {
         const title = "댓글 삭제";
         const message = "정말로 이 댓글을 삭제하시겠습니까?";
@@ -120,7 +118,6 @@ function ReplyItem({ item, onRefresh, isLast }: ReplyItemProps) {
         }
     };
 
-    // 댓글 삭제 실행
     const executeDelete = async () => {
         try {
             await replyApi.deleteReply(item.id);
@@ -137,28 +134,32 @@ function ReplyItem({ item, onRefresh, isLast }: ReplyItemProps) {
     };
 
     return (
-        <View className={twMerge(["py-4"], !isLast && ["border-b", "border-divider"])}>
-            <View className={twMerge(["flex-row", "justify-between", "items-center", "mb-2"])}>
-                <View className={twMerge(["flex-row", "items-center", "gap-2"])}>
-                    <TextComponent className={twMerge(["font-bold", "text-sm"])}>
+        <View className={twMerge(["py-4"], !isLast && ["border-b", "border-background-default"])}>
+            <View className="flex-row justify-between items-center mb-1.5">
+                <View className="flex-row items-center gap-2">
+                    <TextComponent className="font-semibold text-sm text-text-secondary">
                         {item.user.nickname}
                     </TextComponent>
-                    <TextComponent className={twMerge(["text-xs", "text-text-secondary"])}>
+                    <TextComponent className="text-xs text-text-secondary">
                         {item.createdAt.substring(0, 10)}
                     </TextComponent>
                 </View>
 
                 {isAuthor && !isEditing && (
-                    <View className={twMerge(["flex-row", "gap-2"])}>
+                    <View className="flex-row gap-1.5">
                         <Button
-                            variant={"contained"}
-                            size="small"
+                            className={"border-success-main"}
+                            textColor={"text-success-point"}
+                            variant={"outlined"}
+                            size={"mini"}
                             onPress={() => setIsEditing(true)}>
                             수정
                         </Button>
                         <Button
-                            variant={"contained"}
-                            size="small"
+                            className={"border-error-main"}
+                            textColor={"text-error-point"}
+                            variant={"outlined"}
+                            size={"mini"}
                             color={"error"}
                             onPress={handleDelete}>
                             삭제
@@ -168,19 +169,25 @@ function ReplyItem({ item, onRefresh, isLast }: ReplyItemProps) {
             </View>
 
             {isEditing ? (
-                <View className={twMerge(["mt-2"])}>
+                <View className="mt-2">
                     <TextareaGroup
                         value={editContent}
                         onChangeText={setEditContent}
                         placeholder="수정할 내용을 입력하세요"
+                        textInputClassName="min-h-[60px] bg-white border border-gray-200 rounded-xl p-2.5 text-sm"
                     />
-                    <View className={twMerge(["flex-row", "justify-end", "gap-2", "mt-2"])}>
-                        <Button variant="outlined" size="small" onPress={() => setIsEditing(false)}>
+                    <View className="flex-row justify-end gap-2 mt-2">
+                        <Button
+                            variant={"outlined"}
+                            size={"mini"}
+                            onPress={() => setIsEditing(false)}>
                             취소
                         </Button>
                         <Button
-                            variant="contained"
-                            size="small"
+                            variant={"outlined"}
+                            size={"mini"}
+                            className={"border-success-main"}
+                            textColor={"text-success-point"}
                             disabled={isSubmitting}
                             onPress={handleUpdate}>
                             {isSubmitting ? "저장 중.." : "저장"}
@@ -188,7 +195,7 @@ function ReplyItem({ item, onRefresh, isLast }: ReplyItemProps) {
                     </View>
                 </View>
             ) : (
-                <TextComponent className={twMerge(["text-base", "text-text-default", "px-1"])}>
+                <TextComponent className="text-sm text-gray-700 leading-5 px-0.5">
                     {item.content}
                 </TextComponent>
             )}

@@ -51,16 +51,12 @@ function CommunityPostListPage() {
     return (
         <View className={twMerge(["flex-1", "w-full", "p-0"])}>
             <ScrollView className={"flex-1"}>
-                <TextComponent
-                    className={twMerge(["font-medium", "text-left", "pb-4", "text-base"])}>
-                    반려동물의 정보를 같이 공유하는 커뮤니티 입니다.
-                </TextComponent>
                 <View className={twMerge(["overflow-hidden", "flex-1"])}>
                     <View
                         className={twMerge(
                             ["hidden", "md:flex"],
                             ["flex-row", "items-center", "px-4", "py-3"],
-                            ["border-b", "border-divider", "bg-[#FFFFFF]/30", "rounded-t-xl"],
+                            ["border-b", "border-divider", "bg-background-light", "rounded-t-xl"],
                         )}>
                         <TextComponent
                             className={twMerge(
@@ -127,7 +123,7 @@ function CommunityPostListPage() {
                                         ],
                                         ["px-4", "py-4", "md:px-4"],
                                         ["my-1", "md:my-0"],
-                                        ["transition-colors", "hover:bg-background-default"],
+                                        ["transition-colors", "hover:bg-background-light"],
                                         ["border-b", "border-background-default"],
                                         ["rounded-xl", "md:rounded-none"],
                                         isLast && ["md:rounded-b-xl"],
@@ -220,14 +216,14 @@ function CommunityPostListPage() {
                         })}
                     </View>
                 </View>
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPage}
-                    onPageChange={newPage =>
-                        router.setParams({ page: String(newPage), size: String(pageSize) })
-                    }
-                />
             </ScrollView>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPage}
+                onPageChange={newPage =>
+                    router.setParams({ page: String(newPage), size: String(pageSize) })
+                }
+            />
             <Button
                 isFloating
                 isCircle

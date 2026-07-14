@@ -57,44 +57,42 @@ function NoticeListPage() {
                 onBackPress={() => router.push("/my")}
                 className={"bg-background-paper"}
             />
-
             <ContentContainer className={"overflow-hidden flex-1"}>
-                <View
-                    className={twMerge(
-                        ["hidden", "md:flex"],
-                        ["flex-row", "items-center", "px-4", "py-3"],
-                        [
-                            "border-divider",
-                            "border-b",
-                            "bg-primary-main",
-                            "bg-[#FFFFFF]/30",
-                            "rounded-t-xl",
-                        ],
-                    )}>
-                    <TextComponent
-                        className={twMerge(
-                            ["hidden", "md:flex", "w-12"],
-                            ["font-bold", "text-text-secondary"],
-                        )}>
-                        ID
-                    </TextComponent>
-                    <TextComponent
-                        className={twMerge(
-                            ["flex-1"],
-                            ["font-bold", "text-text-secondary", "px-2"],
-                        )}>
-                        제목
-                    </TextComponent>
-                    <TextComponent
-                        className={twMerge(
-                            ["w-24"],
-                            ["font-bold", "text-text-secondary", "text-center"],
-                        )}>
-                        등록일
-                    </TextComponent>
-                </View>
-
                 <ScrollView className={"flex-1"}>
+                    <View
+                        className={twMerge(
+                            ["hidden", "md:flex"],
+                            ["flex-row", "items-center", "px-4", "py-3"],
+                            [
+                                "border-divider",
+                                "border-b",
+                                "bg-primary-main",
+                                "bg-background-light",
+                                "rounded-t-xl",
+                            ],
+                        )}>
+                        <TextComponent
+                            className={twMerge(
+                                ["hidden", "md:flex", "w-12"],
+                                ["font-bold", "text-text-secondary"],
+                            )}>
+                            ID
+                        </TextComponent>
+                        <TextComponent
+                            className={twMerge(
+                                ["flex-1"],
+                                ["font-bold", "text-text-secondary", "px-2"],
+                            )}>
+                            제목
+                        </TextComponent>
+                        <TextComponent
+                            className={twMerge(
+                                ["w-24"],
+                                ["font-bold", "text-text-secondary", "text-center"],
+                            )}>
+                            등록일
+                        </TextComponent>
+                    </View>
                     {isLoading && (
                         <View className={"py-20"}>
                             <LoadingIndicator />
@@ -117,8 +115,8 @@ function NoticeListPage() {
                                     "transition-all",
                                     "bg-background-paper",
                                     "border-b",
-                                    "border-primary-light",
-                                    "hover:bg-background-default",
+                                    "border-background-default",
+                                    "hover:bg-background-light",
                                     "rounded-xl",
                                     "md:rounded-none",
                                 ],
