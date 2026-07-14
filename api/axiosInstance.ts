@@ -16,13 +16,9 @@ export default api;
 api.interceptors.request.use(config => {
     const { token } = useAuthStore.getState();
 
-    console.log("token:", token);
-
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
-
-    console.log("Authorization:", config.headers.Authorization);
 
     return config;
 });

@@ -111,7 +111,6 @@ function WeightLogListPage() {
     return (
         <View className={twMerge("flex-1 bg-background-default")}>
             <Title
-                // 💡 3. 하드코딩된 '초코' 대신 실제 반려동물 이름 적용
                 title={selectedPet ? `${selectedPet.name}의 몸무게` : "몸무게 기록"}
                 showBackButton={true}
                 onBackPress={() => router.push("/")}
