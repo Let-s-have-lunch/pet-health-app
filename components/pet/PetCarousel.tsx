@@ -1,5 +1,3 @@
-
-
 import { Pet } from "@/types/pet";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -8,6 +6,7 @@ import {
     NativeScrollEvent,
     NativeSyntheticEvent,
     View,
+    ViewToken,
 } from "react-native";
 import PetCard from "@/components/pet/PetCard";
 import AddPetCard from "@/components/pet/AddPetCard";
@@ -47,6 +46,28 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
     const setSelectedPet = usePetStore(state => state.setSelectedPet);
     const setIsAddCardSelected = usePetStore(state => state.setIsAddCardSelected);
 
+    const onViewableItemsChanged = useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
+        const firstItem = viewableItems[0];
+
+        if (!firstItem) return;
+
+        const index = firstItem.index ?? 0;
+        setCurrentIndex(index);
+
+        const item = data[index];
+
+        if (item?.type === "pet") {
+            setSelectedPet(item.pet);
+            setIsAddCardSelected(false);
+        } else {
+            setIsAddCardSelected(true);
+        }
+    });
+
+    const viewabilityConfig = useRef({
+        itemVisiblePercentThreshold: 50,
+    });
+
     const data = useMemo(() => {
         return [
             ...pets.map(pet => ({
@@ -64,19 +85,6 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
     };
 
     const CARD_WIDTH = Math.max(0, containerWidth - HORIZONTAL_PADDING * 2);
-
-    const handleMomentumEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-        const index = Math.round(e.nativeEvent.contentOffset.x / CARD_WIDTH);
-        setCurrentIndex(index);
-        const item = data[index];
-
-        if (item?.type === "pet") {
-            setSelectedPet(item.pet);
-            setIsAddCardSelected(false);
-        } else {
-            setIsAddCardSelected(true);
-        }
-    };
 
     useEffect(() => {
         flatListRef.current?.scrollToOffset({
@@ -97,31 +105,16 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                 ref={flatListRef}
                 data={data}
                 horizontal
-
-                onScroll={e => {
-                    const index = Math.round(e.nativeEvent.contentOffset.x / CARD_WIDTH);
-
-                    if (index !== currentIndex) {
-                        setCurrentIndex(index);
-
-                        const item = data[index];
-
-                        if (item?.type === "pet") {
-                            setSelectedPet(item.pet);
-                            setIsAddCardSelected(false);
-                        } else {
-                            setIsAddCardSelected(true);
-                        }
-                    }
-                }}
+                pagingEnabled
                 showsHorizontalScrollIndicator={false}
+                onViewableItemsChanged={onViewableItemsChanged.current}
+                viewabilityConfig={viewabilityConfig.current}
                 keyExtractor={item => (item.type === "pet" ? item.pet.id.toString() : "add-card")}
                 getItemLayout={(_, index) => ({
                     length: CARD_WIDTH,
                     offset: CARD_WIDTH * index,
                     index,
                 })}
-                onScrollEndDrag={handleMomentumEnd}
                 renderItem={({ item }) => (
                     <View
                         style={{
