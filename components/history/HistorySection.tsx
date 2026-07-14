@@ -27,7 +27,7 @@ export default function HistorySection({petId}: HistorySectionProps) {
     const [data, setData] = useState<DashboardData | null>({
         date: todayDate,
         walk: { count: 0 },
-        weight: { value: 0 }, // 🐶 여기에 최신 몸무게가 담길 예정
+        weight: { value: 0 },
         water: { totalAmount: 0 },
         vetRecord: null,
     });
@@ -40,22 +40,22 @@ export default function HistorySection({petId}: HistorySectionProps) {
 
             // 1. 기존 대시보드 데이터 호출
             const dashboardResult = await getHomeDashboard(petId, todayDate);
-            // 2. 💧 펫의 전체 음수량 기록 리스트 호출
+            // 2.  펫의 전체 음수량 기록 리스트 호출
             const waterLogsResult = await waterIntakeApi.getByPetId(petId);
-            // 3. 🐶 펫의 전체 몸무게 기록 리스트 호출
+            // 3. 펫의 전체 몸무게 기록 리스트 호출
             const weightLogsResult = await weightLogApi.getByPetId(petId);
 
             if (dashboardResult.success) {
                 let latestWaterAmount = 0;
                 let latestWeightValue = 0; // 🐶 최신 몸무게 변수 초기화
 
-                // 💧 전체 리스트 중 가장 최근(배열의 마지막)에 등록된 음수량 기록 찾기
+                //  전체 리스트 중 가장 최근(배열의 마지막)에 등록된 음수량 기록 찾기
                 if (waterLogsResult?.data?.data && waterLogsResult.data.data.length > 0) {
                     const logs = waterLogsResult.data.data;
                     latestWaterAmount = logs[logs.length - 1].amount;
                 }
 
-                // 🐶 전체 리스트 중 가장 최근(배열의 첫 번째)에 등록된 몸무게 기록 찾기
+                //  전체 리스트 중 가장 최근(배열의 첫 번째)에 등록된 몸무게 기록 찾기
                 if (weightLogsResult?.data?.data && weightLogsResult.data.data.length > 0) {
                     const weightLogs = weightLogsResult.data.data;
                     latestWeightValue = weightLogs[0].weight;
