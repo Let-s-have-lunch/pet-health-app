@@ -119,7 +119,7 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                     <View
                         style={{
                             width: CARD_WIDTH,
-                            marginHorizontal: HORIZONTAL_PADDING,
+                            paddingHorizontal: 4,
                         }}>
                         {item.type === "pet" ? (
                             <PetCard
