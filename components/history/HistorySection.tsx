@@ -21,7 +21,7 @@ const getTodayString = () => {
 export default function HistorySection() {
     const [isLoading, setIsLoading] = useState(true);
     const todayDate = getTodayString();
-    const { selectedPet } = usePetStore();
+    const { selectedPet, isAddCardSelected } = usePetStore();
     const petId = selectedPet?.id;
 
     // 💡 초기값을 null로 깔끔하게 세팅
@@ -55,8 +55,24 @@ export default function HistorySection() {
     }, [petId, todayDate]); // 의존성 배열도 깔끔하게 유지
 
     useEffect(() => {
-        console.log("selectedPet:", selectedPet?.name, selectedPet?.id);
-    }, [selectedPet]);
+        if (isAddCardSelected) {
+            setData(null);
+            return;
+        }
+
+        if (!selectedPet) return;
+
+        void loadDashboard();
+    }, [isAddCardSelected, selectedPet, loadDashboard]);
+
+    // useEffect(() => {
+    //     if (!selectedPet) {
+    //         setData(null);
+    //         return;
+    //     }
+    //     void loadDashboard();
+    // }, [selectedPet, loadDashboard]);
+
     useFocusEffect(
         useCallback(() => {
             loadDashboard().then(() => {});

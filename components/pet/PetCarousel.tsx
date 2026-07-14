@@ -43,6 +43,7 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [containerWidth, setContainerWidth] = useState(0);
     const setSelectedPet = usePetStore(state => state.setSelectedPet);
+    const setIsAddCardSelected = usePetStore(state => state.setIsAddCardSelected);
 
     const data = useMemo(() => {
         return [
@@ -65,13 +66,13 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
     const handleMomentumEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
         const index = Math.round(e.nativeEvent.contentOffset.x / CARD_WIDTH);
         setCurrentIndex(index);
-        const item = data [index];
-        console.log("현재 index:", index);
-        console.log("현재 item:", item);
+        const item = data[index];
 
         if (item?.type === "pet") {
-            console.log("선택된 펫:", item.pet.name, item.pet.id);
             setSelectedPet(item.pet);
+            setIsAddCardSelected(false);
+        } else {
+            setIsAddCardSelected(true);
         }
     };
 
@@ -94,7 +95,23 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                 ref={flatListRef}
                 data={data}
                 horizontal
-                pagingEnabled
+
+                onScroll={e => {
+                    const index = Math.round(e.nativeEvent.contentOffset.x / CARD_WIDTH);
+
+                    if (index !== currentIndex) {
+                        setCurrentIndex(index);
+
+                        const item = data[index];
+
+                        if (item?.type === "pet") {
+                            setSelectedPet(item.pet);
+                            setIsAddCardSelected(false);
+                        } else {
+                            setIsAddCardSelected(true);
+                        }
+                    }
+                }}
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={item => (item.type === "pet" ? item.pet.id.toString() : "add-card")}
                 getItemLayout={(_, index) => ({
@@ -102,7 +119,7 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                     offset: CARD_WIDTH * index,
                     index,
                 })}
-                onMomentumScrollEnd={handleMomentumEnd}
+                onScrollEndDrag={handleMomentumEnd}
                 renderItem={({ item }) => (
                     <View
                         style={{
