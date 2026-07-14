@@ -12,9 +12,13 @@ import WalkLogModal from "@/app/(main)/health/walk-logs/WalkLogModal";
 import WalkLogHistorySection from "@/app/(main)/health/walk-logs/WalkLogHistorySection";
 import WalkLogChartSection from "@/app/(main)/health/walk-logs/WalkLogChartSection";
 import { usePetStore } from "@/stores/usePetStore";
+// 💡 1. Auth 스토어 임포트
+import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 function WalkLogListPage() {
     const router = useRouter();
+    // 💡 2. 로그인 여부 가져오기
+    const isLoggedIn = useAuthStore(state => state.isLoggedIn);
     const { selectedPet } = usePetStore();
     const petId = selectedPet?.id;
 
@@ -38,8 +42,16 @@ function WalkLogListPage() {
 
     // API 데이터 페칭
     const fetchWalkLogData = useCallback(async () => {
-        if (!petId) return;
+        // 💡 3. 핵심 방어막! 로그인을 안 했거나 펫이 없으면 API 호출 막기
+        if (!isLoggedIn || !petId) {
+            setStats(null); // 통계 빈 데이터 처리
+            setHistory([]); // 히스토리 빈 배열 처리
+            setIsLoading(false); // 로딩 해제 (빈 화면 렌더링)
+            return;
+        }
+
         try {
+            setIsLoading(true); // 💡 다시 로딩 시작 (새로고침 등 펫이 바뀔 때를 대비)
             const statsData = await walkLogApi.getWalkLogStats(petId, startDate, endDate);
             const historyData = await walkLogApi.getWalkLogs(petId);
             setStats(statsData);
@@ -57,14 +69,24 @@ function WalkLogListPage() {
         } finally {
             setIsLoading(false);
         }
-    }, [startDate, endDate, router, petId]);
+    }, [isLoggedIn, petId, startDate, endDate, router]); // 💡 의존성 배열에 isLoggedIn 추가
 
     useEffect(() => {
         fetchWalkLogData().then();
     }, [fetchWalkLogData]);
 
-    // 💡 HistorySection용 액션 핸들러 함수들
+    // 💡 4. 추가 버튼 클릭 시 방어 로직
     const handleAddPress = () => {
+        if (!isLoggedIn) {
+            if (Platform.OS === "web") alert("로그인이 필요한 서비스입니다.");
+            else Alert.alert("알림", "로그인이 필요한 서비스입니다.");
+            return;
+        }
+        if (!petId) {
+            if (Platform.OS === "web") alert("반려동물을 먼저 등록해주세요.");
+            else Alert.alert("알림", "반려동물을 먼저 등록해주세요.");
+            return;
+        }
         setIsModalVisible(true);
     };
 
@@ -133,7 +155,7 @@ function WalkLogListPage() {
                         <WalkLogModal
                             visible={isModalVisible}
                             onClose={handleCloseModal}
-                            petId={petId}
+                            petId={petId!} // 💡 TS 에러 방지용 '!' 추가
                             reload={fetchWalkLogData}
                             initialData={selectedLog}
                         />
