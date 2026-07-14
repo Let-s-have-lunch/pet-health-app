@@ -76,12 +76,9 @@ function AdminNoticeDetailPage() {
         }
     };
 
-    if (isLoading || !notice) {
-        return <LoadingIndicator fullScreen />;
-    }
-
     return (
         <View className={twMerge("flex-1", "w-full")}>
+            {/* 1. 타이틀은 로딩과 상관없이 무조건 먼저 보여줍니다 */}
             <Title
                 title={"공지사항 상세"}
                 description={"등록된 공지사항의 내용을 확인합니다."}
@@ -90,56 +87,80 @@ function AdminNoticeDetailPage() {
 
             <ScrollView className={"flex-1"}>
                 <Card>
-                    <View className={twMerge(["border-b", "border-divider"], ["pb-4", "mb-6"])}>
-                        <TextComponent className={twMerge("mb-1", ["text-xl", "font-bold"])}>
-                            {notice.title}
-                        </TextComponent>
-                        <View className={twMerge("flex-row", "justify-between", "items-center")}>
-                            <TextComponent className={twMerge("text-sm", "text-text-secondary")}>
-                                관리자
-                            </TextComponent>
-                            <TextComponent className={twMerge("text-sm", "text-text-secondary")}>
-                                등록일 : {notice.createdAt.substring(0, 10)}
-                            </TextComponent>
+                    {/* 2. 데이터를 불러오는 중이거나 데이터가 없을 때는 카드 안에서만 로딩을 띄웁니다 */}
+                    {isLoading || !notice ? (
+                        <View className="min-h-60 justify-center items-center">
+                            <LoadingIndicator />
                         </View>
-                    </View>
+                    ) : (
+                        /* 3. 로딩이 끝나면 실제 공지사항 내용을 보여줍니다 */
+                        <>
+                            <View
+                                className={twMerge(
+                                    ["border-b", "border-divider"],
+                                    ["pb-4", "mb-6"],
+                                )}>
+                                <TextComponent
+                                    className={twMerge("mb-1", ["text-xl", "font-bold"])}>
+                                    {notice.title}
+                                </TextComponent>
+                                <View
+                                    className={twMerge(
+                                        "flex-row",
+                                        "justify-between",
+                                        "items-center",
+                                    )}>
+                                    <TextComponent
+                                        className={twMerge("text-sm", "text-text-secondary")}>
+                                        관리자
+                                    </TextComponent>
+                                    <TextComponent
+                                        className={twMerge("text-sm", "text-text-secondary")}>
+                                        등록일 : {notice.createdAt.substring(0, 10)}
+                                    </TextComponent>
+                                </View>
+                            </View>
 
-                    <View className={"min-h-60"}>
-                        <TextComponent className={twMerge("leading-relaxed")}>
-                            {notice.content}
-                        </TextComponent>
-                    </View>
+                            <View className={"min-h-60"}>
+                                <TextComponent className={twMerge("leading-relaxed")}>
+                                    {notice.content}
+                                </TextComponent>
+                            </View>
 
-                    <View
-                        className={twMerge(
-                            ["flex-row", "justify-between", "items-center"],
-                            ["mt-10", "pt-6"],
-                            ["border-divider", "border-t"],
-                        )}>
-                        <Button
-                            size={"small"}
-                            variant={"outlined"}
-                            onPress={() => router.push("/admin/notices")}>
-                            목록으로
-                        </Button>
+                            <View
+                                className={twMerge(
+                                    ["flex-row", "justify-between", "items-center"],
+                                    ["mt-10", "pt-6"],
+                                    ["border-divider", "border-t"],
+                                )}>
+                                <Button
+                                    size={"small"}
+                                    variant={"outlined"}
+                                    onPress={() => router.push("/admin/notices")}>
+                                    목록으로
+                                </Button>
 
-                        <View className={twMerge("flex-row", "gap-3")}>
-                            <Button
-                                size={"small"}
-                                variant={"outlined"}
-                                onPress={handleDeleteNotice}>
-                                삭제
-                            </Button>
-                            <Button
-                                size={"small"}
-                                variant={"contained"}
-                                color={"warning"}
-                                onPress={() => router.push(`/admin/notices/${notice.id}/update`)}
-                                className={"bg-primary-main border-primary-main"}>
-                                수정
-                            </Button>
-                        </View>
-                    </View>
+                                <View className={twMerge("flex-row", "gap-3")}>
+                                    <Button
+                                        size={"small"}
+                                        variant={"outlined"}
+                                        onPress={handleDeleteNotice}>
+                                        삭제
+                                    </Button>
+                                    <Button
+                                        size={"small"}
+                                        variant={"contained"}
+                                        color={"warning"}
+                                        onPress={() =>
+                                            router.push(`/admin/notices/${notice.id}/update`)
+                                        }
+                                        className={"bg-primary-main border-primary-main"}>
+                                        수정
+                                    </Button>
+                                </View>
+                            </View>
+                        </>
+                    )}
                 </Card>
             </ScrollView>
         </View>

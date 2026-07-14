@@ -1,5 +1,5 @@
 import { View, ScrollView, Platform, Alert } from "react-native";
-import {  useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import Title from "../../../../components/common/title/Title";
 
@@ -12,10 +12,12 @@ import WaterLogModal from "@/app/(main)/health/water-logs/WaterLogModal";
 import waterIntakeApi from "@/api/user/waterIntakeApi";
 import WaterLogHistorySection from "@/app/(main)/health/water-logs/WaterLogHistorySection";
 import { usePetStore } from "@/stores/usePetStore";
-
+import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 export default function WaterLogListPage() {
     const router = useRouter();
+    // 💡 2. 로그인 여부 가져오기
+    const isLoggedIn = useAuthStore(state => state.isLoggedIn);
     const { selectedPet } = usePetStore();
     const petId = selectedPet?.id;
 
@@ -26,7 +28,13 @@ export default function WaterLogListPage() {
     const [selectedLogData, setSelectedLogData] = useState<WaterIntakeLog | null>(null);
 
     const fetchData = useCallback(async () => {
-        if (!petId) return;
+        // 💡 3. 핵심 방어막! 로그인을 안 했거나 펫이 없으면 API 호출 막고 빈 화면 렌더링
+        if (!isLoggedIn || !petId) {
+            setHistoryData([]);
+            setIsLoading(false);
+            return;
+        }
+
         try {
             setIsLoading(true);
             const response = await waterIntakeApi.getByPetId(petId);
@@ -38,9 +46,21 @@ export default function WaterLogListPage() {
         } finally {
             setIsLoading(false);
         }
-    }, [petId])
+    }, [isLoggedIn, petId]); // 💡 의존성 배열에 isLoggedIn 추가
 
+    // 💡 4. 추가 버튼 클릭 시 방어 로직
     const handleCreatePress = () => {
+        if (!isLoggedIn) {
+            if (Platform.OS === "web") alert("로그인이 필요한 서비스입니다.");
+            else Alert.alert("알림", "로그인이 필요한 서비스입니다.");
+            return;
+        }
+        if (!petId) {
+            if (Platform.OS === "web") alert("반려동물을 먼저 등록해주세요.");
+            else Alert.alert("알림", "반려동물을 먼저 등록해주세요.");
+            return;
+        }
+
         setSelectedLogData(null); // 신규 작성이므로 비워줍니다.
         setIsModalOpen(true);
     };
@@ -105,12 +125,17 @@ export default function WaterLogListPage() {
                         <WaterLogModal
                             visible={isModalOpen}
                             onClose={handleCloseModal}
-                            petId={petId}
+                            petId={petId!} // 💡 TS 에러 방지용 '!' 추가
                             reload={fetchData}
                             initialData={selectedLogData}
                         />
 
-                        <WaterLogHistorySection history={historyData} onAddPress={handleCreatePress} onEditPress={handleEditPress} onDeletePress={handleDelete}/>
+                        <WaterLogHistorySection
+                            history={historyData}
+                            onAddPress={handleCreatePress}
+                            onEditPress={handleEditPress}
+                            onDeletePress={handleDelete}
+                        />
                     </ContentContainer>
                 </ScrollView>
             )}

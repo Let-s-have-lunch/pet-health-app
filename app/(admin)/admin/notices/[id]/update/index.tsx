@@ -78,10 +78,6 @@ function AdminNoticeUpdatePage() {
         }
     };
 
-    if (isLoading) {
-        return <LoadingIndicator fullScreen />;
-    }
-
     return (
         <View className={twMerge("flex-1", "w-full")}>
             <Title
@@ -91,71 +87,77 @@ function AdminNoticeUpdatePage() {
             />
             <ScrollView className={"flex-1"}>
                 <Card>
-                    <Controller
-                        control={control}
-                        name={"title"}
-                        render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                                <InputGroup
-                                    id={"title"}
-                                    label={"제목"}
-                                    placeholder={"공지사항 제목을 입력해주세요."}
-                                    onBlur={onBlur}
-                                    onChangeText={onChange} // HTML onChange 속성 => React-Native onChangeText 속성
-                                    value={value}
-                                    errorMessage={errors.title?.message}
-                                />
-                            );
-                        }}
-                    />
+                    {isLoading ? (
+                        <LoadingIndicator />
+                    ) : (
+                        <>
+                            <Controller
+                                control={control}
+                                name={"title"}
+                                render={({ field: { onChange, onBlur, value } }) => {
+                                    return (
+                                        <InputGroup
+                                            id={"title"}
+                                            label={"제목"}
+                                            placeholder={"공지사항 제목을 입력해주세요."}
+                                            onBlur={onBlur}
+                                            onChangeText={onChange} // HTML onChange 속성 => React-Native onChangeText 속성
+                                            value={value}
+                                            errorMessage={errors.title?.message}
+                                        />
+                                    );
+                                }}
+                            />
 
-                    <Controller
-                        control={control}
-                        name={"content"}
-                        render={({ field: { onChange, onBlur, value } }) => {
-                            return (
-                                <TextareaGroup
-                                    id={"content"}
-                                    label={"내용"}
-                                    placeholder={"공지사항 상세 내용을 입력해주세요."}
-                                    onBlur={onBlur}
-                                    onChangeText={onChange} // HTML onChange 속성 => React-Native onChangeText 속성
-                                    value={value}
-                                    errorMessage={errors.content?.message}
-                                />
-                            );
-                        }}
-                    />
+                            <Controller
+                                control={control}
+                                name={"content"}
+                                render={({ field: { onChange, onBlur, value } }) => {
+                                    return (
+                                        <TextareaGroup
+                                            id={"content"}
+                                            label={"내용"}
+                                            placeholder={"공지사항 상세 내용을 입력해주세요."}
+                                            onBlur={onBlur}
+                                            onChangeText={onChange} // HTML onChange 속성 => React-Native onChangeText 속성
+                                            value={value}
+                                            errorMessage={errors.content?.message}
+                                        />
+                                    );
+                                }}
+                            />
 
-                    {errors.root?.message && (
-                        <ErrorMessage className={twMerge("mt-2", "text-center")}>
-                            {errors.root.message}
-                        </ErrorMessage>
+                            {errors.root?.message && (
+                                <ErrorMessage className={twMerge("mt-2", "text-center")}>
+                                    {errors.root.message}
+                                </ErrorMessage>
+                            )}
+
+                            <View
+                                className={twMerge("mt-10", [
+                                    "flex-row",
+                                    "justify-end",
+                                    "items-center",
+                                    "gap-3",
+                                ])}>
+                                <Button
+                                    size={"small"}
+                                    variant={"outlined"}
+                                    color={"secondary"}
+                                    onPress={() => router.push("/admin/notices")}>
+                                    취소
+                                </Button>
+                                <Button
+                                    size={"small"}
+                                    variant={"contained"}
+                                    color={"primary"}
+                                    onPress={handleSubmit(onSubmit)}
+                                    disabled={isSubmitting}>
+                                    {isSubmitting ? "수정중..." : "수정"}
+                                </Button>
+                            </View>
+                        </>
                     )}
-
-                    <View
-                        className={twMerge("mt-10", [
-                            "flex-row",
-                            "justify-end",
-                            "items-center",
-                            "gap-3",
-                        ])}>
-                        <Button
-                            size={"small"}
-                            variant={"outlined"}
-                            color={"secondary"}
-                            onPress={() => router.push("/admin/notices")}>
-                            취소
-                        </Button>
-                        <Button
-                            size={"small"}
-                            variant={"contained"}
-                            color={"primary"}
-                            onPress={handleSubmit(onSubmit)}
-                            disabled={isSubmitting}>
-                            {isSubmitting ? "수정중..." : "수정"}
-                        </Button>
-                    </View>
                 </Card>
             </ScrollView>
         </View>
