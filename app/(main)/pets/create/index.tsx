@@ -21,6 +21,7 @@ import petApi from "@/api/user/petApi";
 import { RegisterPetInputType, registerPetSchema } from "@/schemas/user/pet/registerPetSchema";
 import TextComponent from "@/components/common/text/TextComponent";
 import { useEffect, useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
 
 function PetCreatePage() {
     const router = useRouter();
@@ -142,25 +143,23 @@ function PetCreatePage() {
             <ScrollView>
                 <ContentContainer className="bg-transparent p-0">
                     <FormContainer>
-                        <View className="items-center mb-6">
-                            <View className="w-32 h-32 rounded-xl bg-gray-200 justify-center items-center">
-                                <TextComponent>사진 등록</TextComponent>
-                            </View>
+                        <View className="mb-6">
+                            <TextComponent className="mb-2 font-medium">
+                                반려동물 사진
+                            </TextComponent>
 
-                            <Button
-                                variant="outlined"
-                                size={"small"}
-                                textClassName={"font-semibold text-text-default"}
-                                className="w-32 h-10 mt-3 border-primary-main"
+                            <Pressable
                                 onPress={() => {
-                                    // TODO : 이미지 선택
-                                }}>
-                                사진 선택
-                            </Button>
+                                    // TODO: 이미지 선택
+                                }}
+                                className="h-32 items-center justify-center rounded-xl border border-dashed border-[#E7D7CC] bg-white">
+                                <Ionicons name="camera-outline" size={34} color="#7F8C8D" />
 
-                            {/*TODO: 사진 등록 기능*/}
+                                <TextComponent className="mt-2 text-text-secondary font-medium">
+                                    사진 선택
+                                </TextComponent>
+                            </Pressable>
                         </View>
-
                         <Controller
                             control={control}
                             name="name"
@@ -292,7 +291,7 @@ function PetCreatePage() {
                                 className="flex-1"
                                 onPress={handleSubmit(onSubmit)}
                                 disabled={isSubmitting}>
-                                {isEditMode ? "수정하기" : "등록하기"}
+                                {isEditMode ? "수정" : "등록"}
                             </Button>
                         </View>
                     </FormContainer>
@@ -401,7 +400,7 @@ function PetCreatePage() {
                                 className="flex-1 bg-[#F2C6C2]"
                                 onPress={handleDelete}
                                 disabled={isDeleting}
-                            variant={"text"}>
+                                variant={"text"}>
                                 삭제
                             </Button>
                         </View>
