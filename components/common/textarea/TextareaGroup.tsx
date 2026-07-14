@@ -10,7 +10,7 @@ interface TextareaGroupProps extends TextInputProps {
     errorMessage?: string;
     wrap?: boolean;
     size?: StyleSizeType;
-    textInputClassName: string;
+    textInputClassName?: string;
 }
 
 function TextareaGroup({

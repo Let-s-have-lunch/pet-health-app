@@ -7,6 +7,7 @@ interface PaginationProps {
     totalPages: number;
     onPageChange: (page: number) => void;
     maxVisibleButtons?: number;
+    className?: string;
 }
 
 export default function Pagination({
@@ -14,6 +15,7 @@ export default function Pagination({
     totalPages,
     onPageChange,
     maxVisibleButtons = 5,
+    className,
 }: PaginationProps) {
     if (totalPages <= 1) {
         return null;
@@ -69,6 +71,7 @@ export default function Pagination({
                             "w-10 h-10 rounded-[10px] border-2 flex items-center justify-center",
                             "bg-white border-text-secondary",
                             isActive && "bg-secondary-main border-transparent",
+                            className,
                         )}>
                         <Text
                             className={twMerge(
