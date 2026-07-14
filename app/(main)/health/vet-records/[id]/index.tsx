@@ -1,196 +1,169 @@
-import { View, TextInput, Pressable, Alert, Image, ScrollView, Platform } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
-import { useState, useEffect } from "react";
-import * as ImagePicker from "expo-image-picker";
+import React, { useState, useEffect, useCallback } from "react";
+import { View, Image, Pressable, ScrollView, ActivityIndicator } from "react-native";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import TextComponent from "../../../../../components/common/text/TextComponent";
 import { vetLogApi } from "@/api/user/vetLogApi";
+import { VetRecord } from "@/types/vetRecord";
+import TextComponent from "@/components/common/text/TextComponent";
+import axiosInstance from "@/api/axiosInstance";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { twMerge } from "tailwind-merge";
+import Title from "@/components/common/title/Title";
 import { usePetStore } from "@/stores/usePetStore";
 
-export default function VetLogUpdatePage() {
+export default function RecordDetail() {
+    const router = useRouter();
+    const { id } = useLocalSearchParams();
+    const BACKEND_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
+
+    const [record, setRecord] = useState<VetRecord | null>(null);
+    const [loading, setLoading] = useState(true);
     const selectedPet = usePetStore(state => state.selectedPet);
-    const petId = selectedPet?.id;
 
-    const params = useLocalSearchParams();
-    const id = params.id as string;
-
-    const [hospitalName, setHospitalName] = useState((params.hospitalName as string) || "");
-    const [visitPurpose, setVisitPurpose] = useState((params.visitPurpose as string) || "");
-    const [visitDate, setVisitDate] = useState(
-        (params.visitDate as string) || new Date().toISOString().split("T")[0],
-    );
-
-    const [diagnosis, setDiagnosis] = useState((params.diagnosis as string) || "");
-    const [treatment, setTreatment] = useState((params.treatment as string) || "");
-    const [cost, setCost] = useState((params.cost as string) || "");
-    const [memo, setMemo] = useState((params.memo as string) || "");
-    const [image, setImage] = useState<string | null>((params.receiptImage as string) || null);
-
-    useEffect(() => {
-        if (!petId || !id) {
-            const message = !petId ? "선택된 반려동물이 없습니다." : "수정할 기록의 ID가 없습니다.";
-            if (Platform.OS === "web") {
-                alert(message);
-            } else {
-                Alert.alert("알림", message);
-            }
-            router.back();
-        }
-    }, [petId, id]);
-
-    const pickImage = async () => {
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        if (!result.canceled) {
-            setImage(result.assets[0].uri);
-        }
-    };
-
-    const onSubmit = async () => {
-        // 💡 수정 페이지이므로 record id(id)만 확실히 있으면 됩니다.
-        if (!id) {
-            Alert.alert("오류", "수정할 기록의 정보가 없습니다.");
-            return;
-        }
+    const fetchRecord = useCallback(async () => {
+        const recordId = Array.isArray(id) ? id[0] : id;
+        if (!recordId) return;
 
         try {
-            const payload = {
-                visitDate,
-                hospitalName,
-                visitPurpose,
-                diagnosis,
-                treatment,
-                cost: Number(cost || 0),
-                memo,
-            };
+            setLoading(true);
+            const numericId = Number(recordId);
 
-            await vetLogApi.update(Number(id), payload);
+            const res = await axiosInstance.get(`/vet-records/${numericId}`, {
+                data: { id: numericId },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${useAuthStore.getState().token}`,
+                },
+            });
 
-            if (Platform.OS === "web") {
-                alert("기록이 수정되었습니다.");
-            } else {
-                Alert.alert("성공", "기록이 수정되었습니다.");
-            }
+            const recordData = res?.data?.data || res?.data;
+            setRecord(recordData);
+        } catch (error: any) {
+            console.error("데이터 로딩 실패:", error);
+        } finally {
+            setLoading(false);
+        }
+    }, [id]);
 
+    useEffect(() => {
+        fetchRecord();
+    }, [fetchRecord]);
+
+    const getImageUrl = (path?: string | null) => {
+        if (!path) return "https://via.placeholder.com/400x300?text=No+Image";
+        if (path.startsWith("http")) return path;
+        return `${BACKEND_URL}${path}`;
+    };
+
+    const formatLongDate = (dateString?: string) => {
+        if (!dateString) return "날짜 정보 없음";
+
+        let date = new Date(dateString);
+
+        if (isNaN(date.getTime())) {
+            date = new Date(dateString.replace(/\./g, "-"));
+        }
+
+        if (isNaN(date.getTime())) return "날짜 정보 없음";
+
+        const days = ["일", "월", "화", "수", "목", "금", "토"];
+        return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 ${days[date.getDay()]}요일`;
+    };
+
+    const handleDelete = async () => {
+        try {
+            await vetLogApi.delete(Number(id));
             router.back();
         } catch (error) {
-            console.log("수정 에러:", error);
-
-            if (Platform.OS === "web") {
-                alert("수정에 실패했습니다.");
-            } else {
-                Alert.alert("오류", "수정에 실패했습니다.");
-            }
+            console.error("삭제 실패:", error);
         }
     };
 
-    if (!petId || !id) {
-        return <View className="flex-1 bg-black/50" />;
+    if (loading) {
+        return (
+            <View className="flex-1 justify-center items-center bg-background-default">
+                <ActivityIndicator size="large" color="#BACFCD" />
+            </View>
+        );
+    }
+
+    if (!record) {
+        return (
+            <View className="flex-1 justify-center items-center bg-background-default">
+                <TextComponent>데이터를 찾을 수 없습니다.</TextComponent>
+            </View>
+        );
     }
 
     return (
-        <View className="flex-1 justify-center items-center bg-black/50 p-5">
+        <View className="flex-1 bg-background-default">
+            <Title
+                title={selectedPet ? `${selectedPet.name} 병원방문기록` : "병원방문기록"}
+                showBackButton={true}
+                onBackPress={() => router.back()}
+                className={twMerge("bg-background-paper")}
+            />
+
             <ScrollView
-                className="w-full bg-background-paper p-6 rounded-2xl flex-grow-0"
-                keyboardShouldPersistTaps="handled">
-                <TextComponent className="text-lg font-bold mb-4">
-                    {selectedPet?.name} 병원 기록 수정
-                </TextComponent>
+                className="flex-1"
+                contentContainerStyle={{
+                    paddingHorizontal: 20,
+                    paddingTop: 24,
+                    paddingBottom: 40,
+                }}>
+                <View className="bg-background-paper p-6 rounded-[20px] shadow-sm">
+                    <TextComponent className="text-[20px] font-bold text-text-default">
+                        {record.visitPurpose}
+                    </TextComponent>
 
-                <TextComponent className="text-sm mb-1">반려동물 사진</TextComponent>
+                    <TextComponent className="text-[14px] text-text-secondary mt-1 mb-6 text-right">
+                        {formatLongDate(record.visitDate)}
+                    </TextComponent>
 
-                {image ? (
-                    <View className="relative mb-3">
-                        <Image source={{ uri: image }} className="w-full h-48 rounded-lg" />
+                    <Image
+                        source={{ uri: getImageUrl(record.receiptImage) }}
+                        className="w-full h-[220px] rounded-[16px] mb-6"
+                        resizeMode="cover"
+                    />
+
+                    <TextComponent className="text-[16px] text-text-default leading-6 mb-10">
+                        {record.memo || "기록된 내용이 없습니다."}
+                    </TextComponent>
+
+                    <View className="flex-row justify-between gap-3">
+                        <Pressable
+                            className={twMerge(
+                                "flex-1 items-center justify-center h-12 rounded-[12px] bg-error-main"
+                            )}
+                            onPress={handleDelete}
+                        >
+                            <TextComponent className={twMerge("font-semibold text-error-contrast")}>
+                                삭제
+                            </TextComponent>
+                        </Pressable>
 
                         <Pressable
-                            className="absolute top-2 right-2 bg-black/50 p-1 rounded-full"
-                            onPress={() => setImage(null)}>
-                            <Ionicons name="close" size={20} color="white" />
+                            className="flex-1 items-center justify-center h-12 rounded-[12px] bg-success-main"
+                            onPress={() =>
+                                router.push({
+                                    pathname: "/(main)/health/vet-records/[id]/update",
+                                    params: {
+                                        id: record.id,
+                                        hospitalName: record.hospitalName,
+                                        visitPurpose: record.visitPurpose,
+                                        visitDate: record.visitDate,
+                                        cost: String(record.cost),
+                                        memo: record.memo || "",
+                                        receiptImage: record.receiptImage || "",
+                                    },
+                                })
+                            }
+                        >
+                            <TextComponent className={twMerge("font-semibold text-primary-contrast")}>
+                                수정
+                            </TextComponent>
                         </Pressable>
                     </View>
-                ) : (
-                    <Pressable
-                        className="border border-dashed border-divider p-8 rounded-lg mb-3 items-center"
-                        onPress={pickImage}>
-                        <Ionicons name="camera-outline" size={32} color="#7F8C8D" />
-
-                        <TextComponent className="text-text-secondary mt-2">
-                            사진 선택
-                        </TextComponent>
-                    </Pressable>
-                )}
-
-                <TextComponent className="text-sm mb-1">병원 이름</TextComponent>
-                <TextInput
-                    className="border border-divider p-3 rounded-lg mb-3"
-                    value={hospitalName}
-                    onChangeText={setHospitalName}
-                />
-
-                <TextComponent className="text-sm mb-1">방문 목적</TextComponent>
-                <TextInput
-                    className="border border-divider p-3 rounded-lg mb-3"
-                    value={visitPurpose}
-                    onChangeText={setVisitPurpose}
-                />
-
-                <TextComponent className="text-sm mb-1">방문 날짜</TextComponent>
-                <TextInput
-                    className="border border-divider p-3 rounded-lg mb-3"
-                    value={visitDate}
-                    onChangeText={setVisitDate}
-                />
-
-                <TextComponent className="text-sm mb-1">진단 내용</TextComponent>
-                <TextInput
-                    className="border border-divider p-3 rounded-lg mb-3"
-                    value={diagnosis}
-                    onChangeText={setDiagnosis}
-                />
-
-                <TextComponent className="text-sm mb-1">치료 내용</TextComponent>
-                <TextInput
-                    className="border border-divider p-3 rounded-lg mb-3"
-                    value={treatment}
-                    onChangeText={setTreatment}
-                />
-
-                <TextComponent className="text-sm mb-1">진료 비용</TextComponent>
-                <TextInput
-                    keyboardType="numeric"
-                    className="border border-divider p-3 rounded-lg mb-3"
-                    value={cost}
-                    onChangeText={setCost}
-                />
-
-                <TextComponent className="text-sm mb-1">메모</TextComponent>
-                <TextInput
-                    multiline
-                    className="border border-divider p-3 rounded-lg mb-6"
-                    value={memo}
-                    onChangeText={setMemo}
-                />
-
-                <View className="flex-row gap-3">
-                    <Pressable
-                        className="flex-1 p-3 border border-divider rounded-lg"
-                        onPress={() => router.back()}>
-                        <TextComponent className="text-center">취소</TextComponent>
-                    </Pressable>
-
-                    <Pressable
-                        className="flex-1 p-3 bg-secondary-main rounded-lg"
-                        onPress={onSubmit}>
-                        <TextComponent className="text-center text-white font-bold">
-                            수정
-                        </TextComponent>
-                    </Pressable>
                 </View>
             </ScrollView>
         </View>
