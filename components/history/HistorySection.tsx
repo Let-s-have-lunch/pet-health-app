@@ -8,7 +8,6 @@ import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import { format } from "date-fns";
 import { usePetStore } from "@/stores/usePetStore";
-import { Pet } from "@/types/pet";
 
 const getTodayString = () => {
     const today = new Date();
@@ -55,8 +54,15 @@ export default function HistorySection() {
     }, [petId, todayDate]); // 의존성 배열도 깔끔하게 유지
 
     useEffect(() => {
+        if (!selectedPet) return;
+
         console.log("selectedPet:", selectedPet?.name, selectedPet?.id);
-    }, [selectedPet]);
+
+        void loadDashboard();
+
+    }, [selectedPet, loadDashboard]);
+
+
     useFocusEffect(
         useCallback(() => {
             loadDashboard().then(() => {});

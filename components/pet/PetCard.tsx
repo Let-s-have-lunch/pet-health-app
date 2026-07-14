@@ -69,7 +69,7 @@ export default function PetCard({ pet, onPressEdit }: Props) {
                         value={pet.birthdate ? pet.birthdate.slice(0, 10) : "-"}
                     />
                     <InfoRow label={"성별"} value={pet.gender === "MALE" ? "수컷" : "암컷"} />
-                    <InfoRow label={"종"} value={pet.species === "dog" ? "강아지" : "고양이"} />
+                    <InfoRow label={"종"} value={pet.species || "-"} />
                     <InfoRow label={"품종"} value={pet.breed || "-"} />
                     <InfoRow label={"중성화"} value={pet.neutered ? "중성화" : "미완료"} />
                 </View>
