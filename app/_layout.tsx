@@ -5,6 +5,7 @@ import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import AuthProvider from "@/components/auth/AuthProvider";
 
 export default function RootLayout() {
     const { theme } = useThemeStore();
@@ -18,7 +19,7 @@ export default function RootLayout() {
         <SafeAreaProvider>
             <StatusBar style={theme === "dark" ? "light" : "dark"} />
             <SafeAreaView className={"flex-1 "}>
-                <Slot />
+                <AuthProvider><Slot /></AuthProvider>
             </SafeAreaView>
         </SafeAreaProvider>
     );
