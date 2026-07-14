@@ -51,11 +51,10 @@ function Button({
     return (
         <Pressable
             className={twMerge(
-                // 기본 스타일 (원형 버튼일 때는 패딩 조절을 위해 클래스 분기)
                 "flex-row items-center justify-center",
                 isCircle ? "rounded-full" : "rounded-[10px]",
 
-                // 크기 및 형태 관련 조건문
+
                 isCircle ? "w-[48px] h-[48px] p-0" : BUTTON_SIZE_STYLE[size],
                 showChevron && !isCircle ? "justify-between" : "justify-center",
 
@@ -63,8 +62,8 @@ function Button({
                 fullWidth && !isCircle ? "w-full" : "",
                 wrap && "flex-1",
 
-                // 화면 고정(Floating) 스타일 추가 (예: 우측 하단 고정)
-                isFloating && "absolute bottom-6 right-6 z-50 shadow-lg",
+
+                isFloating && "absolute bottom-4 right-4 z-50 shadow-lg",
 
                 className,
             )}

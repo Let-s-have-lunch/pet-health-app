@@ -17,12 +17,11 @@ import waterIntakeApi from "@/api/user/waterIntakeApi";
 import Title from "@/components/common/title/Title";
 import InputGroup from "@/components/common/input/InputGroup";
 import Button from "@/components/common/button/Button";
-import { isAxiosError } from "axios";
 
 interface WaterLogModalProps {
     visible: boolean;
     onClose: () => void;
-    petId: number;
+    petId: number | undefined;
     reload: () => Promise<void>;
     initialData: WaterIntakeLog | null;
 }
@@ -61,6 +60,7 @@ function WaterLogModal({ visible, onClose, petId, reload, initialData }: WaterLo
     }, [visible, reset, initialData]);
 
     const onSubmit = async (data: WaterLogInputType) => {
+        if (!petId) return;
         try {
             const { recordDate, memo, ...submitData } = data;
 

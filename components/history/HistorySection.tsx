@@ -6,7 +6,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { DashboardData, getHomeDashboard } from "@/api/user/dashboardApi";
 import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
-import { format, formatDate } from "date-fns";
+import { format } from "date-fns";
+import { usePetStore } from "@/stores/usePetStore";
+
 
 const getTodayString = () => {
     const today = new Date();
@@ -19,13 +21,17 @@ const getTodayString = () => {
 export default function HistorySection() {
     const [isLoading, setIsLoading] = useState(true);
     const todayDate = getTodayString();
+    const { selectedPet } = usePetStore();
+    const petId = selectedPet?.id;
 
     // 💡 초기값을 null로 깔끔하게 세팅
     const [data, setData] = useState<DashboardData | null>(null);
 
     const loadDashboard = useCallback(async () => {
-        // 💡 [TODO] 나중에 Zustand 완벽하게 세팅되면 아래 1 대신 selectedPet.id 로 변경!
-        const petId = 1;
+        if (!petId) {
+            setIsLoading(false);
+            return;
+        }
 
         try {
             // 💡 불필요한 호출을 지우고, 대시보드 데이터 딱 하나만 가져오기!
@@ -46,7 +52,7 @@ export default function HistorySection() {
         } finally {
             setIsLoading(false);
         }
-    }, [todayDate]); // 의존성 배열도 깔끔하게 유지
+    }, [petId, todayDate]); // 의존성 배열도 깔끔하게 유지
 
     useFocusEffect(
         useCallback(() => {

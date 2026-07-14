@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 interface TextAreaProps extends TextInputProps {
     hasError?: boolean;
     size?: StyleSizeType;
+    textInputClassName?: string;
 }
 
 function TextArea({
@@ -12,6 +13,7 @@ function TextArea({
     size = "medium",
     placeholderClassName,
     className,
+    textInputClassName,
     ...props
 }: TextAreaProps) {
     const getTextSizeClasses = () => {
@@ -31,11 +33,12 @@ function TextArea({
             textAlignVertical={"top"}
             className={twMerge(
                 ["w-full", "p-4", "min-h-32"],
-                ["bg-background-paper", "rounded-[10px]", "border-2", "text-text-secondary"],
+                ["bg-background-paper", "rounded-[10px]", "border-2", "text-text-default"],
                 getTextSizeClasses(),
                 hasError ? "border-error-main" : "border-primary-main focus:border-primary-point",
                 Platform.OS === "web" && "outline-none",
                 className,
+                textInputClassName,
             )}
             placeholderClassName={twMerge("text-text-secondary", placeholderClassName)}
             {...props}

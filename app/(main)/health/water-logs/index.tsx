@@ -11,11 +11,13 @@ import ContentContainer from "@/components/layouts/common/ContentContainer";
 import WaterLogModal from "@/app/(main)/health/water-logs/WaterLogModal";
 import waterIntakeApi from "@/api/user/waterIntakeApi";
 import WaterLogHistorySection from "@/app/(main)/health/water-logs/WaterLogHistorySection";
+import { usePetStore } from "@/stores/usePetStore";
 
 
 export default function WaterLogListPage() {
     const router = useRouter();
-    const petId = 1;
+    const { selectedPet } = usePetStore();
+    const petId = selectedPet?.id;
 
     const [historyData, setHistoryData] = useState<WaterIntakeLog[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -23,10 +25,11 @@ export default function WaterLogListPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedLogData, setSelectedLogData] = useState<WaterIntakeLog | null>(null);
 
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
+        if (!petId) return;
         try {
             setIsLoading(true);
-            const response = await waterIntakeApi.getByPetId(1);
+            const response = await waterIntakeApi.getByPetId(petId);
             setHistoryData(response);
         } catch (error) {
             console.log(error);
@@ -35,7 +38,7 @@ export default function WaterLogListPage() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [petId])
 
     const handleCreatePress = () => {
         setSelectedLogData(null); // 신규 작성이므로 비워줍니다.
@@ -80,20 +83,13 @@ export default function WaterLogListPage() {
     useFocusEffect(
         useCallback(() => {
             void fetchData();
-        }, []),
+        }, [fetchData]),
     );
-
-    // 하단 History 리스트 렌더링용 정렬
-    const sortedHistory = [...historyData].sort((a, b) => {
-        const dateCompare = b.recordDate.localeCompare(a.recordDate);
-        if (dateCompare !== 0) return dateCompare;
-        return b.id - a.id;
-    });
 
     return (
         <View className={twMerge("flex-1 bg-background-default")}>
             <Title
-                title={"초코의 음수량"}
+                title={selectedPet ? `${selectedPet.name}의 음수량` : "음수량 기록"}
                 showBackButton={true}
                 onBackPress={() => router.push("/")}
                 className={"bg-background-paper"}
