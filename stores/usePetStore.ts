@@ -9,6 +9,8 @@ type PetState = {
     setPets: (pets: Pet[]) => void;
     setSelectedPet: (pet: Pet | null) => void;
     setIsAddCardSelected: (isSelected: boolean) => void;
+
+    reset: () => void;
 };
 
 export const usePetStore = create<PetState>(set => ({
@@ -19,4 +21,10 @@ export const usePetStore = create<PetState>(set => ({
     setPets: pets => set({ pets }),
     setSelectedPet: pet => set({ selectedPet: pet }),
     setIsAddCardSelected: isSelected => set({ isAddCardSelected: isSelected }),
+
+    reset: () =>
+        set({
+            pets: [],
+            selectedPet: null,
+        }),
 }));
