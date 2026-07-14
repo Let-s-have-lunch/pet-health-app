@@ -31,7 +31,7 @@ export const useAuthStore = create<AuthState>()(
             login: (user, token) => set({ isLoggedIn: true, token, user }),
             logout: () => {
                 set({ isLoggedIn: false, token: null, user: null });
-                usePetStore.getState().clearPets();
+                usePetStore.getState().reset();
             },
         }),
         {
