@@ -12,6 +12,16 @@ const getDiaryList = async (date: string): Promise<Diary[]> => {
     return response.data.data;
 };
 
+const getDiaryListByRange = async (startDate: string, endDate: string): Promise<Diary[]> => {
+    const response = await axiosInstance.get(`/diary/range`, {
+        params: {
+            startDate,
+            endDate,
+        },
+    });
+    return response.data.data;
+};
+
 const createDiary = async (data: CreateDiaryInputType): Promise<Diary> => {
     const response = await axiosInstance.post("/diary/create", data);
     return response.data.data;
@@ -28,6 +38,7 @@ const deleteDiary = async (id: number): Promise<void> => {
 
 export default {
     getDiaryList,
+    getDiaryListByRange,
     createDiary,
     updateDiary,
     deleteDiary,
