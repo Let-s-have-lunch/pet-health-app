@@ -1,4 +1,4 @@
-import { Pressable, View } from "react-native";
+import { Image, Pressable, View } from "react-native";
 import { useRouter } from "expo-router";
 import { twMerge } from "tailwind-merge";
 import { Ionicons } from "@expo/vector-icons";
@@ -6,12 +6,13 @@ import TextComponent from "@/components/common/text/TextComponent";
 import { useThemeStore } from "@/stores/theme/useThemeStore";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { Role } from "@/types/user";
+import { usePetStore } from "@/stores/usePetStore";
 
 function MainHeaderMobile() {
     const router = useRouter();
     const { isLoggedIn, user } = useAuthStore();
-
     const { theme, onChangeTheme } = useThemeStore();
+    const selectedPet = usePetStore(state => state.selectedPet);
 
     return (
         <View
@@ -26,20 +27,23 @@ function MainHeaderMobile() {
                         ["flex-row", "h-20", "justify-between", "items-center"],
                         ["flex-1", "px-4", "h-full"],
                     )}>
-                    <Pressable
-                        className={twMerge([
-                            "flex-row",
-                            "items-center",
-                            "gap-1",
-                            "h-full",
-                        ])}>
-                        <View
-                            className={twMerge(
-                                ["flex-row", "h-12", "w-12", "items-center", "justify-center"],
-                                ["rounded-full", "bg-success-main"],
-                            )}></View>
+                    <Pressable className={twMerge(["flex-row", "items-center", "gap-1", "h-full"])}>
+                        {selectedPet?.profileImage ? (
+                            <Image
+                                source={{ uri: selectedPet.profileImage }}
+                                className={twMerge(["h-12", "w-12"], ["rounded-full"])}
+                            />
+                        ) : (
+                            <View
+                                className={twMerge(
+                                    ["h-12", "w-12"],
+                                    ["items-center", "justify-center"],
+                                    ["rounded-full", "bg-success-main"],
+                                )}
+                            />
+                        )}
                         <TextComponent className={twMerge(["text-xl", "font-bold"])}>
-                            초코
+                            {selectedPet?.name ?? "반려동물 등록"}
                         </TextComponent>
                     </Pressable>
                 </View>

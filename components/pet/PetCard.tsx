@@ -46,16 +46,16 @@ export default function PetCard({ pet, onPressEdit }: Props) {
                 {pet.profileImage ? (
                     <Image
                         source={{
-                            uri: pet.profileImage,
+                            uri: `htt://localhost:8000${pet.profileImage}`,
                         }}
-                        className={twMerge(["h-40", "w-40"], ["rounded-[22px]"], ["bg-[#F6C5BE]"])}
+                        className={twMerge(["h-40", "w-40"], ["rounded-[28px]"], ["bg-[#F6C5BE]"])}
                     />
                 ) : (
                     <View
                         className={twMerge(
                             ["h-32", "w-32"],
                             ["items-center", "justify-center"],
-                            ["rounded-[22px]"],
+                            ["rounded-[28px]"],
                             ["bg-[#F6C5BE]"],
                         )}>
                         <Ionicons name={"paw"} size={48} color={"white"} />
