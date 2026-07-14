@@ -14,12 +14,8 @@ export default function VetLogCreatePage() {
     const [hospitalName, setHospitalName] = useState("");
     const [visitPurpose, setVisitPurpose] = useState("");
     const [visitDate, setVisitDate] = useState(new Date().toISOString().split("T")[0]);
-
-    const [diagnosis, setDiagnosis] = useState("");
-    const [treatment, setTreatment] = useState("");
-    const [cost, setCost] = useState("");
+    const [cost, setCost] = useState(""); // 💡 진료 비용 상태 복구
     const [memo, setMemo] = useState("");
-
     const [image, setImage] = useState<string | null>(null);
 
     useEffect(() => {
@@ -53,29 +49,28 @@ export default function VetLogCreatePage() {
             return;
         }
 
+        // 필수 값 검증
+        if (!hospitalName.trim() || !visitPurpose.trim() || !visitDate.trim()) {
+            Alert.alert("알림", "필수 항목(* 표시)을 모두 입력해주세요.");
+            return;
+        }
+
         try {
-            // 💡 이미지와 텍스트를 담을 단일 FormData 생성
             const formData = new FormData();
 
-            // 1. 텍스트 데이터 담기 (FormData는 무조건 문자열로 변환해서 보내야 함)
             formData.append("petId", String(petId));
             formData.append("visitDate", visitDate);
             formData.append("hospitalName", hospitalName);
             formData.append("visitPurpose", visitPurpose);
 
-            // 빈 값이 아닐 때만 담기
-            if (diagnosis) formData.append("diagnosis", diagnosis);
-            if (treatment) formData.append("treatment", treatment);
-            if (cost) formData.append("cost", String(cost));
+            // 💡 진료 비용 값 추가 (입력값이 있으면 숫자로 변환해서 전송, 없으면 "0" 또는 생략 가능)
+            if (cost) formData.append("cost", String(Number(cost) || 0));
             if (memo) formData.append("memo", memo);
 
             if (image) {
-                console.log("이미지 데이터가 있어서 append 합니다:", image);
-
                 if (Platform.OS === "web") {
                     const response = await fetch(image);
                     const blob = await response.blob();
-
                     const file = new File([blob], "receipt.jpg", { type: "image/jpeg" });
                     formData.append("image", file);
                 } else {
@@ -88,7 +83,6 @@ export default function VetLogCreatePage() {
                 }
             }
 
-            // 3. 백엔드로 딱 한 번만 전송!
             await vetLogApi.create(formData);
 
             Alert.alert("성공", "기록이 등록되었습니다.");
@@ -110,13 +104,11 @@ export default function VetLogCreatePage() {
                     {selectedPet?.name} 병원 기록 등록
                 </TextComponent>
 
-                {/* 이미지 */}
                 <TextComponent className="text-sm mb-1">반려동물 사진</TextComponent>
 
                 {image ? (
                     <View className="relative mb-3">
                         <Image source={{ uri: image }} className="w-full h-48 rounded-lg" />
-
                         <Pressable
                             className="absolute top-2 right-2 bg-black/50 p-1 rounded-full"
                             onPress={() => setImage(null)}>
@@ -128,71 +120,62 @@ export default function VetLogCreatePage() {
                         className="border border-dashed border-divider p-8 rounded-lg mb-3 items-center"
                         onPress={pickImage}>
                         <Ionicons name="camera-outline" size={32} color="#7F8C8D" />
-
                         <TextComponent className="text-text-secondary mt-2">
                             사진 선택
                         </TextComponent>
                     </Pressable>
                 )}
 
-                <TextComponent className="text-sm mb-1">병원 이름</TextComponent>
-
+                <TextComponent className="text-sm mb-1">
+                    병원 이름 <TextComponent className="text-error-main">*</TextComponent>
+                </TextComponent>
                 <TextInput
                     className="border border-divider p-3 rounded-lg mb-3"
                     value={hospitalName}
                     onChangeText={setHospitalName}
+                    placeholder="예) 튼튼 동물병원"
                 />
 
-                <TextComponent className="text-sm mb-1">방문 목적</TextComponent>
-
+                <TextComponent className="text-sm mb-1">
+                    방문 목적 <TextComponent className="text-error-main">*</TextComponent>
+                </TextComponent>
                 <TextInput
                     className="border border-divider p-3 rounded-lg mb-3"
                     value={visitPurpose}
                     onChangeText={setVisitPurpose}
+                    placeholder="예) 심장사상충 예방접종"
                 />
 
-                <TextComponent className="text-sm mb-1">방문 날짜</TextComponent>
-
+                <TextComponent className="text-sm mb-1">
+                    방문 날짜 <TextComponent className="text-error-main">*</TextComponent>
+                </TextComponent>
                 <TextInput
                     className="border border-divider p-3 rounded-lg mb-3"
                     value={visitDate}
                     onChangeText={setVisitDate}
                 />
 
-                <TextComponent className="text-sm mb-1">진단 내용</TextComponent>
-
-                <TextInput
-                    className="border border-divider p-3 rounded-lg mb-3"
-                    value={diagnosis}
-                    onChangeText={setDiagnosis}
-                />
-
-                <TextComponent className="text-sm mb-1">치료 내용</TextComponent>
-
-                <TextInput
-                    className="border border-divider p-3 rounded-lg mb-3"
-                    value={treatment}
-                    onChangeText={setTreatment}
-                />
-
+                {/* 💡 진료 비용 입력창 복구 (선택 입력) */}
                 <TextComponent className="text-sm mb-1">진료 비용</TextComponent>
-
                 <TextInput
                     keyboardType="numeric"
                     className="border border-divider p-3 rounded-lg mb-3"
                     value={cost}
                     onChangeText={setCost}
+                    placeholder="예) 15000 (숫자만 입력)"
                 />
 
                 <TextComponent className="text-sm mb-1">메모</TextComponent>
-
                 <TextInput
                     multiline
-                    className="border border-divider p-3 rounded-lg mb-6"
+                    className="border border-divider p-3 rounded-lg mb-6 min-h-[80px]"
                     value={memo}
                     onChangeText={setMemo}
+                    placeholder="의사 선생님의 조언이나 특이사항을 적어주세요."
+                    textAlignVertical="top"
                 />
 
+                {/* 하단 버튼 */}
                 <View className="flex-row gap-3">
                     <Pressable
                         className="flex-1 p-3 border border-divider rounded-lg"

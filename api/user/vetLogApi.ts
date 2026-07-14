@@ -1,9 +1,9 @@
 import axiosInstance from "../axiosInstance";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import axios from "axios";
+import { VetRecord } from "@/types/vetRecord";
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
-
 
 export const vetLogApi = {
     // 1. 병원 기록 생성 (POST /vet-records)
@@ -32,24 +32,15 @@ export const vetLogApi = {
     },
 
     // 3. 특정 병원 기록 상세 조회 (GET /vet-records/:id)
-    getById: async (id: number) => {
-        return await axiosInstance.get(`/vet-records/${id}`);
+    getById: async (id: number): Promise<VetRecord> => {
+        const response = await axiosInstance.get(`/vet-records/${id}`, {
+            data: { id: id },
+        });
+        return response.data.data;
     },
 
     // 4. 병원 기록 수정 (PUT /vet-records/:id)
-    update: async (
-        id: number,
-        data: {
-            petId?: number;
-            hospitalName?: string;
-            visitPurpose?: string;
-            visitDate?: string;
-            diagnosis?: string;
-            treatment?: string;
-            cost?: number;
-            memo?: string;
-        },
-    ) => {
+    update: async (id: number, data: FormData) => {
         return await axiosInstance.put(`/vet-records/${id}`, data);
     },
 

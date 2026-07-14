@@ -2,10 +2,12 @@ import { PropsWithChildren, useEffect, useState } from "react";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import * as SplashScreen from "expo-splash-screen";
 import api from "@/api/axiosInstance";
+import { useRouter } from "expo-router";
 
 void SplashScreen.preventAutoHideAsync();
 
 export default function AuthProvider({ children }: PropsWithChildren) {
+    const router = useRouter();
     const { isInitialized, isLoggedIn, token, logout }  = useAuthStore();
     const [isAuthChecked, setIsAuthChecked] = useState(false);
 
@@ -27,6 +29,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
                 console.error("토큰 검증 실패:", error);
 
                 logout();
+                router.replace("/auth/login");
             } finally {
                 setIsAuthChecked(true);
             }

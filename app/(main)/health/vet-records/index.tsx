@@ -8,7 +8,6 @@ import { VetLogState, VetRecord } from "../../../../types/vetRecord";
 import Title from "../../../../components/common/title/Title";
 import { usePetStore } from "@/stores/usePetStore";
 
-
 export default function VetLogPage() {
     const selectedPet = usePetStore(state => state.selectedPet);
     const petId = selectedPet?.id;
@@ -58,6 +57,7 @@ export default function VetLogPage() {
         }, [loadData]),
     );
 
+    // 💡 삭제 기능 복구
     const handleDelete = async (id: number) => {
         const processDelete = async () => {
             try {
@@ -126,38 +126,17 @@ export default function VetLogPage() {
                 }}>
                 {/* 1. 상단 카드 */}
                 {data.upcoming ? (
-                    <View className="bg-background-paper rounded-[20px] overflow-hidden mb-8 shadow-sm">
-                        <View className="bg-primary-main px-5 py-4 flex-row justify-between items-center">
+                    <Pressable
+                        onPress={() =>
+                            router.push(`/(main)/health/vet-records/${data.upcoming!.id}`)
+                        }
+                        className="bg-background-paper rounded-[20px] overflow-hidden mb-8 shadow-sm">
+                        <View className="bg-[#F2C6C2] px-5 py-4">
                             <TextComponent className="text-[16px] font-bold text-text-default">
                                 {formatLongDate(data.upcoming.visitDate)}
                             </TextComponent>
-                            <View className="flex-row items-center gap-3">
-                                <Pressable
-                                    onPress={() =>
-                                        router.push({
-                                            pathname: "/(main)/health/vet-records/create",
-                                            params: {
-                                                id: data.upcoming!.id,
-                                                hospitalName: data.upcoming!.hospitalName,
-                                                visitPurpose: data.upcoming!.visitPurpose,
-                                                visitDate: data.upcoming!.visitDate,
-                                                diagnosis: data.upcoming!.diagnosis,
-                                                treatment: data.upcoming!.treatment,
-                                                cost: data.upcoming!.cost,
-                                                memo: data.upcoming!.memo,
-                                                receiptImage: data.upcoming!.receiptImage,
-                                            },
-                                        })
-                                    }>
-                                    <Ionicons name="pencil" size={16} color="#4A5568" />
-                                </Pressable>
-                                <Pressable
-                                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                                    onPress={() => handleDelete(data.upcoming!.id)}>
-                                    <Ionicons name="trash-outline" size={16} color="#4A5568" />
-                                </Pressable>
-                            </View>
                         </View>
+
                         <View className="p-5">
                             <Image
                                 source={{ uri: getImageUrl(data.upcoming.receiptImage) }}
@@ -172,7 +151,7 @@ export default function VetLogPage() {
                                     `${data.upcoming.hospitalName}에 다녀왔습니다.`}
                             </TextComponent>
                         </View>
-                    </View>
+                    </Pressable>
                 ) : (
                     <Pressable
                         onPress={() => router.push("/(main)/health/vet-records/create")}
@@ -207,23 +186,24 @@ export default function VetLogPage() {
                                 numberOfLines={1}>
                                 {item.visitPurpose || item.hospitalName}
                             </TextComponent>
+
+                            {/* 💡 수정/삭제 아이콘 영역 복구 */}
                             <View className="flex-row items-center ml-2 gap-2">
                                 <TextComponent className="text-[12px] text-text-secondary mr-2">
                                     {formatShortDate(item.visitDate)}
                                 </TextComponent>
+
                                 <Pressable
                                     className="p-1"
                                     onPress={() =>
                                         router.push({
-                                            pathname: "/(main)/health/vet-records/[id]",
+                                            pathname: "/(main)/health/vet-records/[id]/update",
                                             params: {
                                                 id: item.id,
                                                 hospitalName: item.hospitalName,
                                                 visitPurpose: item.visitPurpose,
                                                 visitDate: item.visitDate,
-                                                diagnosis: item.diagnosis,
-                                                treatment: item.treatment,
-                                                cost: item.cost,
+                                                cost: item.cost, // 비용 항목 포함
                                                 memo: item.memo,
                                                 receiptImage: item.receiptImage,
                                             },
@@ -231,6 +211,7 @@ export default function VetLogPage() {
                                     }>
                                     <Ionicons name="pencil" size={16} color="#888" />
                                 </Pressable>
+
                                 <Pressable
                                     className="p-1"
                                     hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
