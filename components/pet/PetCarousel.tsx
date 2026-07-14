@@ -11,6 +11,7 @@ import PetCard from "@/components/pet/PetCard";
 import AddPetCard from "@/components/pet/AddPetCard";
 import { twMerge } from "tailwind-merge";
 import { router } from "expo-router";
+import { usePetStore } from "@/stores/usePetStore";
 
 type Props = {
     pets: Pet[];
@@ -41,6 +42,7 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
     const flatListRef = useRef<FlatList<CarouselItem>>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [containerWidth, setContainerWidth] = useState(0);
+    const setSelectedPet = usePetStore(state => state.setSelectedPet);
 
     const data = useMemo(() => {
         return [
@@ -63,6 +65,14 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
     const handleMomentumEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
         const index = Math.round(e.nativeEvent.contentOffset.x / CARD_WIDTH);
         setCurrentIndex(index);
+        const item = data [index];
+        console.log("현재 index:", index);
+        console.log("현재 item:", item);
+
+        if (item?.type === "pet") {
+            console.log("선택된 펫:", item.pet.name, item.pet.id);
+            setSelectedPet(item.pet);
+        }
     };
 
     useEffect(() => {
@@ -100,7 +110,10 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                             marginHorizontal: HORIZONTAL_PADDING,
                         }}>
                         {item.type === "pet" ? (
-                            <PetCard pet={item.pet} onPressEdit={() => handleEditPet(item.pet.id)}/>
+                            <PetCard
+                                pet={item.pet}
+                                onPressEdit={() => handleEditPet(item.pet.id)}
+                            />
                         ) : (
                             <AddPetCard onPress={onPressAdd} />
                         )}

@@ -1,5 +1,5 @@
 import { ActivityIndicator, Alert, Platform, Pressable, ScrollView, View } from "react-native";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { router, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,7 +8,7 @@ import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import { format } from "date-fns";
 import { usePetStore } from "@/stores/usePetStore";
-
+import { Pet } from "@/types/pet";
 
 const getTodayString = () => {
     const today = new Date();
@@ -54,6 +54,9 @@ export default function HistorySection() {
         }
     }, [petId, todayDate]); // 의존성 배열도 깔끔하게 유지
 
+    useEffect(() => {
+        console.log("selectedPet:", selectedPet?.name, selectedPet?.id);
+    }, [selectedPet]);
     useFocusEffect(
         useCallback(() => {
             loadDashboard().then(() => {});

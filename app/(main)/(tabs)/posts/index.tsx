@@ -49,55 +49,56 @@ function CommunityPostListPage() {
     const totalPage = Math.ceil(total / pageSize) || 1;
 
     return (
-        <View className={twMerge(["flex-1", "w-full", "m-0"])}>
-            <TextComponent className={twMerge(["font-medium", "text-left", "pb-4", "text-base"])}>
-                반려동물의 정보를 같이 공유하는 커뮤니티 입니다.
-            </TextComponent>
-            <View className={twMerge(["overflow-hidden", "flex-1"])}>
-                <View
-                    className={twMerge(
-                        ["hidden", "md:flex"],
-                        ["flex-row", "items-center", "px-4", "py-3"],
-                        ["border-b", "border-divider", "bg-[#FFFFFF]/30", "rounded-t-xl"],
-                    )}>
-                    <TextComponent
+        <View className={twMerge(["flex-1", "w-full", "p-0"])}>
+            <ScrollView className={"flex-1"}>
+                <TextComponent
+                    className={twMerge(["font-medium", "text-left", "pb-4", "text-base"])}>
+                    반려동물의 정보를 같이 공유하는 커뮤니티 입니다.
+                </TextComponent>
+                <View className={twMerge(["overflow-hidden", "flex-1"])}>
+                    <View
                         className={twMerge(
-                            ["w-16"],
-                            ["text-text-secondary", "font-bold", "text-center"],
+                            ["hidden", "md:flex"],
+                            ["flex-row", "items-center", "px-4", "py-3"],
+                            ["border-b", "border-divider", "bg-[#FFFFFF]/30", "rounded-t-xl"],
                         )}>
-                        번호
-                    </TextComponent>
-                    <TextComponent
-                        className={twMerge(
-                            ["flex-1", "px-2"],
-                            ["text-text-secondary", "font-bold"],
-                        )}>
-                        제목
-                    </TextComponent>
-                    <TextComponent
-                        className={twMerge(
-                            ["w-28"],
-                            ["text-text-secondary", "font-bold", "text-center"],
-                        )}>
-                        작성자
-                    </TextComponent>
-                    <TextComponent
-                        className={twMerge(
-                            ["w-20"],
-                            ["text-text-secondary", "font-bold", "text-center"],
-                        )}>
-                        조회수
-                    </TextComponent>
-                    <TextComponent
-                        className={twMerge(
-                            ["w-24"],
-                            ["text-text-secondary", "font-bold", "text-center"],
-                        )}>
-                        작성일
-                    </TextComponent>
-                </View>
-                {/* 내용 */}
-                <ScrollView className={"flex-1"}>
+                        <TextComponent
+                            className={twMerge(
+                                ["w-16"],
+                                ["text-text-secondary", "font-bold", "text-center"],
+                            )}>
+                            번호
+                        </TextComponent>
+                        <TextComponent
+                            className={twMerge(
+                                ["flex-1", "px-2"],
+                                ["text-text-secondary", "font-bold"],
+                            )}>
+                            제목
+                        </TextComponent>
+                        <TextComponent
+                            className={twMerge(
+                                ["w-28"],
+                                ["text-text-secondary", "font-bold", "text-center"],
+                            )}>
+                            작성자
+                        </TextComponent>
+                        <TextComponent
+                            className={twMerge(
+                                ["w-20"],
+                                ["text-text-secondary", "font-bold", "text-center"],
+                            )}>
+                            조회수
+                        </TextComponent>
+                        <TextComponent
+                            className={twMerge(
+                                ["w-24"],
+                                ["text-text-secondary", "font-bold", "text-center"],
+                            )}>
+                            작성일
+                        </TextComponent>
+                    </View>
+                    {/* 내용 */}
                     <View>
                         {isLoading && (
                             <View className={"py-20"}>
@@ -218,15 +219,15 @@ function CommunityPostListPage() {
                             );
                         })}
                     </View>
-                </ScrollView>
-            </View>
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPage}
-                onPageChange={newPage =>
-                    router.setParams({ page: String(newPage), size: String(pageSize) })
-                }
-            />
+                </View>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPage}
+                    onPageChange={newPage =>
+                        router.setParams({ page: String(newPage), size: String(pageSize) })
+                    }
+                />
+            </ScrollView>
             <Button
                 isFloating
                 isCircle

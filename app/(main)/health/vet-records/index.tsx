@@ -7,7 +7,7 @@ import { vetLogApi } from "../../../../api/user/vetLogApi";
 import { VetLogState, VetRecord } from "../../../../types/vetRecord";
 import Title from "../../../../components/common/title/Title";
 import { usePetStore } from "@/stores/usePetStore";
-import { waterIntakeApi } from "@/api/user/waterIntakeApi";
+
 
 export default function VetLogPage() {
     const selectedPet = usePetStore(state => state.selectedPet);
