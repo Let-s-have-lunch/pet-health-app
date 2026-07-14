@@ -10,7 +10,7 @@ import {
     VictoryLine,
     VictoryScatter,
 } from "victory-native";
-import { WaterIntakeLog } from "@/types/WaterIntakeLog";
+import { WaterIntakeLog } from "@/types/waterIntakeLog";
 
 interface WaterLogChartSectionProps {
     historyData: WaterIntakeLog[];
@@ -30,19 +30,32 @@ export default function WaterLogChartSection({ historyData }: WaterLogChartSecti
             };
         }
 
-        // 최신 날짜순 정렬 후 최근 7개만 자르고 다시 과거->최신순으로 뒤집기 (차트 렌더링용)
-        const sorted = [...historyData]
-            .sort((a, b) => b.recordDate.localeCompare(a.recordDate) || b.id - a.id)
-            .slice(0, 7)
-            .reverse();
+        // 1. 날짜별로 데이터 합산하기 (Grouping & Sum)
+        const groupedByDate: Record<string, number> = {};
 
-        const data = sorted.map(item => {
-            const parts = item.recordDate.split(/[-/T]/);
+        historyData.forEach(log => {
+            // "2026-07-13T14:30:00Z" 같은 형식이 올 수 있으므로 날짜 부분만 추출
+            const dateStr = log.recordDate.split("T")[0];
+
+            if (groupedByDate[dateStr]) {
+                groupedByDate[dateStr] += log.amount; // 이미 있으면 누적합!
+            } else {
+                groupedByDate[dateStr] = log.amount; // 없으면 초기값 세팅!
+            }
+        });
+
+        // 2. 날짜 최신순 정렬 후 최근 7일 자르고 차트 방향(과거->최신)으로 뒤집기
+        const sortedDates = Object.keys(groupedByDate)
+            .sort((a, b) => b.localeCompare(a)) // 최신 날짜가 맨 앞으로
+            .slice(0, 7) // 최근 7일(7개)만 추출
+            .reverse(); // 과거가 왼쪽, 최신이 오른쪽으로 가도록 뒤집기
+
+        // 3. 차트 라이브러리 포맷({x, y})에 맞게 매핑
+        const data = sortedDates.map(date => {
+            const parts = date.split("-");
             const label =
-                parts.length >= 2
-                    ? `${parseInt(parts[1], 10)}/${parseInt(parts[2], 10)}`
-                    : item.recordDate;
-            return { x: label, y: item.amount || 0 };
+                parts.length >= 3 ? `${parseInt(parts[1], 10)}/${parseInt(parts[2], 10)}` : date;
+            return { x: label, y: groupedByDate[date] }; // 합산된 y값 적용
         });
 
         const dateText =
@@ -56,6 +69,7 @@ export default function WaterLogChartSection({ historyData }: WaterLogChartSecti
         return { chartData: data, yMax: max, yTickValues: ticks, dateRangeText: dateText };
     }, [historyData]);
 
+    // ... 아래 렌더링 로직(return 부분)은 기존과 완전히 동일합니다!
     return (
         <View className={twMerge("mb-6")}>
             <View className={twMerge("w-full mb-3")}>

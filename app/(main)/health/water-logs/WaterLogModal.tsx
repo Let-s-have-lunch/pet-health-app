@@ -1,4 +1,4 @@
-import { WaterIntakeLog } from "@/types/WaterIntakeLog";
+import { WaterIntakeLog } from "@/types/waterIntakeLog";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { WaterLogInputType, waterLogSchema } from "@/schemas/waterLog/waterLogSchema";
@@ -17,12 +17,11 @@ import waterIntakeApi from "@/api/user/waterIntakeApi";
 import Title from "@/components/common/title/Title";
 import InputGroup from "@/components/common/input/InputGroup";
 import Button from "@/components/common/button/Button";
-import { isAxiosError } from "axios";
 
 interface WaterLogModalProps {
     visible: boolean;
     onClose: () => void;
-    petId: number;
+    petId: number | undefined;
     reload: () => Promise<void>;
     initialData: WaterIntakeLog | null;
 }
@@ -61,6 +60,7 @@ function WaterLogModal({ visible, onClose, petId, reload, initialData }: WaterLo
     }, [visible, reset, initialData]);
 
     const onSubmit = async (data: WaterLogInputType) => {
+        if (!petId) return;
         try {
             const { recordDate, memo, ...submitData } = data;
 
@@ -88,14 +88,6 @@ function WaterLogModal({ visible, onClose, petId, reload, initialData }: WaterLo
         } catch (error) {
             console.log(error);
             const errorActionText = initialData ? "수정하는" : "등록하는";
-
-            if (isAxiosError(error)) {
-                if (error?.response?.status === 409) {
-                    const msg = "이미 해당 날짜에 작성된 음수량 기록이 있습니다.";
-                    Platform.OS === "web" ? alert(msg) : Alert.alert("등록 실패", msg);
-                    return;
-                }
-            }
 
             if (Platform.OS === "web") {
                 alert(`음수량 기록을 ${errorActionText} 중 오류가 발생했습니다.`);

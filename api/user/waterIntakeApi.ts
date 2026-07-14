@@ -1,6 +1,6 @@
 import axiosInstance from "@/api/axiosInstance";
 import { WaterLogInputType } from "@/schemas/waterLog/waterLogSchema";
-import { WaterIntakeLog } from "@/types/WaterIntakeLog";
+import { WaterIntakeLog } from "@/types/waterIntakeLog";
 
 const getByPetId = async (petId: number): Promise<WaterIntakeLog[]> => {
     const response = await axiosInstance.get(`/water-logs/pet/${petId}`)

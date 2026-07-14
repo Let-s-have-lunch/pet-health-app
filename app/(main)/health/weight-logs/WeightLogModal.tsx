@@ -15,8 +15,9 @@ import Button from "@/components/common/button/Button";
 import InputGroup from "@/components/common/input/InputGroup";
 import Title from "@/components/common/title/Title";
 import { weightLogApi } from "@/api/user/weightLogApi";
-import { WeightLog } from "@/types/WeightLog";
+import { WeightLog } from "@/types/weightLog";
 import { WeightLogInputType, weightLogSchema } from "@/schemas/weightLog/weightLogSchema";
+import { isAxiosError } from "axios";
 
 interface WeightLogModalProps {
     visible: boolean;
@@ -88,6 +89,16 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
             console.log(error);
             const errorActionText = initialData ? "수정하는" : "등록하는";
 
+            // 💡 몸무게는 1일 1기록이므로 409 에러 처리를 반드시 해야 합니다!
+            if (isAxiosError(error)) {
+                if (error?.response?.status === 409) {
+                    const msg =
+                        "이미 해당 날짜에 기록된 몸무게가 있습니다. 리스트에서 기존 기록을 수정해 주세요.";
+                    Platform.OS === "web" ? alert(msg) : Alert.alert("등록 실패", msg);
+                    return; // 에러 띄우고 종료
+                }
+            }
+
             if (Platform.OS === "web") {
                 alert(`몸무게 기록을 ${errorActionText} 중 오류가 발생했습니다.`);
             } else {
@@ -123,7 +134,10 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
                                         selectTextOnFocus={true}
                                         maxLength={8}
                                         onBlur={onBlur}
-                                        onChangeText={onChange}
+                                        onChangeText={text => {
+                                            const filteredText = text.replace(/-/g, "");
+                                            onChange(filteredText);
+                                        }}
                                         value={value}
                                         errorMessage={errors.recordDate?.message}
                                     />
@@ -138,16 +152,13 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
                                         id={"weight"}
                                         label="몸무게 (kg)"
                                         onBlur={onBlur}
-                                        onChangeText={onChange}
+                                        onChangeText={text => {
+                                            const sanitized = text.replace(/[^0-9.]/g, ""); // 숫자와 . 이외 전부 제거
+                                            onChange(sanitized);
+                                        }}
                                         errorMessage={errors.weight?.message}
-                                        keyboardType="numeric"
-
-                                        // 💡 터치 시 한 번에 전체 선택! (여러 번 지울 필요 없음)
-                                        selectTextOnFocus={true}
-
-                                        // 💡 예시를 보여주어 사용자에게 입력 가이드 제공
+                                        keyboardType="decimal-pad" // 💡 numeric 보다는 소수점이 포함된 decimal-pad가 더 좋습니다.
                                         placeholder="예: 4.5"
-
                                         value={value?.toString() ?? ""}
                                     />
                                 )}

@@ -1,4 +1,4 @@
-import { WaterIntakeLog } from "@/types/WaterIntakeLog";
+import { WaterIntakeLog } from "@/types/waterIntakeLog";
 import { View } from "react-native";
 import { twMerge } from "tailwind-merge";
 import TextComponent from "@/components/common/text/TextComponent";

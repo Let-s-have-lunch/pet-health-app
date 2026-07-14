@@ -10,6 +10,7 @@ interface TextareaGroupProps extends TextInputProps {
     errorMessage?: string;
     wrap?: boolean;
     size?: StyleSizeType;
+    textInputClassName: string;
 }
 
 function TextareaGroup({
@@ -17,13 +18,14 @@ function TextareaGroup({
     errorMessage,
     wrap,
     className,
+    textInputClassName,
     size = "medium",
     ...props
 }: TextareaGroupProps) {
     return (
         <View className={twMerge("w-full mb-4", wrap && "flex-1", className)}>
             {label && <Label size={size}>{label}</Label>}
-            <Textarea hasError={!!errorMessage} size={size} {...props} />
+            <Textarea hasError={!!errorMessage} size={size} textInputClassName={textInputClassName} {...props} />
             {errorMessage && <ErrorMessage size={size}>{errorMessage}</ErrorMessage>}
         </View>
     );

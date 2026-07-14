@@ -11,6 +11,7 @@ import { twMerge } from "tailwind-merge";
 import Pagination from "@/components/common/pagination/Pagination";
 import Badge from "@/components/common/badge/Badge";
 import inquiryApi from "@/api/user/inquiryApi";
+import { Feather } from "@expo/vector-icons";
 
 function MyInquiryListPage() {
     const router = useRouter();
@@ -64,13 +65,6 @@ function MyInquiryListPage() {
                 showBackButton={true}
                 onBackPress={() => router.push("/my")}
                 className={"bg-background-paper"}>
-                <Button
-                    size={"small"}
-                    variant={"contained"}
-                    onPress={() => router.push("/inquiry/create")}
-                    className={"bg-primary-main"}>
-                    + 문의글 등록
-                </Button>
             </Title>
 
             <ContentContainer className={"overflow-hidden flex-1"}>
@@ -81,7 +75,7 @@ function MyInquiryListPage() {
                         [
                             "border-divider",
                             "border-b",
-                            "bg-background-default",
+                            "bg-[#ffffff]/30",
                             "border-divider",
                             "rounded-t-xl",
                         ],
@@ -168,11 +162,7 @@ function MyInquiryListPage() {
                                 </TextComponent>
                             </Pressable>
                             <View
-                                className={twMerge(
-                                    "flex-row",
-                                    "items-center",
-                                    "justify-between",
-                                )}>
+                                className={twMerge("flex-row", "items-center", "justify-between")}>
                                 <TextComponent
                                     className={twMerge("w-24", [
                                         "text-sm",
@@ -195,8 +185,14 @@ function MyInquiryListPage() {
                         </View>
                     ))}
                 </ScrollView>
+                <Button
+                    isFloating
+                    isCircle
+                    color={"success"}
+                    onPress={() => router.push("/inquiry/create")}>
+                    <Feather name={"plus"} size={22} />
+                </Button>
             </ContentContainer>
-
             <Pagination
                 currentPage={currentPage}
                 totalPages={totalPage}

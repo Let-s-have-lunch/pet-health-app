@@ -10,7 +10,7 @@ import {
     VictoryLine,
     VictoryScatter,
 } from "victory-native";
-import { WeightLog } from "@/types/WeightLog";
+import { WeightLog } from "@/types/weightLog";
 
 interface Props {
     history: WeightLog[];
@@ -19,35 +19,27 @@ interface Props {
 function WeightLogChartSection({ history }: Props) {
     const [chartWidth, setChartWidth] = useState(300);
 
-    const { chartData, yMax, yMin, dateRangeText, latestWeight } = useMemo(() => {
+    const { chartData, yMax, yMin, dateRangeText } = useMemo(() => {
         if (!history || history.length === 0) {
             return { chartData: [], yMax: 10, yMin: 0, dateRangeText: "DATE -", latestWeight: 0 };
         }
 
-        // 💡 1. 중복 날짜 제거 (같은 날짜면 최신 기록만 남기기)
-        // history 배열이 최신순(내림차순)으로 들어오므로, Map에 처음 담기는 값이 그 날의 최신 값입니다.
-        const uniqueLogsMap = new Map<string, number>();
-        history.forEach(log => {
-            if (!uniqueLogsMap.has(log.recordDate)) {
-                uniqueLogsMap.set(log.recordDate, log.weight);
-            }
-        });
+        // 💡 1일 1기록이 보장되므로 중복 제거 로직(Map) 삭제
+        // 그냥 최근 7개 자르고 과거->최신(reverse)으로 뒤집기만 하면 끝!
+        const recentLogs = [...history].slice(0, 7).reverse();
 
-        // 💡 2. 최근 7일치 고유 날짜 데이터만 잘라내어 차트 방향(과거->최신)에 맞게 역순 정렬
-        const uniqueLogs = Array.from(uniqueLogsMap.entries())
-            .slice(0, 7)
-            .reverse()
-            .map(([date, weight]) => ({ date, weight }));
+        // 차트 라벨 및 데이터 포맷팅
+        const data = recentLogs.map(item => {
+            const dateParts = item.recordDate.split(/[-/]/);
+            let label = item.recordDate;
 
-        // 3. 차트 라벨 및 데이터 포맷팅
-        const data = uniqueLogs.map(item => {
-            const dateParts = item.date.split(/[-/]/);
-            let label = item.date;
-            if (dateParts.length >= 2) {
-                const month = parseInt(dateParts[dateParts.length - 2], 10);
-                const day = parseInt(dateParts[dateParts.length - 1], 10);
+            // "YYYY-MM-DD" 에서 월과 일만 추출
+            if (dateParts.length >= 3) {
+                const month = parseInt(dateParts[1], 10);
+                const day = parseInt(dateParts[2], 10);
                 label = `${month}/${day}`;
             }
+
             return { x: label, y: item.weight };
         });
 
@@ -65,8 +57,8 @@ function WeightLogChartSection({ history }: Props) {
                 ? `DATE ${labels[0]}`
                 : `DATE ${labels[0]} ~ ${labels[labels.length - 1]}`;
 
-        // 차트 상단의 최신 몸무게 텍스트용 (역순 정렬된 배열의 마지막 요소가 가장 최신)
-        const latestWeight = uniqueLogs.length > 0 ? uniqueLogs[uniqueLogs.length - 1].weight : 0;
+        // 차트 상단의 최신 몸무게 텍스트용
+        const latestWeight = recentLogs.length > 0 ? recentLogs[recentLogs.length - 1].weight : 0;
 
         return { chartData: data, yMax, yMin, dateRangeText, latestWeight };
     }, [history]);
@@ -83,6 +75,7 @@ function WeightLogChartSection({ history }: Props) {
                     </TextComponent>
                 </View>
             </View>
+
             <Card
                 shadow={"sm"}
                 className={twMerge("w-full items-center")}
