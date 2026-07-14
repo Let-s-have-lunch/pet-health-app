@@ -64,14 +64,6 @@ export default function HistorySection() {
         void loadDashboard();
     }, [isAddCardSelected, selectedPet, loadDashboard]);
 
-    // useEffect(() => {
-    //     if (!selectedPet) {
-    //         setData(null);
-    //         return;
-    //     }
-    //     void loadDashboard();
-    // }, [selectedPet, loadDashboard]);
-
     useFocusEffect(
         useCallback(() => {
             loadDashboard().then(() => {});
