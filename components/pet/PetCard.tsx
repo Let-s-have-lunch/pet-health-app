@@ -52,7 +52,6 @@ export default function PetCard({ pet, onPressEdit }: Props) {
     };
 
     return (
-        <View style={{ paddingTop: 25 }}>
         <Card
             className={twMerge(["rounded-[28px]"])}
             shadow="none"
@@ -125,6 +124,5 @@ export default function PetCard({ pet, onPressEdit }: Props) {
                 </>
             )}
         </Card>
-        </View>
     );
 }
