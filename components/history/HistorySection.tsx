@@ -8,6 +8,7 @@ import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import { format } from "date-fns";
 import { usePetStore } from "@/stores/usePetStore";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 const getTodayString = () => {
     const today = new Date();
@@ -22,8 +23,6 @@ export default function HistorySection() {
     const todayDate = getTodayString();
     const { selectedPet, isAddCardSelected } = usePetStore();
     const petId = selectedPet?.id;
-
-    // 💡 초기값을 null로 깔끔하게 세팅
     const [data, setData] = useState<DashboardData | null>(null);
 
     const loadDashboard = useCallback(async () => {

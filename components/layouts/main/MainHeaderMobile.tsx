@@ -1,4 +1,4 @@
-import { Pressable, View } from "react-native";
+import { Image, Pressable, View } from "react-native";
 import { useRouter } from "expo-router";
 import { twMerge } from "tailwind-merge";
 import { Ionicons } from "@expo/vector-icons";
@@ -6,12 +6,19 @@ import TextComponent from "@/components/common/text/TextComponent";
 import { useThemeStore } from "@/stores/theme/useThemeStore";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { Role } from "@/types/user";
+import { usePetStore } from "@/stores/usePetStore";
 
 function MainHeaderMobile() {
     const router = useRouter();
     const { isLoggedIn, user } = useAuthStore();
-
     const { theme, onChangeTheme } = useThemeStore();
+    const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
+    const { selectedPet, isAddCardSelected } = usePetStore();
+    const profileImageUrl = selectedPet?.profileImage
+        ? `${BASE_URL}${selectedPet.profileImage}`
+        : undefined;
+
+
 
     return (
         <View
@@ -26,20 +33,24 @@ function MainHeaderMobile() {
                         ["flex-row", "h-20", "justify-between", "items-center"],
                         ["flex-1", "px-4", "h-full"],
                     )}>
-                    <Pressable
-                        className={twMerge([
-                            "flex-row",
-                            "items-center",
-                            "gap-1",
-                            "h-full",
-                        ])}>
-                        <View
-                            className={twMerge(
-                                ["flex-row", "h-12", "w-12", "items-center", "justify-center"],
-                                ["rounded-full", "bg-success-main"],
-                            )}></View>
+                    <Pressable className={twMerge(["flex-row", "items-center", "gap-1", "h-full"])}>
+                        {!isAddCardSelected && selectedPet?.profileImage ? (
+                            <Image
+                                source={{ uri: profileImageUrl }}
+                                className={twMerge(["h-12", "w-12"], ["rounded-full"])}
+                            />
+                        ) : (
+                            <View
+                                className={twMerge(
+                                    ["h-12", "w-12"],
+                                    ["items-center", "justify-center"],
+                                    ["rounded-full", "bg-success-main"],
+                                )}>
+                                <Ionicons name="person" size={24} color="white" />
+                            </View>
+                        )}
                         <TextComponent className={twMerge(["text-xl", "font-bold"])}>
-                            초코
+                            {isAddCardSelected ? "반려동물 등록" : selectedPet?.name}
                         </TextComponent>
                     </Pressable>
                 </View>
