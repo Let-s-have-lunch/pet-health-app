@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Platform, Pressable, ScrollView, View } from "react-native";
+import { Alert, Platform, Pressable, ScrollView, View } from "react-native";
 import { useCallback, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { router, useFocusEffect } from "expo-router";
@@ -8,7 +8,6 @@ import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import { format } from "date-fns";
 import { usePetStore } from "@/stores/usePetStore";
-import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 const getTodayString = () => {
     const today = new Date();

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { View, ScrollView } from "react-native";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import todoApi from "@/api/user/todoApi";
@@ -8,7 +8,7 @@ import { Todo } from "@/types/todo";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
 import DiarySection from "@/app/(main)/(tabs)/diary/DiarySection";
-import TodoSection from "@/app/(main)/(tabs)/diary/TodoSection";
+import TodoSection from "@/app/(main)/(tabs)/diary/list/TodoSection";
 
 export default function DailyDetailScreen() {
     const { date } = useLocalSearchParams<{ date: string }>();
@@ -21,6 +21,7 @@ export default function DailyDetailScreen() {
     const loadDailyData = useCallback(async () => {
         if (!date) return;
         setIsLoading(true);
+        
         try {
             const [diaryList, todoList] = await Promise.all([
                 diaryApi.getDiaryList(date),
@@ -30,21 +31,17 @@ export default function DailyDetailScreen() {
             setDiaries(diaryList);
             setTodos(todoList);
         } catch (error) {
-            console.error("데이터 로드 실패:", error);
+            console.error("데이터 로드 실패 상세 원인: ", error);
         } finally {
             setIsLoading(false);
         }
     }, [date]);
 
-    // useEffect(() => {
-    //     if (date) fetchDailyData().then(() => {});
-    // }, [date, fetchDailyData]);
     useFocusEffect(
         useCallback(() => {
             void loadDailyData();
         }, [loadDailyData]),
     );
-
 
     if (isLoading) {
         return (
@@ -60,7 +57,7 @@ export default function DailyDetailScreen() {
                 <ContentContainer className={"p-0"}>
                     <DiarySection diaryList={diaries} date={date} />
 
-                    <TodoSection todoList={todos} targetDate={date} />
+                    <TodoSection todos={todos} targetDate={date} onRefresh={loadDailyData}/>
                 </ContentContainer>
             </ScrollView>
         </View>
