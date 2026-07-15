@@ -1,70 +1,97 @@
 import { useCallback, useEffect, useState } from "react";
 import { ReplyListItemType } from "@/types/reply";
-import { useLocalSearchParams } from "expo-router";
 import replyApi from "@/api/user/replyApi";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReplyInputType, replySchema } from "@/schemas/reply/replySchema";
-import { Alert, Platform, View, TouchableOpacity, LayoutAnimation } from "react-native";
-import { twMerge } from "tailwind-merge";
+import {
+    Alert,
+    Platform,
+    View,
+    TouchableOpacity,
+    Modal,
+    KeyboardAvoidingView,
+    FlatList,
+    ActivityIndicator,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 import TextareaGroup from "@/components/common/textarea/TextareaGroup";
 import Button from "@/components/common/button/Button";
 import TextComponent from "@/components/common/text/TextComponent";
 
-// 완성한 리스트 컴포넌트 임포트
-import CommunityPostDetailReplyListPage from "./CommunityPostDetailReplyListPage";
+// 💡 여기서 두 번째 파일의 ReplyItem을 가져옵니다. (경로는 실제 프로젝트 환경에 맞게 수정해주세요!)
+import { ReplyItem } from "./CommunityPostDetailReplyListPage";
 
 interface Props {
     postId: number;
+    isOpen: boolean;
+    onClose: () => void;
     onTotalChange?: (total: number) => void;
 }
 
-function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
+function CommunityPostDetailReply({ postId, isOpen, onClose, onTotalChange }: Props) {
     const [list, setList] = useState<ReplyListItemType[]>([]);
     const [total, setTotal] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
 
-    // 페이지 열었을 때 처음부터 목록은 숨김 처리
-    const [isExpanded, setIsExpanded] = useState<boolean>(false);
+    // 무한 스크롤 관련 상태
+    const [page, setPage] = useState(1);
+    const [isFetchingMore, setIsFetchingMore] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const pageSize = 15; // 한 번에 15개씩 로드
 
-    const { page, size } = useLocalSearchParams<{ page: string; size: string }>();
-    const currentPage = Number(page) || 1;
-    const pageSize = Number(size || 10);
-
-    const loadReplies = useCallback(async () => {
+    // 첫 페이지 로드
+    const loadFirstReplies = useCallback(async () => {
         try {
             setIsLoading(true);
-            const result = await replyApi.getRepliesByPostId(postId, currentPage, pageSize);
+            const result = await replyApi.getRepliesByPostId(postId, 1, pageSize);
             setList(result.list);
             setTotal(result.total);
+            setPage(1);
+            setHasMore(result.list.length < result.total);
         } catch (error) {
             console.error(error);
         } finally {
             setIsLoading(false);
         }
-    }, [postId, currentPage, pageSize]);
+    }, [postId]);
+
+    // 스크롤 하단 도달 시 추가 데이터 로드
+    const loadMoreReplies = async () => {
+        if (isFetchingMore || !hasMore) return;
+
+        try {
+            setIsFetchingMore(true);
+            const nextPage = page + 1;
+            const result = await replyApi.getRepliesByPostId(postId, nextPage, pageSize);
+
+            if (result.list && result.list.length > 0) {
+                setList(prev => [...prev, ...result.list]);
+                setPage(nextPage);
+                setHasMore(list.length + result.list.length < result.total);
+            } else {
+                setHasMore(false);
+            }
+        } catch (error) {
+            console.error("추가 댓글 로드 실패:", error);
+        } finally {
+            setIsFetchingMore(false);
+        }
+    };
+
+    // 모달이 열릴 때만 첫 데이터를 불러옴
+    useEffect(() => {
+        if (isOpen) {
+            loadFirstReplies().then(() => {});
+        }
+    }, [isOpen, loadFirstReplies]);
 
     useEffect(() => {
-        loadReplies().then(() => {});
-    }, [loadReplies]);
-
-    // total 값이 바뀔 때마다 상위 부모 컴포넌트에 댓글 수를 전달
-    useEffect(() => {
-        if (onTotalChange) {
+        if (!isLoading && onTotalChange) {
             onTotalChange(total);
         }
-    }, [total, onTotalChange]);
-
-    const totalPage = Math.ceil(total / pageSize) || 1;
-
-    // 접고 펼 때 자연스러운 애니메이션 효과 적용
-    const toggleExpand = () => {
-        if (Platform.OS !== "web") {
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        }
-        setIsExpanded(!isExpanded);
-    };
+    }, [total, isLoading, onTotalChange]);
 
     const {
         control,
@@ -83,9 +110,7 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
         try {
             await replyApi.createReply(postId, data.content);
             reset();
-            await loadReplies();
-            // 댓글을 새로 등록하면 내용을 바로 확인할 수 있게 목록을 펼쳐줍니다.
-            if (!isExpanded) setIsExpanded(true);
+            await loadFirstReplies(); // 댓글 작성 완료 시 리스트 맨 위부터 재정렬 로드
         } catch (error) {
             console.error(error);
             const msg = "댓글 등록에 실패했습니다.";
@@ -98,112 +123,122 @@ function CommunityPostDetailReply({ postId, onTotalChange }: Props) {
     };
 
     return (
-        <View className={twMerge(["mt-4", "p-6"], ["border-t", "border-divider"])}>
-            <View>
-                <TextComponent className={twMerge([""])}>
-                    댓글
-                </TextComponent>
-            </View>
-
-            <View className={twMerge(["mb-6"])}>
-                <Controller
-                    control={control}
-                    name={"content"}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <TextareaGroup
-                            placeholder={"타인을 존중하는 바른 말을 사용해주세요"}
-                            value={value}
-                            onChangeText={onChange}
-                            onBlur={onBlur}
-                            errorMessage={errors.content?.message}
-                            textInputClassName={"min-h-2"}
-                        />
-                    )}
+        <Modal visible={isOpen} animationType="slide" transparent={true} onRequestClose={onClose}>
+            <View className="flex-1 bg-transparent">
+                {/* 상단 30% 영역 (터치 시 닫힘) */}
+                <TouchableOpacity
+                    className="h-[30%] bg-transparent"
+                    activeOpacity={1}
+                    onPress={onClose}
                 />
 
-                <View className={twMerge(["w-24"])}>
-                    <Button
-                        className={twMerge(["flex-1", "rounded-0"])}
-                        variant={"contained"}
-                        color={"primary"}
-                        size={"small"}
-                        disabled={isSubmitting}
-                        onPress={handleSubmit(onSubmit)}>
-                        {isSubmitting ? "댓글 작성 중..." : "댓글작성"}
-                    </Button>
+                <View
+                    className="h-[70%] bg-background-paper rounded-t-[30px] overflow-hidden border-t border-divider shadow-2xl"
+                    style={Platform.select({
+                        ios: {
+                            shadowColor: "#000",
+                            shadowOffset: { width: 0, height: -6 },
+                            shadowOpacity: 0.08,
+                            shadowRadius: 10,
+                        },
+                        android: {
+                            elevation: 20,
+                        },
+                    })}>
+                    <SafeAreaView className="flex-1" edges={["bottom"]}>
+                        <KeyboardAvoidingView
+                            behavior={Platform.OS === "ios" ? "padding" : "height"}
+                            className="flex-1"
+                            keyboardVerticalOffset={Platform.OS === "ios" ? 40 : 0}>
+                            <View className="flex-row items-center justify-between px-5 py-4 border-b border-background-default bg-background-paper">
+                                <View className="flex-row items-center gap-1.5">
+                                    <Ionicons
+                                        name="chatbubble-ellipses-outline"
+                                        size={20}
+                                        color="#1F2937"
+                                    />
+                                    <TextComponent className="text-base font-semibold text-text-default">
+                                        댓글{" "}
+                                        <TextComponent className={"text-success-point"}>
+                                            {total}
+                                        </TextComponent>
+                                    </TextComponent>
+                                </View>
+
+                                <TouchableOpacity
+                                    onPress={onClose}
+                                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                                    <Ionicons name="close" size={24} color="#4B5563" />
+                                </TouchableOpacity>
+                            </View>
+
+                            <FlatList
+                                data={list}
+                                keyExtractor={item => item.id.toString()}
+                                contentContainerStyle={{
+                                    paddingHorizontal: 20,
+                                    paddingVertical: 10,
+                                    flexGrow: 1,
+                                }}
+                                renderItem={({ item, index }) => (
+                                    <ReplyItem
+                                        item={item}
+                                        onRefresh={loadFirstReplies}
+                                        isLast={index === list.length - 1}
+                                    />
+                                )}
+                                ListEmptyComponent={
+                                    !isLoading ? (
+                                        <View className="flex-1 justify-center items-center py-24">
+                                            <TextComponent className="text-text-secondary text-base font-semibold text-center leading-6">
+                                                댓글이 없습니다.{"\n"}댓글을 작성해주세요
+                                            </TextComponent>
+                                        </View>
+                                    ) : null
+                                }
+                                onEndReached={loadMoreReplies}
+                                onEndReachedThreshold={0.2}
+                                ListFooterComponent={
+                                    isFetchingMore ? (
+                                        <View className="py-4">
+                                            <ActivityIndicator size="small" color="#BCCDCB" />
+                                        </View>
+                                    ) : null
+                                }
+                            />
+
+                            <View className="p-5 border-t border-background-default bg-background-paper">
+                                <Controller
+                                    control={control}
+                                    name="content"
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <TextareaGroup
+                                            placeholder="타인을 존중하는 바른 말을 사용해주세요"
+                                            value={value}
+                                            onChangeText={onChange}
+                                            onBlur={onBlur}
+                                            errorMessage={errors.content?.message}
+                                            textInputClassName="min-h-[60px] bg-background-paper border border-primary-main rounded-xl p-3 text-sm"
+                                        />
+                                    )}
+                                />
+
+                                <View className="mt-2.5">
+                                    <Button
+                                        className="w-full"
+                                        variant="contained"
+                                        disabled={isSubmitting}
+                                        onPress={handleSubmit(onSubmit)}>
+
+                                            {isSubmitting ? "등록 중..." : "등록"}
+                                    </Button>
+                                </View>
+                            </View>
+                        </KeyboardAvoidingView>
+                    </SafeAreaView>
                 </View>
             </View>
-
-            {!isLoading && total === 0 ? (
-                <View
-                    className={twMerge([
-                        "p-8",
-                        "rounded-xl",
-                        "border",
-                        "border-divider",
-                        "justify-center",
-                        "items-center",
-                        "bg-[#FFFFFF]/30",
-                    ])}>
-                    <Ionicons
-                        name={"chatbox-outline"}
-                        size={32}
-                        color={"#9CA3AF"}
-                        className={"mb-2"}
-                    />
-                    <TextComponent className={twMerge(["mt-2", "text-text-secondary", "text-sm"])}>
-                        아직 등록된 댓글이 없습니다.
-                    </TextComponent>
-                </View>
-            ) : (
-                <View className={twMerge(["bg-background-paper", "rounded-xl"])}>
-                    <TouchableOpacity
-                        activeOpacity={0.7}
-                        onPress={toggleExpand}
-                        className={twMerge([
-                            "flex-row",
-                            "justify-between",
-                            "items-center",
-                            "py-3",
-                            "px-4",
-                        ])}>
-                        <View className={twMerge(["flex-row", "items-center", "gap-1.5"])}>
-                            <TextComponent
-                                className={twMerge([
-                                    "text-base",
-                                    "font-semibold",
-                                    "text-text-default",
-                                ])}>
-                                전체 댓글
-                            </TextComponent>
-                            <TextComponent
-                                className={twMerge([
-                                    "text-base",
-                                    "font-bold",
-                                    "text-primary-main",
-                                ])}>
-                                {total}
-                            </TextComponent>
-                        </View>
-
-                        <Ionicons name={isExpanded ? "chevron-up" : "chevron-down"} size={20} />
-                    </TouchableOpacity>
-
-                    {isExpanded && (
-                        <View className={twMerge(["transition-all", "duration-300"])}>
-                            <CommunityPostDetailReplyListPage
-                                list={list}
-                                currentPage={currentPage}
-                                pageSize={pageSize}
-                                totalPage={totalPage}
-                                isLoading={isLoading}
-                                onRefresh={loadReplies}
-                            />
-                        </View>
-                    )}
-                </View>
-            )}
-        </View>
+        </Modal>
     );
 }
 
