@@ -12,9 +12,11 @@ import Pagination from "@/components/common/pagination/Pagination";
 import Badge from "@/components/common/badge/Badge";
 import inquiryApi from "@/api/user/inquiryApi";
 import { Feather } from "@expo/vector-icons";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 function MyInquiryListPage() {
     const router = useRouter();
+    const { isLoggedIn } = useAuthStore();
     const [list, setList] = useState<InquiryUserItemType[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const { page, size } = useLocalSearchParams<{ page: string; size: string }>();
@@ -24,6 +26,19 @@ function MyInquiryListPage() {
 
     const loadInquiries = useCallback(
         async (targetPage: number, targetSize: number) => {
+            if (!isLoggedIn) {
+                setIsLoading(false);
+                if (Platform.OS === "web") {
+                    window.alert("로그인이 필요한 서비스입니다.");
+                    router.replace("/auth/login");
+                } else {
+                    Alert.alert("알림", "로그인이 필요한 서비스입니다.", [
+                        { text: "확인", onPress: () => router.replace("/auth/login") },
+                    ]);
+                }
+                return;
+            }
+
             try {
                 const result = await inquiryApi.fetchMyInquiryList(targetPage, targetSize);
                 setList(result.list);
@@ -41,7 +56,7 @@ function MyInquiryListPage() {
                 setIsLoading(false);
             }
         },
-        [router],
+        [isLoggedIn, router],
     );
 
     useEffect(() => {
