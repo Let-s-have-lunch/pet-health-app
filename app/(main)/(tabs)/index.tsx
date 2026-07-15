@@ -55,6 +55,7 @@ function HomeScreen() {
             return;
         }
 
+
         router.push("/pets/create");
     };
 
