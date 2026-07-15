@@ -13,33 +13,41 @@ import TodoSection from "@/app/(main)/(tabs)/diary/TodoSection";
 export default function DailyDetailScreen() {
     const { date } = useLocalSearchParams<{ date: string }>();
     const [isLoading, setIsLoading] = useState(true);
-    const [diaryData, setDiaryData] = useState<Diary[]>([]);
-    const [todoData, setTodoData] = useState<Todo[]>([]);
+    const [diaries, setDiaries] = useState<Diary[]>([]);
+    const [todos, setTodos] = useState<Todo[]>([]);
 
-    const dailyData = useCallback(async () => {
+    console.log(date);
+
+    const loadDailyData = useCallback(async () => {
+        if (!date) {
+            console.warn("⚠️ date 파라미터가 없습니다!");
+            return;
+        }
+        setIsLoading(true);
         try {
+            console.log("🚀 API 요청 시작! 보낼 날짜:", date);
+
             const [diaryList, todoList] = await Promise.all([
                 diaryApi.getDiaryList(date),
                 todoApi.getTodoList(date),
             ]);
 
-            setDiaryData(diaryList);
-            setTodoData(todoList);
-        } catch (error) {
-            console.error("데이터 로드 실패:", error);
+            setDiaries(diaryList);
+            setTodos(todoList);
+        } catch (error: any) {
+            console.error("❌ 데이터 로드 실패 상세 원인:");
+
+            // Axios 등을 쓸 때 서버가 반환한 진짜 500 에러 메시지 출력
+            if (error.response) {
+                console.error("상태 코드:", error.response.status); // 500
+                console.error("서버 에러 데이터:", error.response.data); // 여기에 진짜 이유가 들어있습니다!
+            } else {
+                console.error("일반 에러:", error.message);
+            }
         } finally {
             setIsLoading(false);
         }
     }, [date]);
-
-    // useEffect(() => {
-    //     if (date) fetchDailyData().then(() => {});
-    // }, [date, fetchDailyData]);
-    useFocusEffect(
-        useCallback(() => {
-            void dailyData();
-        }, [dailyData]),
-    );
 
 
     if (isLoading) {
@@ -54,8 +62,9 @@ export default function DailyDetailScreen() {
         <View className="flex-1">
             <ScrollView className={"flex-1"}>
                 <ContentContainer className={"p-0"}>
-                    <DiarySection diaryList={diaryData}/>
-                    <TodoSection todoList={todoData} targetDate={date}/>
+                    <DiarySection diaryList={diaries} date={date} />
+
+                    <TodoSection todoList={todos} targetDate={date} onRefresh={loadDailyData}/>
                 </ContentContainer>
             </ScrollView>
         </View>
