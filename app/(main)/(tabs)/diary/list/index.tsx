@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { View, ScrollView } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import todoApi from "@/api/user/todoApi";
 import diaryApi from "@/api/user/diaryApi";
 import { Diary } from "@/types/diary";
@@ -14,15 +14,15 @@ export default function DailyDetailScreen() {
     const [diaryData, setDiaryData] = useState<Diary[]>([]);
     const [todoData, setTodoData] = useState<Todo[]>([]);
 
-    const fetchDailyData = useCallback(async () => {
+    const dailyData = useCallback(async () => {
         try {
-            const [diaries, todos] = await Promise.all([
+            const [diaryList, todoList] = await Promise.all([
                 diaryApi.getDiaryList(date),
                 todoApi.getTodoList(date),
             ]);
 
-            setDiaryData(diaries);
-            setTodoData(todos);
+            setDiaryData(diaryList);
+            setTodoData(todoList);
         } catch (error) {
             console.error("데이터 로드 실패:", error);
         } finally {
@@ -30,9 +30,15 @@ export default function DailyDetailScreen() {
         }
     }, [date]);
 
-    useEffect(() => {
-        if (date) fetchDailyData().then(() => {});
-    }, [date, fetchDailyData]);
+    // useEffect(() => {
+    //     if (date) fetchDailyData().then(() => {});
+    // }, [date, fetchDailyData]);
+    useFocusEffect(
+        useCallback(() => {
+            void dailyData();
+        }, [dailyData]),
+    );
+
 
     if (isLoading) {
         return (
