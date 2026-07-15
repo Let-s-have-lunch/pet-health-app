@@ -78,10 +78,20 @@ function WalkLogListPage() {
     // 💡 4. 추가 버튼 클릭 시 방어 로직
     const handleAddPress = () => {
         if (!isLoggedIn) {
-            if (Platform.OS === "web") alert("로그인이 필요한 서비스입니다.");
-            else Alert.alert("알림", "로그인이 필요한 서비스입니다.");
+            if (Platform.OS === "web") {
+                alert("로그인이 필요한 서비스입니다.");
+                router.push("/auth/login");
+            } else {
+                Alert.alert("알림", "로그인이 필요한 서비스입니다.", [
+                    {
+                        text: "확인",
+                        onPress: () => router.push("/auth/login"),
+                    },
+                ]);
+            }
             return;
         }
+
         if (!petId) {
             if (Platform.OS === "web") alert("반려동물을 먼저 등록해주세요.");
             else Alert.alert("알림", "반려동물을 먼저 등록해주세요.");

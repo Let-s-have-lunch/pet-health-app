@@ -25,7 +25,7 @@ function MyInfoPage() {
                 onPress={() => router.push("/inquiry")}>
                 1:1 문의
             </Button>
-            <Button variant={"text"} showChevron={true} size={"large"}>
+            <Button variant={"text"} showChevron={true} size={"large"} onPress={() => router.push("/service")}>
                 고객센터
             </Button>
             {isLoggedIn ? (

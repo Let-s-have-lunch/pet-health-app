@@ -22,6 +22,8 @@ import TextComponent from "@/components/common/text/TextComponent";
 
 // 💡 여기서 두 번째 파일의 ReplyItem을 가져옵니다. (경로는 실제 프로젝트 환경에 맞게 수정해주세요!)
 import { ReplyItem } from "./CommunityPostDetailReplyListPage";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { useRouter } from "expo-router";
 
 interface Props {
     postId: number;
@@ -31,6 +33,8 @@ interface Props {
 }
 
 function CommunityPostDetailReply({ postId, isOpen, onClose, onTotalChange }: Props) {
+    const router = useRouter();
+    const { isLoggedIn } = useAuthStore();
     const [list, setList] = useState<ReplyListItemType[]>([]);
     const [total, setTotal] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
@@ -105,6 +109,22 @@ function CommunityPostDetailReply({ postId, isOpen, onClose, onTotalChange }: Pr
             content: "",
         },
     });
+
+    const handleRequireLogin = () => {
+        onClose();
+
+        setTimeout(() => {
+            if (Platform.OS === "web") {
+                window.alert("로그인 후 댓글을 남길 수 있습니다.");
+                router.push("/auth/login");
+            } else {
+                Alert.alert("알림", "로그인 후 댓글을 남길 수 있습니다.", [
+                    { text: "취소", style: "cancel" },
+                    { text: "로그인하기", onPress: () => router.push("/auth/login") },
+                ]);
+            }
+        }, 100);
+    };
 
     const onSubmit = async (data: ReplyInputType) => {
         try {
@@ -208,31 +228,43 @@ function CommunityPostDetailReply({ postId, isOpen, onClose, onTotalChange }: Pr
                             />
 
                             <View className="p-5 border-t border-background-default bg-background-paper">
-                                <Controller
-                                    control={control}
-                                    name="content"
-                                    render={({ field: { onChange, onBlur, value } }) => (
-                                        <TextareaGroup
-                                            placeholder="타인을 존중하는 바른 말을 사용해주세요"
-                                            value={value}
-                                            onChangeText={onChange}
-                                            onBlur={onBlur}
-                                            errorMessage={errors.content?.message}
-                                            textInputClassName="min-h-[60px] bg-background-paper border border-primary-main rounded-xl p-3 text-sm"
+                                {isLoggedIn ? (
+                                    <>
+                                        <Controller
+                                            control={control}
+                                            name="content"
+                                            render={({ field: { onChange, onBlur, value } }) => (
+                                                <TextareaGroup
+                                                    placeholder="타인을 존중하는 바른 말을 사용해주세요"
+                                                    value={value}
+                                                    onChangeText={onChange}
+                                                    onBlur={onBlur}
+                                                    errorMessage={errors.content?.message}
+                                                    textInputClassName="min-h-[60px] bg-background-paper border border-primary-main rounded-xl p-3 text-sm"
+                                                />
+                                            )}
                                         />
-                                    )}
-                                />
 
-                                <View className="mt-2.5">
-                                    <Button
-                                        className="w-full"
-                                        variant="contained"
-                                        disabled={isSubmitting}
-                                        onPress={handleSubmit(onSubmit)}>
-
-                                            {isSubmitting ? "등록 중..." : "등록"}
-                                    </Button>
-                                </View>
+                                        <View className="mt-2.5">
+                                            <Button
+                                                className="w-full"
+                                                variant="contained"
+                                                disabled={isSubmitting}
+                                                onPress={handleSubmit(onSubmit)}>
+                                                {isSubmitting ? "등록 중..." : "등록"}
+                                            </Button>
+                                        </View>
+                                    </>
+                                ) : (
+                                    <TouchableOpacity
+                                        activeOpacity={0.8}
+                                        onPress={handleRequireLogin}
+                                        className="min-h-[60px] bg-background-default border border-divider rounded-xl p-3 justify-center">
+                                        <TextComponent className="text-sm text-text-secondary">
+                                            로그인 후 댓글을 남길 수 있습니다.
+                                        </TextComponent>
+                                    </TouchableOpacity>
+                                )}
                             </View>
                         </KeyboardAvoidingView>
                     </SafeAreaView>

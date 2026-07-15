@@ -11,11 +11,13 @@ import WeightLogChartSection from "@/app/(main)/health/weight-logs/WeightLogChar
 import WeightLogModal from "@/app/(main)/health/weight-logs/WeightLogModal";
 import WeightLogHistorySection from "@/app/(main)/health/weight-logs/WeightLogHistorySection";
 import { usePetStore } from "@/stores/usePetStore";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 function WeightLogListPage() {
     const router = useRouter();
     const selectedPet = usePetStore(state => state.selectedPet);
     const petId = selectedPet?.id;
+    const { isLoggedIn } = useAuthStore();
 
     const [history, setHistory] = useState<WeightLog[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -25,7 +27,7 @@ function WeightLogListPage() {
     // API 데이터 페칭
     const fetchWeightLogData = useCallback(async () => {
         // 💡 펫이 없으면 빈 배열 상태로 두고 로딩만 종료 (빈 화면 렌더링)
-        if (!petId) {
+        if (!isLoggedIn || !petId) {
             setHistory([]);
             setIsLoading(false);
             return;
@@ -45,7 +47,7 @@ function WeightLogListPage() {
         } finally {
             setIsLoading(false);
         }
-    }, [petId]);
+    }, [isLoggedIn, petId]);
 
     useFocusEffect(
         useCallback(() => {
@@ -55,6 +57,20 @@ function WeightLogListPage() {
 
     const handleAddPress = () => {
         // 💡 펫이 없는데 추가 버튼을 누를 경우 방어 로직
+        if (!isLoggedIn) {
+            if (Platform.OS === "web") {
+                alert("로그인이 필요한 서비스입니다.");
+                router.push("/auth/login");
+            } else {
+                Alert.alert("알림", "로그인이 필요한 서비스입니다.", [
+                    {
+                        text: "확인",
+                        onPress: () => router.push("/auth/login"),
+                    },
+                ]);
+            }
+            return;
+        }
         if (!petId) {
             if (Platform.OS === "web") {
                 alert("반려동물을 먼저 등록해주세요.");
