@@ -7,6 +7,8 @@ import { Diary } from "@/types/diary";
 import { Todo } from "@/types/todo";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
+import DiarySection from "@/app/(main)/(tabs)/diary/DiarySection";
+import TodoSection from "@/app/(main)/(tabs)/diary/TodoSection";
 
 export default function DailyDetailScreen() {
     const { date } = useLocalSearchParams<{ date: string }>();
@@ -52,8 +54,8 @@ export default function DailyDetailScreen() {
         <View className="flex-1">
             <ScrollView className={"flex-1"}>
                 <ContentContainer className={"p-0"}>
-                    {/*<DiaryComponent diaries={diaryData} />*/}
-                    {/*<TodoComponent todos={todoData} targetDate={date} />*/}
+                    <DiarySection diaryList={diaryData}/>
+                    <TodoSection todoList={todoData} targetDate={date}/>
                 </ContentContainer>
             </ScrollView>
         </View>
