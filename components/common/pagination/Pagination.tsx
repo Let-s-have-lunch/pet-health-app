@@ -68,9 +68,9 @@ export default function Pagination({
                         onPress={() => onPageChange(page)}
                         activeOpacity={0.7}
                         className={twMerge(
-                            "w-10 h-10 rounded-[10px] border-2 flex items-center justify-center",
+                            "w-10 h-10 rounded-[10px] border flex items-center justify-center",
                             "bg-white border-text-secondary",
-                            isActive && "bg-secondary-main border-transparent",
+                            isActive && "bg-primary-main border-transparent",
                             className,
                         )}>
                         <Text

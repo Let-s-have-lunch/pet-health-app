@@ -118,8 +118,7 @@ function MyInquiryDetailPage() {
                                         "flex-row justify-between items-center",
                                         "border-b pb-4 border-divider",
                                     )}>
-                                    <TextComponent
-                                        className={twMerge("font-bold", "text-base")}>
+                                    <TextComponent className={twMerge("font-bold", "text-base")}>
                                         관리자 답변
                                     </TextComponent>
 
@@ -140,35 +139,32 @@ function MyInquiryDetailPage() {
 
                         <View
                             className={twMerge(
-                                ["flex-row", "justify-between", "items-center"],
+                                ["flex-row", "justify-end", "items-center", "gap-2"],
                                 ["mt-10", "pt-6"],
                                 ["border-divider", "border-t"],
                             )}>
                             <Button
+                                className={twMerge(["flex-1", "md:flex-none"])}
                                 size={"small"}
                                 variant={"outlined"}
                                 onPress={() => router.push("/inquiry")}>
-                                목록으로
+                                목록
                             </Button>
-
-                            <View className={twMerge("flex-row", "gap-3")}>
-                                <Button
-                                    size={"small"}
-                                    variant={"outlined"}
-                                    onPress={handleDeleteInquiry}>
-                                    삭제
-                                </Button>
-                                <Button
-                                    size={"small"}
-                                    variant={"contained"}
-                                    color={"warning"}
-                                    onPress={() =>
-                                        router.push(`/inquiry/${inquiry.id}/update`)
-                                    }
-                                    className={"bg-primary-main border-primary-main"}>
-                                    수정
-                                </Button>
-                            </View>
+                            <Button
+                                className={twMerge(["flex-1", "md:flex-none"])}
+                                size={"small"}
+                                variant={"contained"}
+                                color={"error"}
+                                onPress={handleDeleteInquiry}>
+                                삭제
+                            </Button>
+                            <Button
+                                className={twMerge(["flex-1", "md:flex-none"])}
+                                size={"small"}
+                                variant={"contained"}
+                                onPress={() => router.push(`/inquiry/${inquiry.id}/update`)}>
+                                수정
+                            </Button>
                         </View>
                     </Card>
                 </ContentContainer>

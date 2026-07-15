@@ -10,6 +10,7 @@ export const BUTTON_SIZE_STYLE = {
 };
 
 export const INPUT_SIZE_STYLE = {
+    mini: "text-sm px-2.5 py-1",
     small: "text-lg px-4 py-3",
     medium: "text-lg px-5 py-4",
     large: "text-xl px-11 py-8",

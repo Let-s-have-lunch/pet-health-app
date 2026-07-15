@@ -17,7 +17,7 @@ function Input({
     return (
         <TextInput
             className={twMerge(
-                "w-full bg-background-paper rounded-[10px] border-2 text-text-default",
+                "w-full bg-background-paper rounded-[10px] border text-text-default",
                 INPUT_SIZE_STYLE[size],
                 hasError
                     ? "border-error-main"

@@ -26,17 +26,19 @@ function MyInfoPage() {
                 1:1 문의
             </Button>
             <Button variant={"text"} showChevron={true} size={"large"}>
-                고객센터
+                자주 묻는 질문(FAQ)
             </Button>
             {isLoggedIn ? (
-                <Button variant={"text"} size={"large"} onPress={() => logout()}>
+                <Button size={"large"} onPress={() => logout()} className={twMerge(["bg-primary-light"])}>
                     로그아웃
                 </Button>
             ) : (
                 <Button
-                    variant={"text"}
+                    variant={"contained"}
                     size={"large"}
-                    onPress={() => router.push("/auth/login")}>로그인</Button>
+                    onPress={() => router.push("/auth/login")}>
+                    로그인
+                </Button>
             )}
         </View>
     );
