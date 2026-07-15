@@ -21,6 +21,7 @@ function HomeScreen() {
     const [loading, setLoading] = useState(true);
     const accessToken = useAuthStore(state => state.token);
 
+
     const loadPets = useCallback(async () => {
         if (!isLoggedIn) {
             setLoading(false);
