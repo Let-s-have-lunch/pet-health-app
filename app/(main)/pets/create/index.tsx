@@ -147,13 +147,21 @@ function PetCreatePage() {
             }
 
             if (image) {
-                formData.append("profileImage", {
-                    uri: image.uri,
-                    name: image.fileName ?? "pet.jpg",
-                    type: image.mimeType ?? "image/jpeg",
-                } as any);
+                if (Platform.OS === "web") {
+                    if (image.file) {
+                        console.log(image.file);
+                        formData.append("profileImage", image.file);
+                    }
+                } else {
+                    formData.append("profileImage", {
+                        uri: image.uri,
+                        name: image.fileName ?? "pet.jpg",
+                        type: image.mimeType ?? "image/jpeg",
+                    } as any);
+                }
             }
 
+            console.log("여기까지 옴");
             if (isEditMode) {
                 await petApi.updatePet(Number(petId), formData);
             } else {
