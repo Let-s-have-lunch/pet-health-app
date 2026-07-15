@@ -31,7 +31,7 @@ function CreateCommunityPostPage() {
                 ]);
             }
         }
-    }, [isLoggedIn]);
+    }, [isLoggedIn, router]);
 
     const {
         control,
@@ -111,7 +111,7 @@ function CreateCommunityPostPage() {
                                         value={value}
                                         errorMessage={errors.content?.message}
                                     />
-                                );24
+                                );
                             }}
                         />
 
