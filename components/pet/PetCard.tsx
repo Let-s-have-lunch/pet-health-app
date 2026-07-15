@@ -11,6 +11,8 @@ type Props = {
     onPressEdit?: () => void;
 };
 
+const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
+
 export default function PetCard({ pet, onPressEdit }: Props) {
     return (
         <Card
@@ -46,7 +48,7 @@ export default function PetCard({ pet, onPressEdit }: Props) {
                 {pet.profileImage ? (
                     <Image
                         source={{
-                            uri: `htt://localhost:8000${pet.profileImage}`,
+                            uri: `${BASE_URL}${pet.profileImage}`,
                         }}
                         className={twMerge(["h-40", "w-40"], ["rounded-[28px]"], ["bg-[#F6C5BE]"])}
                     />

@@ -13,6 +13,11 @@ function MainHeaderMobile() {
     const { isLoggedIn, user } = useAuthStore();
     const { theme, onChangeTheme } = useThemeStore();
     const selectedPet = usePetStore(state => state.selectedPet);
+    const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
+    const profileImageUrl = selectedPet?.profileImage
+        ? `${BASE_URL}${selectedPet.profileImage}`
+        : undefined;
+
 
     return (
         <View
@@ -30,7 +35,7 @@ function MainHeaderMobile() {
                     <Pressable className={twMerge(["flex-row", "items-center", "gap-1", "h-full"])}>
                         {selectedPet?.profileImage ? (
                             <Image
-                                source={{ uri: selectedPet.profileImage }}
+                                source={{ uri: profileImageUrl }}
                                 className={twMerge(["h-12", "w-12"], ["rounded-full"])}
                             />
                         ) : (
