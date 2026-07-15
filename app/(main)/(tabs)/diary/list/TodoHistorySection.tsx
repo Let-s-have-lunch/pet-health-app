@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { twMerge } from "tailwind-merge";
 import { format } from "date-fns";
-import { Check, Edit2, Plus, Trash2 } from "lucide-react-native";
+import { Check, CheckSquare, Edit2, Plus, Square, SquareCheck, Trash2 } from "lucide-react-native";
 
 import TextComponent from "@/components/common/text/TextComponent";
 import Button from "@/components/common/button/Button";
@@ -27,7 +27,7 @@ function TodoHistorySection({
     return (
         <View className={twMerge("mb-6 mt-2")}>
             <View className={twMerge("flex-row justify-between items-center mb-2")}>
-                <TextComponent className={twMerge("text-xl font-bold")}>일정등록</TextComponent>
+                <TextComponent className={twMerge("text-xl font-bold")}> 일정등록</TextComponent>
                 <Button
                     size={"small"}
                     onPress={onAddPress}
@@ -36,7 +36,7 @@ function TodoHistorySection({
                 </Button>
             </View>
 
-            <View className={twMerge("gap-3")}>
+            <View className={twMerge("gap-3", "pt-2")}>
                 {todos.length > 0 ? (
                     todos.map(todo => {
                         const isCompleted = todo.isCompleted;
@@ -44,21 +44,17 @@ function TodoHistorySection({
                         return (
                             <Card
                                 key={todo.id}
-                                shadow={"sm"}
                                 className={twMerge("elevation-1 flex-row items-center p-4 gap-4")}>
                                 {/* 1. 체크 아이콘 (완료 여부에 따라 색상 변경) */}
                                 <Button
                                     variant={"icon"}
                                     className="mr-1 p-0"
                                     onPress={() => onTogglePress(todo.id)}>
-                                    <Check
-                                        size={22}
-                                        className={
-                                            isCompleted
-                                                ? "text-text-secondary"
-                                                : "text-success-point"
-                                        }
-                                    />
+                                    {isCompleted ? (
+                                        <SquareCheck size={22} color="#F2C6C2" />
+                                    ) : (
+                                        <Square size={22} color="#AEB8B6" />
+                                    )}
                                 </Button>
 
                                 {/* 2. 내용 및 날짜/시간 */}
@@ -73,7 +69,8 @@ function TodoHistorySection({
                                         )}>
                                         {todo.title}
                                     </TextComponent>
-                                    <TextComponent className={twMerge("text-xs text-text-secondary")}>
+                                    <TextComponent
+                                        className={twMerge("text-xs text-text-secondary")}>
                                         {/* date-fns 포맷 적용 (소문자 am/pm 출력을 위해 toLowerCase() 체이닝) */}
                                         {format(
                                             new Date(todo.date),
