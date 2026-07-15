@@ -6,18 +6,23 @@ import AddPetCard from "@/components/pet/AddPetCard";
 import { twMerge } from "tailwind-merge";
 import { router } from "expo-router";
 import { usePetStore } from "@/stores/usePetStore";
+
 type Props = { pets: Pet[]; onPressAdd: () => void };
 type CarouselItem = { type: "pet"; pet: Pet } | { type: "add" };
+
 const HORIZONTAL_PADDING = 0;
+
 const handleEditPet = (petId: number) => {
     router.push({ pathname: "/pets/create", params: { petId } });
 };
+
 export default function PetCarousel({ pets, onPressAdd }: Props) {
     const flatListRef = useRef<FlatList<CarouselItem>>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [containerWidth, setContainerWidth] = useState(0);
     const setSelectedPet = usePetStore(state => state.setSelectedPet);
     const setIsAddCardSelected = usePetStore(state => state.setIsAddCardSelected);
+
     const onViewableItemsChanged = useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
         const firstItem = viewableItems[0];
         if (!firstItem) return;
@@ -54,7 +59,6 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
 
     return (
         <View onLayout={handleLayout}>
-            {" "}
             <FlatList
                 ref={flatListRef}
                 data={data}
@@ -71,7 +75,6 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                 })}
                 renderItem={({ item }) => (
                     <View style={{ width: CARD_WIDTH, paddingHorizontal: 4 }}>
-                        {" "}
                         {item.type === "pet" ? (
                             <PetCard
                                 pet={item.pet}
@@ -79,12 +82,11 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                             />
                         ) : (
                             <AddPetCard onPress={onPressAdd} />
-                        )}{" "}
+                        )}
                     </View>
                 )}
-            />{" "}
+            />
             <View className={twMerge(["mt-7"], ["flex-row", "justify-center"])}>
-                {" "}
                 {data.map((_, index) => (
                     <View
                         key={index}
@@ -96,8 +98,8 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                             backgroundColor: currentIndex === index ? "#F8A69B" : "#D8D8D8",
                         }}
                     />
-                ))}{" "}
-            </View>{" "}
+                ))}
+            </View>
         </View>
     );
 }
