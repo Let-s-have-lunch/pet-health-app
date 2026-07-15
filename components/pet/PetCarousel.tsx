@@ -1,61 +1,29 @@
 import { Pet } from "@/types/pet";
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-    FlatList,
-    LayoutChangeEvent,
-    NativeScrollEvent,
-    NativeSyntheticEvent,
-    View,
-    ViewToken,
-} from "react-native";
+import { FlatList, LayoutChangeEvent, View, ViewToken } from "react-native";
 import PetCard from "@/components/pet/PetCard";
 import AddPetCard from "@/components/pet/AddPetCard";
 import { twMerge } from "tailwind-merge";
 import { router } from "expo-router";
 import { usePetStore } from "@/stores/usePetStore";
-
-type Props = {
-    pets: Pet[];
-    onPressAdd: () => void;
-};
-
-type CarouselItem =
-    | {
-          type: "pet";
-          pet: Pet;
-      }
-    | {
-          type: "add";
-      };
-
+type Props = { pets: Pet[]; onPressAdd: () => void };
+type CarouselItem = { type: "pet"; pet: Pet } | { type: "add" };
 const HORIZONTAL_PADDING = 0;
-
 const handleEditPet = (petId: number) => {
-    router.push({
-        pathname: "/pets/create",
-        params: {
-            petId,
-        },
-    });
+    router.push({ pathname: "/pets/create", params: { petId } });
 };
-
 export default function PetCarousel({ pets, onPressAdd }: Props) {
     const flatListRef = useRef<FlatList<CarouselItem>>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [containerWidth, setContainerWidth] = useState(0);
     const setSelectedPet = usePetStore(state => state.setSelectedPet);
     const setIsAddCardSelected = usePetStore(state => state.setIsAddCardSelected);
-
     const onViewableItemsChanged = useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
         const firstItem = viewableItems[0];
-
         if (!firstItem) return;
-
         const index = firstItem.index ?? 0;
         setCurrentIndex(index);
-
         const item = data[index];
-
         if (item?.type === "pet") {
             setSelectedPet(item.pet);
             setIsAddCardSelected(false);
@@ -63,21 +31,10 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
             setIsAddCardSelected(true);
         }
     });
-
-    const viewabilityConfig = useRef({
-        itemVisiblePercentThreshold: 50,
-    });
+    const viewabilityConfig = useRef({ itemVisiblePercentThreshold: 50 });
 
     const data = useMemo(() => {
-        return [
-            ...pets.map(pet => ({
-                type: "pet" as const,
-                pet,
-            })),
-            {
-                type: "add" as const,
-            },
-        ];
+        return [...pets.map(pet => ({ type: "pet" as const, pet })), { type: "add" as const }];
     }, [pets]);
 
     const handleLayout = (e: LayoutChangeEvent) => {
@@ -87,11 +44,7 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
     const CARD_WIDTH = Math.max(0, containerWidth - HORIZONTAL_PADDING * 2);
 
     useEffect(() => {
-        flatListRef.current?.scrollToOffset({
-            offset: 0,
-            animated: false,
-        });
-
+        flatListRef.current?.scrollToOffset({ offset: 0, animated: false });
         setCurrentIndex(0);
     }, [pets.length]);
 
@@ -101,6 +54,7 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
 
     return (
         <View onLayout={handleLayout}>
+            {" "}
             <FlatList
                 ref={flatListRef}
                 data={data}
@@ -116,11 +70,8 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                     index,
                 })}
                 renderItem={({ item }) => (
-                    <View
-                        style={{
-                            width: CARD_WIDTH,
-                            paddingHorizontal: 4,
-                        }}>
+                    <View style={{ width: CARD_WIDTH, paddingHorizontal: 4 }}>
+                        {" "}
                         {item.type === "pet" ? (
                             <PetCard
                                 pet={item.pet}
@@ -128,12 +79,12 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                             />
                         ) : (
                             <AddPetCard onPress={onPressAdd} />
-                        )}
+                        )}{" "}
                     </View>
                 )}
-            />
-
+            />{" "}
             <View className={twMerge(["mt-7"], ["flex-row", "justify-center"])}>
+                {" "}
                 {data.map((_, index) => (
                     <View
                         key={index}
@@ -145,8 +96,8 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                             backgroundColor: currentIndex === index ? "#F8A69B" : "#D8D8D8",
                         }}
                     />
-                ))}
-            </View>
+                ))}{" "}
+            </View>{" "}
         </View>
     );
 }

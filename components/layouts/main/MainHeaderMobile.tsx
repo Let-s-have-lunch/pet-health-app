@@ -12,11 +12,12 @@ function MainHeaderMobile() {
     const router = useRouter();
     const { isLoggedIn, user } = useAuthStore();
     const { theme, onChangeTheme } = useThemeStore();
-    const selectedPet = usePetStore(state => state.selectedPet);
     const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
+    const { selectedPet, isAddCardSelected } = usePetStore();
     const profileImageUrl = selectedPet?.profileImage
         ? `${BASE_URL}${selectedPet.profileImage}`
         : undefined;
+
 
 
     return (
@@ -33,7 +34,7 @@ function MainHeaderMobile() {
                         ["flex-1", "px-4", "h-full"],
                     )}>
                     <Pressable className={twMerge(["flex-row", "items-center", "gap-1", "h-full"])}>
-                        {selectedPet?.profileImage ? (
+                        {!isAddCardSelected && selectedPet?.profileImage ? (
                             <Image
                                 source={{ uri: profileImageUrl }}
                                 className={twMerge(["h-12", "w-12"], ["rounded-full"])}
@@ -44,11 +45,12 @@ function MainHeaderMobile() {
                                     ["h-12", "w-12"],
                                     ["items-center", "justify-center"],
                                     ["rounded-full", "bg-success-main"],
-                                )}
-                            />
+                                )}>
+                                <Ionicons name="person" size={24} color="white" />
+                            </View>
                         )}
                         <TextComponent className={twMerge(["text-xl", "font-bold"])}>
-                            {selectedPet?.name ?? "반려동물 등록"}
+                            {isAddCardSelected ? "반려동물 등록" : selectedPet?.name}
                         </TextComponent>
                     </Pressable>
                 </View>
