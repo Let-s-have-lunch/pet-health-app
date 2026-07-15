@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { View, ScrollView } from "react-native";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import todoApi from "@/api/user/todoApi";
@@ -8,7 +8,7 @@ import { Todo } from "@/types/todo";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
 import DiarySection from "@/app/(main)/(tabs)/diary/DiarySection";
-import TodoSection from "@/app/(main)/(tabs)/diary/TodoSection";
+import TodoSection from "@/app/(main)/(tabs)/diary/list/TodoSection";
 
 export default function DailyDetailScreen() {
     const { date } = useLocalSearchParams<{ date: string }>();
@@ -42,7 +42,6 @@ export default function DailyDetailScreen() {
         }, [loadDailyData]),
     );
 
-
     if (isLoading) {
         return (
             <View className="py-20">
@@ -57,7 +56,7 @@ export default function DailyDetailScreen() {
                 <ContentContainer className={"p-0"}>
                     <DiarySection diaryList={diaries} date={date} />
 
-                    <TodoSection todoList={todos} targetDate={date} onRefresh={loadDailyData}/>
+                    <TodoSection todos={todos} targetDate={date} onRefresh={loadDailyData}/>
                 </ContentContainer>
             </ScrollView>
         </View>
