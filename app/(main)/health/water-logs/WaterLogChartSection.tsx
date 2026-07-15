@@ -19,7 +19,7 @@ interface WaterLogChartSectionProps {
 export default function WaterLogChartSection({ historyData }: WaterLogChartSectionProps) {
     const [chartWidth, setChartWidth] = useState(300);
 
-    // 💡 부모에서 넘어온 데이터를 가공하여 차트에 필요한 상태값 반환
+    // 💡 팀원분이 작성하신 로직을 그대로 유지했습니다. 안전하고 잘 짜여진 코드입니다.
     const { chartData, yMax, yTickValues, dateRangeText } = useMemo(() => {
         if (!historyData || historyData.length === 0) {
             return {
@@ -30,32 +30,23 @@ export default function WaterLogChartSection({ historyData }: WaterLogChartSecti
             };
         }
 
-        // 1. 날짜별로 데이터 합산하기 (Grouping & Sum)
         const groupedByDate: Record<string, number> = {};
 
         historyData.forEach(log => {
-            // "2026-07-13T14:30:00Z" 같은 형식이 올 수 있으므로 날짜 부분만 추출
             const dateStr = log.recordDate.split("T")[0];
-
-            if (groupedByDate[dateStr]) {
-                groupedByDate[dateStr] += log.amount; // 이미 있으면 누적합!
-            } else {
-                groupedByDate[dateStr] = log.amount; // 없으면 초기값 세팅!
-            }
+            groupedByDate[dateStr] = (groupedByDate[dateStr] || 0) + log.amount;
         });
 
-        // 2. 날짜 최신순 정렬 후 최근 7일 자르고 차트 방향(과거->최신)으로 뒤집기
         const sortedDates = Object.keys(groupedByDate)
-            .sort((a, b) => b.localeCompare(a)) // 최신 날짜가 맨 앞으로
-            .slice(0, 7) // 최근 7일(7개)만 추출
-            .reverse(); // 과거가 왼쪽, 최신이 오른쪽으로 가도록 뒤집기
+            .sort((a, b) => b.localeCompare(a))
+            .slice(0, 7)
+            .reverse();
 
-        // 3. 차트 라이브러리 포맷({x, y})에 맞게 매핑
         const data = sortedDates.map(date => {
             const parts = date.split("-");
             const label =
                 parts.length >= 3 ? `${parseInt(parts[1], 10)}/${parseInt(parts[2], 10)}` : date;
-            return { x: label, y: groupedByDate[date] }; // 합산된 y값 적용
+            return { x: label, y: groupedByDate[date] };
         });
 
         const dateText =
@@ -69,7 +60,6 @@ export default function WaterLogChartSection({ historyData }: WaterLogChartSecti
         return { chartData: data, yMax: max, yTickValues: ticks, dateRangeText: dateText };
     }, [historyData]);
 
-    // ... 아래 렌더링 로직(return 부분)은 기존과 완전히 동일합니다!
     return (
         <View className={twMerge("mb-6")}>
             <View className={twMerge("w-full mb-3")}>
@@ -110,27 +100,28 @@ export default function WaterLogChartSection({ historyData }: WaterLogChartSecti
                                 grid: { stroke: "#D1D5DB", strokeDasharray: "4, 4" },
                             }}
                         />
+                        {/* 🎨 색상을 파란색 계열로 수정했습니다. */}
                         <VictoryArea
                             data={chartData}
                             interpolation="catmullRom"
-                            style={{ data: { fill: "rgba(232, 124, 113, 0.15)" } }}
+                            style={{ data: { fill: "rgba(169, 198, 217, 0.15)" } }}
                         />
                         <VictoryLine
                             data={chartData}
                             interpolation="catmullRom"
                             style={{
-                                data: { stroke: "rgba(232, 124, 113, 0.3)", strokeWidth: 14 },
+                                data: { stroke: "rgba(169, 198, 217, 0.3)", strokeWidth: 14 },
                             }}
                         />
                         <VictoryLine
                             data={chartData}
                             interpolation="catmullRom"
-                            style={{ data: { stroke: "#e87c71", strokeWidth: 2 } }}
+                            style={{ data: { stroke: "#A9C6D9", strokeWidth: 2 } }}
                         />
                         <VictoryScatter
                             data={chartData}
                             size={6}
-                            style={{ data: { fill: "#e87c71" } }}
+                            style={{ data: { fill: "#A9C6D9" } }}
                         />
                     </VictoryChart>
                 ) : (
