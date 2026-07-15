@@ -24,6 +24,7 @@ export default {
                 background: {
                     default: "var(--bg-default)",
                     paper: "var(--bg-paper)",
+                    light: "var(--bg-light)",
                 },
 
                 text: {
