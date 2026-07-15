@@ -45,7 +45,7 @@ export default function Pagination({
     const pageNumbers = getPageNumbers();
 
     return (
-        <View className="flex-row items-center justify-center gap-2 py-4">
+        <View className="flex-row items-center justify-center gap-2 pt-4">
             {/* 이전 페이지 버튼 */}
             <TouchableOpacity
                 onPress={() => onPageChange(currentPage - 1)}

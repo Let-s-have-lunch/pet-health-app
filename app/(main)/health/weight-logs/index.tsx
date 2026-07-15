@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
 import { View, ScrollView, Platform, Alert } from "react-native";
 import { twMerge } from "tailwind-merge";
 import Title from "@/components/common/title/Title";
@@ -22,21 +22,15 @@ function WeightLogListPage() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedLog, setSelectedLog] = useState<WeightLog | null>(null);
 
-    // 💡 1. 펫 ID가 없을 때 무한 로딩에 빠지지 않도록 메인으로 돌려보내기
-    useEffect(() => {
-        if (!petId) {
-            if (Platform.OS === "web") {
-                alert("선택된 반려동물이 없습니다.");
-            } else {
-                Alert.alert("알림", "선택된 반려동물이 없습니다.");
-            }
-            router.push("/");
-        }
-    }, [petId, router]);
-
     // API 데이터 페칭
     const fetchWeightLogData = useCallback(async () => {
-        if (!petId) return;
+        // 💡 펫이 없으면 빈 배열 상태로 두고 로딩만 종료 (빈 화면 렌더링)
+        if (!petId) {
+            setHistory([]);
+            setIsLoading(false);
+            return;
+        }
+
         try {
             setIsLoading(true);
             const response = await weightLogApi.getByPetId(petId);
@@ -45,16 +39,13 @@ function WeightLogListPage() {
             console.log(error);
             if (Platform.OS === "web") {
                 alert("데이터를 불러오는 중 오류가 발생했습니다.");
-                router.push("/");
             } else {
-                Alert.alert("오류", "데이터를 불러오는 중 오류가 발생했습니다.", [
-                    { text: "확인", onPress: () => router.push("/") },
-                ]);
+                Alert.alert("오류", "데이터를 불러오는 중 오류가 발생했습니다.");
             }
         } finally {
             setIsLoading(false);
         }
-    }, [router, petId]);
+    }, [petId]);
 
     useFocusEffect(
         useCallback(() => {
@@ -63,6 +54,15 @@ function WeightLogListPage() {
     );
 
     const handleAddPress = () => {
+        // 💡 펫이 없는데 추가 버튼을 누를 경우 방어 로직
+        if (!petId) {
+            if (Platform.OS === "web") {
+                alert("반려동물을 먼저 등록해주세요.");
+            } else {
+                Alert.alert("알림", "반려동물을 먼저 등록해주세요.");
+            }
+            return;
+        }
         setIsModalVisible(true);
     };
 
@@ -103,15 +103,9 @@ function WeightLogListPage() {
         }
     };
 
-    // 💡 2. TS 에러 방지: petId가 없으면 빈 화면(로딩) 렌더링
-    if (!petId) {
-        return <LoadingIndicator />;
-    }
-
     return (
         <View className={twMerge("flex-1 bg-background-default")}>
             <Title
-                // 💡 3. 하드코딩된 '초코' 대신 실제 반려동물 이름 적용
                 title={selectedPet ? `${selectedPet.name}의 몸무게` : "몸무게 기록"}
                 showBackButton={true}
                 onBackPress={() => router.push("/")}
@@ -123,13 +117,14 @@ function WeightLogListPage() {
             ) : (
                 <ScrollView>
                     <ContentContainer className={"overflow-hidden flex-1"}>
+                        {/* 💡 history가 빈 배열([])로 넘어가므로 자식 컴포넌트들에서 '기록이 없습니다' 등의 UI를 보여주게 됩니다. */}
                         <WeightLogChartSection history={history} />
 
-                        {/* 모달 팝업 컴포넌트 */}
+                        {/* 모달 팝업 컴포넌트 (petId가 undefined일 경우를 대비해 Number() 또는 as number 처리 가능, 여기선 모달이 안 열리게 막아둠) */}
                         <WeightLogModal
                             visible={isModalVisible}
                             onClose={handleCloseModal}
-                            petId={petId}
+                            petId={petId!} // ! (Non-null assertion) 사용: 어차피 petId 없으면 열리지 않음
                             reload={fetchWeightLogData}
                             initialData={selectedLog}
                         />

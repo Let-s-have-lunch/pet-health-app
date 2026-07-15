@@ -3,6 +3,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 import { User } from "@/types/user";
+import { usePetStore } from "@/stores/usePetStore";
 
 type AuthState = {
     isInitialized: boolean;
@@ -28,7 +29,10 @@ export const useAuthStore = create<AuthState>()(
             token: null,
             user: null,
             login: (user, token) => set({ isLoggedIn: true, token, user }),
-            logout: () => set({ isLoggedIn: false, token: null, user: null }),
+            logout: () => {
+                set({ isLoggedIn: false, token: null, user: null });
+                usePetStore.getState().reset();
+            },
         }),
         {
             name: "pet-health-app-auth-storage",
