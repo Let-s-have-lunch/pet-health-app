@@ -1,4 +1,4 @@
-import { useWindowDimensions, View } from "react-native";
+import { ScrollView, useWindowDimensions, View } from "react-native";
 import { Slot, useSegments } from "expo-router";
 import MainHeaderMobile from "@/components/layouts/main/MainHeaderMobile";
 import MainFooter from "@/components/layouts/main/MainFooter";
@@ -17,16 +17,12 @@ function MainLayout() {
 
     return (
         <View className={"flex-1 bg-background-default"}>
-            {isPostsPage ? (
-                <PostPageHeader />
-            ) : isMyPage ? (
-                <MyPageHeader />
-            ) : (
-                <MainHeaderMobile />
-            )}
-            <ContentContainer>
-                <Slot />
-            </ContentContainer>
+            {isPostsPage ? <PostPageHeader /> : isMyPage ? <MyPageHeader /> : <MainHeaderMobile />}
+            <ScrollView>
+                <ContentContainer >
+                    <Slot />
+                </ContentContainer>
+            </ScrollView>
 
             <MainFooter />
         </View>

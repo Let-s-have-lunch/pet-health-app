@@ -22,7 +22,10 @@ function WeightLogHistorySection({ history, onAddPress, onEditPress, onDeletePre
         <View className={twMerge("mb-6 mt-2")}>
             <View className={twMerge("flex-row justify-between items-center mb-4")}>
                 <TextComponent className={twMerge("text-xl font-bold")}>몸무게 기록</TextComponent>
-                <Button size={"small"} onPress={onAddPress}>
+                <Button
+                    size={"small"}
+                    onPress={onAddPress}
+                    className={"px-0 py-0 w-[48px] h-[48px]"}>
                     <Plus size={20} color="#4A5568" />
                 </Button>
             </View>
