@@ -49,24 +49,31 @@ function TodoHistorySection({
                                 {/* 1. 체크 아이콘 (완료 여부에 따라 색상 변경) */}
                                 <Button
                                     variant={"icon"}
-                                    className="mr-3 p-0"
+                                    className="mr-1 p-0"
                                     onPress={() => onTogglePress(todo.id)}>
-                                    <Check size={22} color={isCompleted ? "#A0AEC0" : "#25A58A"} />
+                                    <Check
+                                        size={22}
+                                        className={
+                                            isCompleted
+                                                ? "text-text-secondary"
+                                                : "text-success-point"
+                                        }
+                                    />
                                 </Button>
 
                                 {/* 2. 내용 및 날짜/시간 */}
                                 <View className="flex-1">
                                     <TextComponent
                                         className={twMerge(
-                                            "font-bold text-[15px] mb-1",
+                                            "font-semibold text-[15px] mb-1",
                                             // 완료 시 회색 텍스트 & 취소선 적용
                                             isCompleted
-                                                ? "text-gray-400 line-through"
-                                                : "text-gray-800",
+                                                ? "text-text-secondary line-through"
+                                                : "text-text-default",
                                         )}>
                                         {todo.title}
                                     </TextComponent>
-                                    <TextComponent className={twMerge("text-xs text-gray-400")}>
+                                    <TextComponent className={twMerge("text-xs text-text-secondary")}>
                                         {/* date-fns 포맷 적용 (소문자 am/pm 출력을 위해 toLowerCase() 체이닝) */}
                                         {format(
                                             new Date(todo.date),
@@ -80,11 +87,11 @@ function TodoHistorySection({
                                     {/* 완료된 항목은 사진 디자인처럼 수정(Edit2) 버튼을 숨김 */}
                                     {!isCompleted && (
                                         <Button variant={"icon"} onPress={() => onEditPress(todo)}>
-                                            <Edit2 size={16} color="#4A5568" />
+                                            <Edit2 size={16} color="#000000" />
                                         </Button>
                                     )}
                                     <Button variant={"icon"} onPress={() => onDeletePress(todo.id)}>
-                                        <Trash2 size={16} color="#4A5568" />
+                                        <Trash2 size={16} color="#000000" />
                                     </Button>
                                 </View>
                             </Card>
@@ -93,7 +100,7 @@ function TodoHistorySection({
                 ) : (
                     <Card
                         shadow={"sm"}
-                        className={twMerge("text-center text-gray-400 py-6 text-sm")}>
+                        className={twMerge("text-center text-text-secondary py-6 text-sm")}>
                         등록된 일정이 없습니다.
                     </Card>
                 )}

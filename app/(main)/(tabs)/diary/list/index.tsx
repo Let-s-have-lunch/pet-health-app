@@ -21,6 +21,7 @@ export default function DailyDetailScreen() {
     const loadDailyData = useCallback(async () => {
         if (!date) return;
         setIsLoading(true);
+        
         try {
             const [diaryList, todoList] = await Promise.all([
                 diaryApi.getDiaryList(date),

@@ -39,8 +39,8 @@ const updateTodo = async (id: number, date: string, data: TodoFormInputType): Pr
     return response.data.data;
 };
 
-const toggleTodo = async (id: number, completed: boolean): Promise<Todo> => {
-    const response = await axiosInstance.patch(`/todo/${id}/toggle`, { completed });
+const toggleTodo = async (id: number): Promise<Todo> => {
+    const response = await axiosInstance.patch(`/todo/${id}/toggle`);
     return response.data.data;
 };
 

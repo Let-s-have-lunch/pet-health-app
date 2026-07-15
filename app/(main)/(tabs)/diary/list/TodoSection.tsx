@@ -13,7 +13,6 @@ interface Props {
 }
 
 export default function TodoSection({ todos, targetDate, onRefresh }: Props) {
-    // 💡 불필요한 isLoading 상태를 제거했습니다!
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
@@ -61,12 +60,8 @@ export default function TodoSection({ todos, targetDate, onRefresh }: Props) {
 
     const handleToggleStatus = async (todoId: number) => {
         try {
-            const targetTodo = todos.find(todo => todo.id === todoId);
-            if (!targetTodo) return;
 
-            const nextStatus = !targetTodo.isCompleted;
-
-            await todoApi.toggleTodo(todoId, nextStatus);
+            await todoApi.toggleTodo(todoId);
 
             await onRefresh();
         } catch (error) {
