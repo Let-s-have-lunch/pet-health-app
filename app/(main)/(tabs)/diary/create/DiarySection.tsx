@@ -31,23 +31,56 @@ export default function DiarySection({ diaryList = [], date }: Props) {
             <Pressable
                 onPress={() =>
                     router.push({
-                        pathname: "/(main)/(tabs)/diary/create", // 👈 기존의 잘못된 '/diary/create/diary' 경로를 올바른 곳으로 수정!
+                        pathname: "/(main)/(tabs)/diary/create",
                         params: { date },
                     })
                 }
                 className={twMerge(
                     "bg-background-paper",
-                    "rounded-[20px]",
-                    "border-2",
-                    "border-dashed",
-                    "border-gray-300",
+                    "rounded-[28px]",
                     "items-center",
                     "justify-center",
-                    "h-[170px]",
+                    "px-8",
+                    "py-10",
+                    "min-h-[320px]",
                 )}>
-                <Ionicons name="add" size={38} color="#A8B0BF" />
-                <TextComponent className="mt-3 text-[15px] text-gray-500">
-                    기록을 추가해주세요
+                {/* 아이콘 */}
+                <View
+                    className={twMerge(
+                        "w-[72px]",
+                        "h-[72px]",
+                        "rounded-full",
+                        "bg-primary-main",
+                        "items-center",
+                        "justify-center",
+                        "bg-[#F8A69B]",
+                    )}>
+                    <Ionicons name="add" size={36} color="#FFFFFF" />
+                </View>
+
+                {/* 제목 */}
+                <TextComponent
+                    className={twMerge(
+                        "mt-8",
+                        "text-[28px]",
+                        "font-bold",
+                        "text-text-default",
+                        "text-center",
+                    )}>
+                    오늘의 일기 작성하기
+                </TextComponent>
+
+                {/* 설명 */}
+                <TextComponent
+                    className={twMerge(
+                        "mt-4",
+                        "text-[16px]",
+                        "leading-7",
+                        "text-center",
+                        "text-text-secondary",
+                    )}>
+                    오늘의 기분과 소중한 순간을{"\n"}
+                    사진과 함께 기록해보세요.
                 </TextComponent>
             </Pressable>
         );
@@ -65,7 +98,7 @@ export default function DiarySection({ diaryList = [], date }: Props) {
                             params: { date },
                         })
                     }
-                    className="bg-background-paper rounded-[20px] overflow-hidden">
+                    className="bg-background-paper rounded-[28px] overflow-hidden">
                     <View className="bg-[#F5C8C7] px-5 py-4">
                         <TextComponent className="text-[17px] font-bold">
                             {formatLongDate(diary.date)}
