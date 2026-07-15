@@ -91,18 +91,30 @@ function MyInquiryDetailPage() {
 
             <ScrollView className={"flex-1"}>
                 <ContentContainer className={"overflow-hidden flex-1"}>
-                    <Card>
-                        <View className={twMerge(["border-b", "border-divider"], ["pb-4", "mb-6"])}>
-                            <TextComponent className={twMerge("mb-1", ["text-xl", "font-bold"])}>
+                    <Card shadow={"sm"}>
+                        <View className={twMerge(["border-b", "border-divider"], ["pb-4", "mb-4"])}>
+                            <TextComponent
+                                className={twMerge("mb-1", [
+                                    "text-xl",
+                                    "font-bold",
+                                    "mb-1",
+                                    "pm-4",
+                                ])}>
                                 {inquiry.title}
                             </TextComponent>
-                            <TextComponent className={twMerge("text-sm", "text-text-secondary")}>
+                            <TextComponent
+                                className={twMerge("text-sm", "text-text-secondary", "text-right")}>
                                 등록일 : {inquiry.createdAt.substring(0, 10)}
                             </TextComponent>
                         </View>
 
-                        <View className={"min-h-60"}>
-                            <TextComponent className={twMerge("leading-relaxed")}>
+                        <View className={"min-h-48"}>
+                            <TextComponent
+                                className={twMerge(
+                                    "text-base",
+                                    "text-text-default",
+                                    "leading-relaxed",
+                                )}>
                                 {inquiry.content}
                             </TextComponent>
                         </View>
@@ -110,13 +122,13 @@ function MyInquiryDetailPage() {
                         {inquiry.answer && (
                             <View
                                 className={twMerge(
-                                    "mt-10 p-6 rounded-lg border",
-                                    "bg-bg-default border-divider",
+                                    "mt-4 p-6 rounded-lg border",
+                                    "bg-background-light border-divider",
                                 )}>
                                 <View
                                     className={twMerge(
-                                        "flex-row justify-between items-center",
-                                        "border-b pb-4 border-divider",
+                                        ["flex-row justify-between items-center"],
+                                        ["border-b pb-4", "border-divider"],
                                     )}>
                                     <TextComponent className={twMerge("font-bold", "text-base")}>
                                         관리자 답변
@@ -140,18 +152,18 @@ function MyInquiryDetailPage() {
                         <View
                             className={twMerge(
                                 ["flex-row", "justify-end", "items-center", "gap-2"],
-                                ["mt-10", "pt-6"],
+                                ["mt-5", "pt-6"],
                                 ["border-divider", "border-t"],
                             )}>
                             <Button
-                                className={twMerge(["flex-1", "md:flex-none"])}
+                                className={twMerge(["flex-1", "md:flex-none"], ["min-w-20"])}
                                 size={"small"}
                                 variant={"outlined"}
                                 onPress={() => router.push("/inquiry")}>
                                 목록
                             </Button>
                             <Button
-                                className={twMerge(["flex-1", "md:flex-none"])}
+                                className={twMerge(["flex-1", "md:flex-none"], ["min-w-20"])}
                                 size={"small"}
                                 variant={"contained"}
                                 color={"error"}
@@ -159,7 +171,7 @@ function MyInquiryDetailPage() {
                                 삭제
                             </Button>
                             <Button
-                                className={twMerge(["flex-1", "md:flex-none"])}
+                                className={twMerge(["flex-1", "md:flex-none"], ["min-w-20"])}
                                 size={"small"}
                                 variant={"contained"}
                                 onPress={() => router.push(`/inquiry/${inquiry.id}/update`)}>

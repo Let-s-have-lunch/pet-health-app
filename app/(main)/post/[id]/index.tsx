@@ -57,7 +57,7 @@ function CommunityPostDetailPage() {
 
     // 컴포넌트가 마운트되거나 postId가 바뀔 때 무조건 데이터를 새로 부릅니다.
     useEffect(() => {
-        loadPostData().then(() =>{});
+        loadPostData().then(() => {});
     }, [postId, loadPostData]);
 
     // 모달창이 닫힐 때 하단 바 댓글 개수 동기화
@@ -135,38 +135,54 @@ function CommunityPostDetailPage() {
                 <ScrollView className="flex-1">
                     <ContentContainer className={"p-0"}>
                         <View className={twMerge(["p-4"])}>
-                            <Card className="bg-background-paper">
+                            <Card shadow={"sm"} className="bg-background-paper">
                                 <View>
                                     <TextComponent
-                                        className={"text-text-default pb-3 text-xl font-bold"}>
+                                        className={
+                                            "text-text-default text-xl font-bold  mb-1 pb-4"
+                                        }>
                                         {post.title}
                                     </TextComponent>
                                     <View className={"flex-row items-center pb-2 justify-between"}>
                                         <View className="flex-row items-center">
                                             <TextComponent
-                                                className={"text-sm font-semibold text-text-default"}>
+                                                className={
+                                                    "text-sm font-semibold text-text-default"
+                                                }>
                                                 {post.user.nickname}
                                             </TextComponent>
                                         </View>
                                         <View className={"flex-row items-center"}>
-                                            <TextComponent className={"text-xs text-text-secondary"}>
+                                            <TextComponent
+                                                className={"text-sm text-text-secondary"}>
                                                 등록 {post.createdAt.substring(0, 10)}
                                             </TextComponent>
                                             <TextComponent
-                                                className={"text-xs text- px-1.5 text-text-secondary"}>
+                                                className={
+                                                    "text-sm text- px-1.5 text-text-secondary"
+                                                }>
                                                 |
                                             </TextComponent>
-                                            <TextComponent className={"text-xs text-text-secondary"}>
+                                            <TextComponent
+                                                className={"text-sm text-text-secondary"}>
                                                 조회 {post.views}
                                             </TextComponent>
                                         </View>
                                     </View>
 
-                                    <View className="border-t border-divider my-2" />
-
-                                    <View className={"py-2 min-h-48"}>
+                                    <View
+                                        className={twMerge([
+                                            "py-5",
+                                            "min-h-48",
+                                            "border-t",
+                                            "border-background-default",
+                                        ])}>
                                         <TextComponent
-                                            className={"text-base text-text-default leading-6"}>
+                                            className={twMerge([
+                                                "text-base",
+                                                "text-text-default",
+                                                "leading-relaxed",
+                                            ])}>
                                             {post.content}
                                         </TextComponent>
                                     </View>
@@ -174,9 +190,13 @@ function CommunityPostDetailPage() {
 
                                 <View
                                     className={
-                                        "flex-row pt-4 gap-2 justify-end items-center border-t border-divider"
+                                        "flex-row pt-6 gap-2 justify-end items-center border-t border-divider"
                                     }>
                                     <Button
+                                        className={twMerge(
+                                            ["flex-1", "md:flex-none"],
+                                            ["min-w-20"],
+                                        )}
                                         variant={"outlined"}
                                         size={"small"}
                                         onPress={() => router.push("/posts")}>
@@ -186,6 +206,10 @@ function CommunityPostDetailPage() {
                                     {isAuthor && (
                                         <>
                                             <Button
+                                                className={twMerge(
+                                                    ["flex-1", "md:flex-none"],
+                                                    ["min-w-20"],
+                                                )}
                                                 variant={"contained"}
                                                 size={"small"}
                                                 onPress={() =>
@@ -194,6 +218,10 @@ function CommunityPostDetailPage() {
                                                 수정
                                             </Button>
                                             <Button
+                                                className={twMerge(
+                                                    ["flex-1", "md:flex-none"],
+                                                    ["min-w-20"],
+                                                )}
                                                 variant={"contained"}
                                                 size={"small"}
                                                 color={"error"}
@@ -217,7 +245,8 @@ function CommunityPostDetailPage() {
                     <View className="flex-row items-center gap-2 text-text-default">
                         <Ionicons name="chatbubble-ellipses-outline" size={18} />
                         <TextComponent className="text-sm font-medium">
-                            댓글 <text className={twMerge(["text-success-point"])}>{replyCount}</text>
+                            댓글{" "}
+                            <text className={twMerge(["text-success-point"])}>{replyCount}</text>
                         </TextComponent>
                     </View>
                     <Ionicons name="chevron-up" size={16} color="#4B5563" />

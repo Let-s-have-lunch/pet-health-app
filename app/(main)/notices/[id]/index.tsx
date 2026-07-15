@@ -74,7 +74,7 @@ function NoticeDetailPage() {
                             </View>
                         </View>
 
-                        <View className={"min-h-60"}>
+                        <View className={"min-h-48"}>
                             <TextComponent className={twMerge("leading-relaxed")}>
                                 {notice.content}
                             </TextComponent>
@@ -83,14 +83,15 @@ function NoticeDetailPage() {
                         <View
                             className={twMerge(
                                 ["flex-row", "justify-end", "items-center"],
-                                ["mt-10", "pt-6"],
+                                ["mt-6", "pt-6"],
                                 ["border-divider", "border-t"],
                             )}>
                             <Button
+                                className={twMerge(["flex-1", "md:flex-none"], ["min-w-20"])}
                                 size={"small"}
                                 variant={"outlined"}
                                 onPress={() => router.push("/notices")}>
-                                목록으로
+                                목록
                             </Button>
                         </View>
                     </Card>

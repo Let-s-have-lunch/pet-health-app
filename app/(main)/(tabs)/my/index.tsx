@@ -29,7 +29,7 @@ function MyInfoPage() {
                 자주 묻는 질문(FAQ)
             </Button>
             {isLoggedIn ? (
-                <Button size={"large"} onPress={() => logout()} className={twMerge(["bg-primary-light"])}>
+                <Button size={"large"} onPress={() => logout()} className={twMerge(["bg-primary-light", "border-0"])}>
                     로그아웃
                 </Button>
             ) : (

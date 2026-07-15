@@ -115,19 +115,21 @@ function CreateCommunityPostPage() {
                             }}
                         />
 
-                        <View className={twMerge(["flex-row", "gap-3", "justify-end"])}>
+                        <View className={twMerge(["flex-row", "gap-2", "justify-end"])}>
                             <Button
-                                className={twMerge(["min-w-28", "flex-1", "md:flex-none"])}
+                                className={twMerge(["min-w-20", "flex-1", "md:flex-none"])}
                                 variant={"outlined"}
+                                size={"small"}
                                 onPress={() => router.push("/posts")}>
                                 취소
                             </Button>
                             <Button
-                                className={twMerge(["min-w-28", "flex-1", "md:flex-none"])}
+                                className={twMerge(["min-w-20", "flex-1", "md:flex-none"])}
+                                size={"small"}
                                 variant={"contained"}
                                 onPress={handleSubmit(onSubmit)}
                                 disabled={isSubmitting}>
-                                {isSubmitting ? "등록 중..." : "등록하기"}
+                                {isSubmitting ? "등록 중..." : "등록"}
                             </Button>
                         </View>
                     </FormContainer>
