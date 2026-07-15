@@ -52,13 +52,14 @@ export default function PetCard({ pet, onPressEdit }: Props) {
     };
 
     return (
+        <View style={{ paddingTop: 25 }}>
         <Card
             className={twMerge(["rounded-[28px]"])}
             shadow="none"
             style={{
                 width: "100%",
                 minHeight: isSmall ? 430 : 320,
-                paddingHorizontal: isSmall ? 20 : 32,
+                paddingHorizontal: isSmall ? 23 : 35,
                 paddingVertical: 24,
             }}>
             {/* 제목 */}
@@ -88,7 +89,7 @@ export default function PetCard({ pet, onPressEdit }: Props) {
                 <>
                     {/* 작은 화면 */}
 
-                    <View className={twMerge(["items-center", "mb-7"])}>{renderImage()}</View>
+                    <View className={twMerge(["items-center", "mt-2", "mb-8"])}>{renderImage()}</View>
 
                     <View>
                         <InfoRow label="이름" value={pet.name} />
@@ -124,5 +125,6 @@ export default function PetCard({ pet, onPressEdit }: Props) {
                 </>
             )}
         </Card>
+        </View>
     );
 }

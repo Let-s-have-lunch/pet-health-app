@@ -7,6 +7,7 @@ import petApi from "@/api/user/petApi";
 import { useCallback, useState } from "react";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import HistorySection from "@/components/history/HistorySection";
+import { twMerge } from "tailwind-merge";
 
 function HomeScreen() {
     const router = useRouter();
@@ -64,9 +65,9 @@ function HomeScreen() {
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
-            <PetCardSection pets={pets} isLoggedIn={isLoggedIn} onPressAdd={handleAddPet} />
+                <PetCardSection pets={pets} isLoggedIn={isLoggedIn} onPressAdd={handleAddPet} />
 
-            <HistorySection />
+                <HistorySection />
         </ScrollView>
     );
 }
