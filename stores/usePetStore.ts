@@ -13,7 +13,6 @@ type PetState = {
     setSelectedPet: (pet: Pet | null) => void;
     setIsAddCardSelected: (isSelected: boolean) => void;
 
-    // 💡 1. 로그아웃 시 비워주기 위한 함수 타입 추가
     reset: () => void;
 };
 

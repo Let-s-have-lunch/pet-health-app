@@ -1,34 +1,36 @@
 import { View, ScrollView, Pressable, Image, Alert, Platform } from "react-native";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useFocusEffect, router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { twMerge } from "tailwind-merge";
 import TextComponent from "../../../../components/common/text/TextComponent";
 import { vetLogApi } from "../../../../api/user/vetLogApi";
 import { VetLogState, VetRecord } from "../../../../types/vetRecord";
 import Title from "../../../../components/common/title/Title";
 import { usePetStore } from "@/stores/usePetStore";
+import VetRecordDetailModal from "@/components/common/vetRecord/VetRecordDetailModal";
 
 export default function VetLogPage() {
     const selectedPet = usePetStore(state => state.selectedPet);
     const petId = selectedPet?.id;
     const BACKEND_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedRecordId, setSelectedRecordId] = useState<number | null>(null);
+
     const [data, setData] = useState<VetLogState>({
         upcoming: null,
         history: [],
     });
 
-    useEffect(() => {
-        if (!petId) {
-            Alert.alert("알림", "선택된 반려동물이 없습니다.");
-            router.push("/");
-        }
-    }, [petId]);
+    const openModal = (id: number) => {
+        setSelectedRecordId(id);
+        setIsModalOpen(true);
+    };
 
-    const parseValidDate = (dateString: string) => {
-        if (!dateString) return new Date();
-        if (dateString.includes("T")) return new Date(dateString);
-        return new Date(dateString.replace(/\./g, "-").replace(/\s/g, ""));
+    const getImageUrl = (path?: string | null) => {
+        if (!path) return null;
+        return path.startsWith("http") ? path : `${BACKEND_URL}${path}`;
     };
 
     const loadData = useCallback(async () => {
@@ -37,14 +39,13 @@ export default function VetLogPage() {
             const res = await vetLogApi.getByPetId(petId);
             const records: VetRecord[] = res?.data?.data || [];
 
-            if (!Array.isArray(records) || records.length === 0) {
-                setData({ upcoming: null, history: [] });
-                return;
-            }
+            const sortedRecords = [...records].sort(
+                (a, b) => new Date(b.visitDate).getTime() - new Date(a.visitDate).getTime(),
+            );
 
             setData({
-                upcoming: records[0] ?? null,
-                history: records.slice(1),
+                upcoming: sortedRecords[0] ?? null,
+                history: sortedRecords.slice(1),
             });
         } catch (e) {
             console.error("데이터 로딩 중 에러:", e);
@@ -57,176 +58,189 @@ export default function VetLogPage() {
         }, [loadData]),
     );
 
-    // 💡 삭제 기능 복구
-    const handleDelete = async (id: number) => {
-        const processDelete = async () => {
+    // 삭제 로직: 웹/앱 환경 분기 처리
+    const handleDelete = (id: number) => {
+        const executeDelete = async () => {
             try {
                 await vetLogApi.delete(id);
                 await loadData();
             } catch (error) {
-                console.error("삭제 중 에러:", error);
-                Platform.OS === "web"
-                    ? alert("삭제에 실패했습니다.")
-                    : Alert.alert("오류", "삭제에 실패했습니다.");
+                if (Platform.OS === "web") {
+                    alert("삭제에 실패했습니다.");
+                } else {
+                    Alert.alert("오류", "삭제에 실패했습니다.");
+                }
             }
         };
 
         if (Platform.OS === "web") {
-            if (confirm("정말 삭제하시겠습니까?")) {
-                await processDelete();
+            const confirmed = window.confirm("정말 삭제하시겠습니까?");
+            if (confirmed) {
+                executeDelete().then(() => {})
             }
         } else {
             Alert.alert("삭제", "정말 삭제하시겠습니까?", [
                 { text: "취소", style: "cancel" },
-                { text: "삭제", style: "destructive", onPress: processDelete },
+                {
+                    text: "삭제",
+                    style: "destructive",
+                    onPress: executeDelete,
+                },
             ]);
         }
     };
 
+    // 요일이 포함된 날짜 포맷 (이미지 디자인 반영)
     const formatLongDate = (dateString: string) => {
-        const date = parseValidDate(dateString);
-        if (isNaN(date.getTime())) return "날짜 정보 없음";
+        const date = new Date(dateString);
         const days = ["일", "월", "화", "수", "목", "금", "토"];
         return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 ${days[date.getDay()]}요일`;
     };
 
     const formatShortDate = (dateString: string) => {
-        const date = parseValidDate(dateString);
-        if (isNaN(date.getTime())) return "";
-        const year = String(date.getFullYear()).slice(2);
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        return `${year}.${month}.${day}`;
+        const date = new Date(dateString);
+        return `${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
     };
 
-    const getImageUrl = (path?: string | null) => {
-        if (!path) return "https://via.placeholder.com/400x150/89CFF0/FFFFFF?text=No+Image";
-        if (path.startsWith("http")) return path;
-        return `${BACKEND_URL}${path}`;
-    };
-
-    if (!petId) return <View className="flex-1 bg-background-default" />;
+    if (!petId) return <View className={twMerge("flex-1 bg-background-default")} />;
 
     return (
-        <View className="flex-1 bg-background-default">
-            <View className="bg-background-paper">
+        <View className={twMerge("flex-1 bg-background-default")}>
+            <View className={twMerge("bg-background-paper")}>
                 <Title
-                    title={selectedPet ? `${selectedPet.name} 병원방문기록` : "병원방문기록"}
+                    title={`${selectedPet?.name} 병원방문기록`}
                     showBackButton={true}
                     onBackPress={() => router.push("/")}
                 />
             </View>
 
             <ScrollView
-                className="flex-1 bg-background-main"
-                contentContainerStyle={{
-                    paddingHorizontal: 20,
-                    paddingTop: 24,
-                    paddingBottom: 40,
-                }}>
+                className={twMerge("flex-1 bg-background-main")}
+                contentContainerStyle={{ padding: 20, paddingBottom: 40 }}>
                 {/* 1. 상단 카드 */}
                 {data.upcoming ? (
                     <Pressable
-                        onPress={() =>
-                            router.push(`/(main)/health/vet-records/${data.upcoming!.id}`)
-                        }
-                        className="bg-background-paper rounded-[20px] overflow-hidden mb-8 shadow-sm">
-                        <View className="bg-[#F2C6C2] px-5 py-4">
-                            <TextComponent className="text-[16px] font-bold text-text-default">
+                        onPress={() => openModal(data.upcoming!.id)}
+                        className={twMerge(
+                            "bg-background-paper rounded-[20px] overflow-hidden mb-8 shadow-sm",
+                        )}>
+                        <View className={twMerge("bg-[#F2C6C2] px-5 py-4")}>
+                            <TextComponent className={twMerge("text-[16px] font-bold")}>
                                 {formatLongDate(data.upcoming.visitDate)}
                             </TextComponent>
                         </View>
-
-                        <View className="p-5">
-                            <Image
-                                source={{ uri: getImageUrl(data.upcoming.receiptImage) }}
-                                className="w-full h-32 rounded-xl mb-4"
-                                resizeMode="cover"
-                            />
-                            <TextComponent className="text-[16px] font-bold text-text-default mb-2">
+                        <View className={twMerge("p-5")}>
+                            {data.upcoming.receiptImage ? (
+                                <Image
+                                    source={{
+                                        uri: getImageUrl(data.upcoming.receiptImage) || undefined,
+                                    }}
+                                    className={twMerge("w-full h-32 rounded-xl mb-4")}
+                                    resizeMode="cover"
+                                />
+                            ) : (
+                                <View
+                                    className={twMerge(
+                                        "w-full h-32 rounded-xl mb-4 border-2 border-dashed border-gray-300 items-center justify-center bg-gray-50",
+                                    )}>
+                                    <Ionicons name="image-outline" size={32} color="#9CA3AF" />
+                                    <TextComponent className={twMerge("text-gray-400 mt-2")}>
+                                        이미지가 없습니다.
+                                    </TextComponent>
+                                    <TextComponent className={twMerge("text-gray-400 text-[12px]")}>
+                                        이미지를 첨부해주세요.
+                                    </TextComponent>
+                                </View>
+                            )}
+                            <TextComponent className={twMerge("text-[16px] font-bold mb-1")}>
                                 {data.upcoming.visitPurpose}
                             </TextComponent>
-                            <TextComponent className="text-[14px] text-text-secondary leading-5">
-                                {data.upcoming.memo ||
-                                    `${data.upcoming.hospitalName}에 다녀왔습니다.`}
-                            </TextComponent>
+                            {data.upcoming.memo && (
+                                <TextComponent
+                                    className={twMerge("text-[14px] text-gray-500")}
+                                    numberOfLines={2}>
+                                    {data.upcoming.memo}
+                                </TextComponent>
+                            )}
                         </View>
                     </Pressable>
                 ) : (
                     <Pressable
                         onPress={() => router.push("/(main)/health/vet-records/create")}
-                        className="bg-background-paper rounded-[20px] h-[150px] items-center justify-center mb-8 border border-dashed border-gray-300">
-                        <TextComponent className="text-text-secondary">
-                            기록을 추가해주세요
-                        </TextComponent>
+                        className={twMerge(
+                            "bg-background-paper rounded-[20px] h-[150px] items-center justify-center mb-8 border-2 border-dashed border-gray-300",
+                        )}>
+                        <Ionicons name="add" size={32} color="#9CA3AF" />
+                        <TextComponent>기록을 추가해주세요</TextComponent>
                     </Pressable>
                 )}
 
                 {/* 2. 방문기록 리스트 */}
-                <View className="flex-row items-center justify-between mb-4">
-                    <TextComponent className="text-[18px] font-bold text-text-default">
+                <View className={twMerge("flex-row items-center justify-between mb-4")}>
+                    <TextComponent className={twMerge("text-[18px] font-bold")}>
                         방문기록
                     </TextComponent>
                     <Pressable
                         onPress={() => router.push("/(main)/health/vet-records/create")}
-                        className="bg-secondary-main px-3 py-1 rounded-full">
-                        <TextComponent className="text-[12px] font-bold text-text-default">
+                        className={twMerge("bg-success-point px-3 py-1 rounded-full")}>
+                        <TextComponent className={twMerge("text-[12px] font-bold")}>
                             + 추가
                         </TextComponent>
                     </Pressable>
                 </View>
 
-                {data.history?.length > 0 ? (
-                    data.history.map(item => (
-                        <View
-                            key={item.id}
-                            className="bg-background-paper rounded-[16px] flex-row items-center px-5 py-4 mb-3 shadow-sm">
+                {data.history?.map(item => (
+                    <View
+                        key={item.id}
+                        className={twMerge(
+                            "bg-background-paper rounded-[16px] flex-row items-center px-5 py-4 mb-3 shadow-sm",
+                        )}>
+                        <Pressable
+                            className={twMerge("flex-1 mr-2")}
+                            onPress={() => openModal(item.id)}>
                             <TextComponent
-                                className="flex-1 text-[15px] font-bold text-text-default"
+                                className={twMerge("text-[15px] font-bold")}
                                 numberOfLines={1}>
                                 {item.visitPurpose || item.hospitalName}
                             </TextComponent>
+                        </Pressable>
 
-                            {/* 💡 수정/삭제 아이콘 영역 복구 */}
-                            <View className="flex-row items-center ml-2 gap-2">
-                                <TextComponent className="text-[12px] text-text-secondary mr-2">
-                                    {formatShortDate(item.visitDate)}
-                                </TextComponent>
+                        <View className={twMerge("flex-row items-center gap-1 z-10")}>
+                            <TextComponent className={twMerge("text-[12px] text-gray-500 mr-2")}>
+                                {formatShortDate(item.visitDate)}
+                            </TextComponent>
 
-                                <Pressable
-                                    className="p-1"
-                                    onPress={() =>
-                                        router.push({
-                                            pathname: "/(main)/health/vet-records/[id]/update",
-                                            params: {
-                                                id: item.id,
-                                                hospitalName: item.hospitalName,
-                                                visitPurpose: item.visitPurpose,
-                                                visitDate: item.visitDate,
-                                                cost: item.cost, // 비용 항목 포함
-                                                memo: item.memo,
-                                                receiptImage: item.receiptImage,
-                                            },
-                                        })
-                                    }>
-                                    <Ionicons name="pencil" size={16} color="#888" />
-                                </Pressable>
+                            <Pressable
+                                className={twMerge("p-2")}
+                                hitSlop={15}
+                                onPress={() =>
+                                    router.push({
+                                        pathname: "/(main)/health/vet-records/[id]/update",
+                                        params: { id: item.id },
+                                    })
+                                }>
+                                <Ionicons name="pencil" size={18} color="#888" />
+                            </Pressable>
 
-                                <Pressable
-                                    className="p-1"
-                                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                                    onPress={() => handleDelete(item.id)}>
-                                    <Ionicons name="trash-outline" size={16} color="#888" />
-                                </Pressable>
-                            </View>
+                            <Pressable
+                                className={twMerge("p-2")}
+                                hitSlop={20}
+                                onPress={() => handleDelete(item.id)}>
+                                <Ionicons name="trash-outline" size={18} color="#EF4444" />
+                            </Pressable>
                         </View>
-                    ))
-                ) : (
-                    <TextComponent className="text-center text-text-secondary mt-10">
-                        지난 기록이 없습니다.
-                    </TextComponent>
-                )}
+                    </View>
+                ))}
             </ScrollView>
+
+            {isModalOpen && (
+                <VetRecordDetailModal
+                    visible={isModalOpen}
+                    recordId={selectedRecordId}
+                    onClose={() => setIsModalOpen(false)}
+                    onUpdateComplete={loadData}
+                />
+            )}
         </View>
     );
 }

@@ -3,10 +3,12 @@ import Button from "@/components/common/button/Button";
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "expo-router";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { usePetStore } from "@/stores/usePetStore";
 
 function MyInfoPage() {
     const router = useRouter();
     const { isLoggedIn, logout } = useAuthStore();
+
 
     // 1:1문의, 공지사항, 자주묻는 질문 탭이 나오게 해주세요.
     return (

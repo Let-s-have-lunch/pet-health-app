@@ -9,7 +9,9 @@ import {
     Alert,
     Modal,
     Pressable,
+    Image,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
 import Title from "@/components/common/title/Title";
 import FormContainer from "@/components/layouts/common/FormContainer";
@@ -22,6 +24,8 @@ import { RegisterPetInputType, registerPetSchema } from "@/schemas/user/pet/regi
 import TextComponent from "@/components/common/text/TextComponent";
 import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { ImagePickerAsset } from "expo-image-picker";
+import { twMerge } from "tailwind-merge";
 
 function PetCreatePage() {
     const router = useRouter();
@@ -31,7 +35,6 @@ function PetCreatePage() {
     const {
         control,
         handleSubmit,
-        setError,
         reset,
         formState: { errors, isSubmitting },
     } = useForm<RegisterPetInputType>({
@@ -53,6 +56,7 @@ function PetCreatePage() {
     const [neuteredModalVisible, setNeuteredModalVisible] = useState(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [image, setImage] = useState<ImagePickerAsset | null>(null);
 
     const handleDelete = async () => {
         if (!petId) return;
@@ -62,12 +66,33 @@ function PetCreatePage() {
             await petApi.deletePet(Number(petId));
             setDeleteModalVisible(false);
             router.replace("/");
-
         } catch (error) {
             console.log(error);
             Alert.alert("삭제 실패", "반려동물 삭제 중 오류가 발생했습니다.");
         } finally {
             setIsDeleting(false);
+        }
+    };
+
+    const handlePickImage = async () => {
+        const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (!permission.granted) {
+            Alert.alert("권한이 필요합니다.");
+            return;
+        }
+
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ["images"],
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.8,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            console.log(result.assets[0]);
+            setImage(result.assets[0]);
         }
     };
 
@@ -95,31 +120,52 @@ function PetCreatePage() {
             }
         };
         loadPet().then(() => {});
-    }, [petId, reset]);
+    }, [isEditMode, petId, reset]);
 
     const onSubmit = async (data: RegisterPetInputType) => {
         try {
-            const payload = {
-                ...data,
+            const formData = new FormData();
 
-                // YYYYMMDD -> YYYY-MM-DD
-                birthdate: data.birthdate
-                    ? `${data.birthdate.slice(0, 4)}-${data.birthdate.slice(4, 6)}-${data.birthdate.slice(6, 8)}`
-                    : undefined,
+            formData.append("name", data.name);
+            formData.append("species", data.species);
+            formData.append("gender", data.gender);
+            formData.append("neutered", String(data.neutered));
 
-                // 빈 문자열이면 DB에는 null(undefined)처리
-                registrationNumber:
-                    (data.registrationNumber ?? "").trim() === ""
-                        ? undefined
-                        : data.registrationNumber,
-                profileImage:
-                    (data.profileImage ?? "").trim() === "" ? undefined : data.profileImage,
-            };
+            if (data.breed) {
+                formData.append("breed", data.breed);
+            }
 
+            if (data.birthdate) {
+                formData.append(
+                    "birthdate",
+                    `${data.birthdate.slice(0, 4)}-${data.birthdate.slice(4, 6)}-${data.birthdate.slice(6, 8)}`,
+                );
+            }
+
+            if (data.registrationNumber?.trim()) {
+                formData.append("registrationNumber", data.registrationNumber);
+            }
+
+            if (image) {
+                if (Platform.OS === "web") {
+                    if (image.file) {
+                        console.log(image.file);
+                        formData.append("profileImage", image.file);
+                    }
+                } else {
+                    formData.append("profileImage", {
+                        uri: image.uri,
+                        name: image.fileName ?? "pet.jpg",
+                        type: image.mimeType ?? "image/jpeg",
+                    } as any);
+                }
+            }
+
+            console.log("여기까지 옴");
             if (isEditMode) {
-                await petApi.updatePet(Number(petId), payload);
+                await petApi.updatePet(Number(petId), formData);
             } else {
-                await petApi.registerPet(payload);
+                await petApi.registerPet(formData);
             }
 
             router.replace("/");
@@ -149,15 +195,29 @@ function PetCreatePage() {
                             </TextComponent>
 
                             <Pressable
-                                onPress={() => {
-                                    // TODO: 이미지 선택
-                                }}
-                                className="h-32 items-center justify-center rounded-xl border border-dashed border-[#E7D7CC] bg-white">
-                                <Ionicons name="camera-outline" size={34} color="#7F8C8D" />
-
-                                <TextComponent className="mt-2 text-text-secondary font-medium">
-                                    사진 선택
-                                </TextComponent>
+                                onPress={handlePickImage}
+                                className={twMerge(
+                                    ["h-32"],
+                                    ["items-center", "justify-center"],
+                                    ["rounded-xl"],
+                                    ["border", "border-dashed", "border-divider"],
+                                    ["bg-white"],
+                                    ["overflow-hidden"],
+                                )}>
+                                {image ? (
+                                    <Image
+                                        source={{ uri: image.uri }}
+                                        className="w-full h-full"
+                                        resizeMode="cover"
+                                    />
+                                ) : (
+                                    <>
+                                        <Ionicons name="camera-outline" size={34} color="#7F8C8D" />
+                                        <TextComponent className="mt-2 text-text-secondary font-medium">
+                                            사진 선택
+                                        </TextComponent>
+                                    </>
+                                )}
                             </Pressable>
                         </View>
                         <Controller
