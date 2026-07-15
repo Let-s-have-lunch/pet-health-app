@@ -33,7 +33,7 @@ function MainHeaderMobile() {
                         ["flex-row", "h-20", "justify-between", "items-center"],
                         ["flex-1", "px-4", "h-full"],
                     )}>
-                    <Pressable className={twMerge(["flex-row", "items-center", "gap-1", "h-full"])}>
+                    <Pressable className={twMerge(["flex-row", "items-center", "gap-3", "h-full"])}>
                         {!isAddCardSelected && selectedPet?.profileImage ? (
                             <Image
                                 source={{ uri: profileImageUrl }}
@@ -46,10 +46,10 @@ function MainHeaderMobile() {
                                     ["items-center", "justify-center"],
                                     ["rounded-full", "bg-success-main"],
                                 )}>
-                                <Ionicons name="person" size={24} color="white" />
+                                <Ionicons name="paw" size={26} color="white" />
                             </View>
                         )}
-                        <TextComponent className={twMerge(["text-xl", "font-bold"])}>
+                        <TextComponent className={twMerge(["text-[22px]", "font-bold"])}>
                             {isAddCardSelected ? "반려동물 등록" : selectedPet?.name}
                         </TextComponent>
                     </Pressable>
@@ -63,7 +63,7 @@ function MainHeaderMobile() {
                             ["active:bg-background-default"],
                         )}>
                         <Ionicons
-                            name={theme === "light" ? "paw" : "paw-outline"}
+                            name={theme === "light" ? "color-palette-outline" : "color-palette"}
                             size={24}
                             className={twMerge("text-text-default")}
                         />

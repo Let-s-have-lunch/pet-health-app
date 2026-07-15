@@ -16,7 +16,7 @@ const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 export default function PetCard({ pet, onPressEdit }: Props) {
     const { width } = useWindowDimensions();
 
-    const isSmall = width < 430;
+    const isSmall = width < 450;
     const imageSize = isSmall ? 140 : 160;
 
     const renderImage = () => {
