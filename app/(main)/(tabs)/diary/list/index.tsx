@@ -7,12 +7,14 @@ import { Diary } from "@/types/diary";
 import { Todo } from "@/types/todo";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
+import TodoSection from "@/app/(main)/(tabs)/diary/list/TodoSection";
 
 export default function DailyDetailScreen() {
     const { date } = useLocalSearchParams<{ date: string }>();
     const [isLoading, setIsLoading] = useState(true);
-    const [diaryData, setDiaryData] = useState<Diary[]>([]);
-    const [todoData, setTodoData] = useState<Todo[]>([]);
+    const [diary, setDiary] = useState<Diary[]>([]);
+    const [todo, setTodo] = useState<Todo[]>([]);
+
 
     const fetchDailyData = useCallback(async () => {
         try {
@@ -21,8 +23,8 @@ export default function DailyDetailScreen() {
                 todoApi.getTodoList(date),
             ]);
 
-            setDiaryData(diaries);
-            setTodoData(todos);
+            setDiary(diaries);
+            setTodo(todos);
         } catch (error) {
             console.error("데이터 로드 실패:", error);
         } finally {
@@ -46,8 +48,8 @@ export default function DailyDetailScreen() {
         <View className="flex-1">
             <ScrollView className={"flex-1"}>
                 <ContentContainer className={"p-0"}>
-                    {/*<DiaryComponent diaries={diaryData} />*/}
-                    {/*<TodoComponent todos={todoData} targetDate={date} />*/}
+                    {/*<DiaryComponent diaries={diary} />*/}
+                    <TodoSection todos={todo} targetDate={date} onRefresh={fetchDailyData} />
                 </ContentContainer>
             </ScrollView>
         </View>

@@ -2,9 +2,10 @@ import { Todo } from "@/types/todo";
 import { CreateTodoInputType } from "@/schemas/user/todo/createTodoSchema";
 import { UpdateTodoInputType } from "@/schemas/user/todo/updateTodoSchema";
 import axiosInstance from "@/api/axiosInstance";
+import { TodoFormInputType } from "@/schemas/todo/todoFormSchema";
 
 const getTodoList = async (date: string): Promise<Todo[]> => {
-    const response = await axiosInstance.get(`/pet/date`, {
+    const response = await axiosInstance.get(`/todo/list`, {
         params: {
             date,
         },
@@ -22,13 +23,19 @@ const getTodoListByRange = async (startDate: string, endDate: string): Promise<T
     return response.data.data;
 };
 
-const createTodo = async (data: CreateTodoInputType): Promise<Todo> => {
-    const response = await axiosInstance.post(`/todo/create`, data);
+const createTodo = async (date: string, data: TodoFormInputType): Promise<Todo> => {
+    const response = await axiosInstance.post(`/todo/create`, {
+        date,
+        title: data.title,
+    });
     return response.data.data;
 };
 
-const updateTodo = async (id: number, data: UpdateTodoInputType): Promise<Todo> => {
-    const response = await axiosInstance.patch(`/todo/${id}`, data);
+const updateTodo = async (id: number, date: string, data: TodoFormInputType): Promise<Todo> => {
+    const response = await axiosInstance.patch(`/todo/${id}`, {
+        date,
+        title: data.title,
+    });
     return response.data.data;
 };
 
