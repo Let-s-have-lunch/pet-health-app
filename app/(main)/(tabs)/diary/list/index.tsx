@@ -13,18 +13,22 @@ import TodoSection from "@/app/(main)/(tabs)/diary/TodoSection";
 export default function DailyDetailScreen() {
     const { date } = useLocalSearchParams<{ date: string }>();
     const [isLoading, setIsLoading] = useState(true);
-    const [diaryData, setDiaryData] = useState<Diary[]>([]);
-    const [todoData, setTodoData] = useState<Todo[]>([]);
+    const [diaries, setDiaries] = useState<Diary[]>([]);
+    const [todos, setTodos] = useState<Todo[]>([]);
 
-    const dailyData = useCallback(async () => {
+    console.log(date);
+
+    const loadDailyData = useCallback(async () => {
+        if (!date) return;
+        setIsLoading(true);
         try {
             const [diaryList, todoList] = await Promise.all([
                 diaryApi.getDiaryList(date),
                 todoApi.getTodoList(date),
             ]);
 
-            setDiaryData(diaryList);
-            setTodoData(todoList);
+            setDiaries(diaryList);
+            setTodos(todoList);
         } catch (error) {
             console.error("데이터 로드 실패:", error);
         } finally {
@@ -37,8 +41,8 @@ export default function DailyDetailScreen() {
     // }, [date, fetchDailyData]);
     useFocusEffect(
         useCallback(() => {
-            void dailyData();
-        }, [dailyData]),
+            void loadDailyData();
+        }, [loadDailyData]),
     );
 
 
@@ -54,8 +58,9 @@ export default function DailyDetailScreen() {
         <View className="flex-1">
             <ScrollView className={"flex-1"}>
                 <ContentContainer className={"p-0"}>
-                    <DiarySection diaryList={diaryData}/>
-                    <TodoSection todoList={todoData} targetDate={date}/>
+                    <DiarySection diaryList={diaries} date={date} />
+
+                    <TodoSection todoList={todos} targetDate={date} />
                 </ContentContainer>
             </ScrollView>
         </View>
