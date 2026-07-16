@@ -69,10 +69,10 @@ function MyInfoPage() {
 
             if (Platform.OS === "web") {
                 alert("회원정보가 성공적으로 수정되었습니다.");
-                router.push("/my");
+                router.push("/profile");
             } else {
                 Alert.alert("수정 완료", "회원정보가 성공적으로 수정되었습니다.", [
-                    { text: "확인", onPress: () => router.push("/my") },
+                    { text: "확인", onPress: () => router.push("/profile") },
                 ]);
             }
         } catch (error) {
