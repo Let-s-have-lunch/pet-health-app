@@ -29,12 +29,12 @@ interface VetLogUpdateModalProps {
 }
 
 export default function VetRecordLogUpdateModal({
-                                              visible,
-                                              onClose,
-                                              logId,
-                                              petName,
-                                              reload,
-                                          }: VetLogUpdateModalProps) {
+    visible,
+    onClose,
+    logId,
+    petName,
+    reload,
+}: VetLogUpdateModalProps) {
     const BACKEND_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 
     const [isLoading, setIsLoading] = useState(true);
@@ -95,7 +95,8 @@ export default function VetRecordLogUpdateModal({
 
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            // 이전 버전 곧 못쓰게 됨 mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            mediaTypes: ["images"],
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
@@ -176,7 +177,6 @@ export default function VetRecordLogUpdateModal({
                     <Pressable
                         onPress={e => e.stopPropagation()}
                         className="bg-background-paper w-full max-w-xl rounded-3xl overflow-hidden shadow-xl max-h-[90%]">
-
                         {isLoading ? (
                             // 로딩 중일 때 모달 내부 레이아웃 유지하며 스피너 표시
                             <View className="p-10 items-center justify-center min-h-[300px]">
@@ -187,19 +187,29 @@ export default function VetRecordLogUpdateModal({
                             </View>
                         ) : (
                             <ScrollView
-                                className="p-6"
+                                className="py-6"
                                 showsVerticalScrollIndicator={false}
-                                contentContainerStyle={{ paddingBottom: 20 }}
-                            >
+                                contentContainerStyle={{ paddingBottom: 20 }}>
                                 <Title
                                     title={`${petName ? petName + " " : ""}병원 기록 수정`}
                                     className={"h-auto pb-6 mb-2"}
-                                />
+                                >
+                                    <Ionicons
+                                        name="close"
+                                        size={20}
+                                        color="#2c2c2c"
+                                        onPress={onClose}
+                                    />
+                                </Title>
 
-                                <View className={"gap-4"}>
+                                <View className={twMerge(["gap-4", "px-4"])}>
                                     {/* 사진 영역 */}
                                     <View>
-                                        <TextComponent className="text-sm mb-2 text-text-primary">
+                                        <TextComponent
+                                            className={twMerge(
+                                                ["mb-2 mt-4 text-text-primary"],
+                                                ["text-lg", "font-bold"],
+                                            )}>
                                             반려동물 사진
                                         </TextComponent>
                                         {image ? (
@@ -211,15 +221,23 @@ export default function VetRecordLogUpdateModal({
                                                 <Pressable
                                                     className="absolute top-2 right-2 bg-black/50 p-1 rounded-full"
                                                     onPress={() => setImage(null)}>
-                                                    <Ionicons name="close" size={20} color="white" />
+                                                    <Ionicons
+                                                        name="close"
+                                                        size={20}
+                                                        color="white"
+                                                    />
                                                 </Pressable>
                                             </View>
                                         ) : (
                                             <Pressable
                                                 className="border border-dashed border-divider p-8 rounded-lg mb-2 items-center"
                                                 onPress={pickImage}>
-                                                <Ionicons name="camera-outline" size={32} color="#7F8C8D" />
-                                                <TextComponent className="text-text-secondary mt-2">
+                                                <Ionicons
+                                                    name="camera-outline"
+                                                    size={32}
+                                                    color="#7F8C8D"
+                                                />
+                                                <TextComponent className="text-text-secondary mt-2 ">
                                                     사진 선택
                                                 </TextComponent>
                                             </Pressable>
@@ -270,15 +288,20 @@ export default function VetRecordLogUpdateModal({
                                 </View>
 
                                 {/* 버튼 영역 */}
-                                <View className="flex-row mt-6 gap-3">
+                                <View className="flex-row mt-6 gap-3 px-4">
                                     <Button
+                                        className={twMerge(["flex-1"])}
+                                        variant={"outlined"}
+                                        wrap={true}
+                                        onPress={onClose}>
+                                        취소
+                                    </Button>
+                                    <Button
+                                        className={twMerge(["flex-1"])}
                                         wrap={true}
                                         onPress={onSubmit}
                                         disabled={isSubmitting}>
                                         {isSubmitting ? "수정중..." : "수정"}
-                                    </Button>
-                                    <Button variant={"outlined"} wrap={true} onPress={onClose}>
-                                        취소
                                     </Button>
                                 </View>
                             </ScrollView>

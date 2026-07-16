@@ -31,7 +31,7 @@ function TodoHistorySection({
                 <Button
                     size={"small"}
                     onPress={onAddPress}
-                    className={"px-0 py-0 w-[40px] h-[40px]"}>
+                    className={"px-0 py-0 w-[48px] h-[48px]"}>
                     <Plus size={20} color="#2D3748" />
                 </Button>
             </View>

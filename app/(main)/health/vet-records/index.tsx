@@ -1,5 +1,5 @@
 import { View, ScrollView, Pressable, Image, Alert, Platform } from "react-native";
-import { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useFocusEffect, router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { twMerge } from "tailwind-merge";
@@ -12,6 +12,8 @@ import ContentContainer from "@/components/layouts/common/ContentContainer";
 import VetRecordDetailModal from "@/components/common/vetRecord/VetRecordDetailModal";
 import VetRecordLogCreateModal from "@/components/common/vetRecord/VetRecordLogCreateModal";
 import VetRecordLogUpdateModal from "@/components/common/vetRecord/VetRecordLogUpdateModal";
+import { Plus } from "lucide-react-native";
+import Button from "@/components/common/button/Button";
 
 export default function VetLogPage() {
     const selectedPet = usePetStore(state => state.selectedPet);
@@ -126,7 +128,7 @@ export default function VetLogPage() {
             </View>
 
             <ScrollView className={twMerge("flex-1 bg-background-main")}>
-                <ContentContainer className="flex-1 py-5 pb-10 px-5 md:px-0">
+                <ContentContainer className="flex-1 py-5 pb-10 px-5">
                     {/* 1. 상단 카드 */}
                     {data.upcoming ? (
                         <Pressable
@@ -193,13 +195,12 @@ export default function VetLogPage() {
                         <TextComponent className={twMerge("text-[18px] font-bold")}>
                             방문기록
                         </TextComponent>
-                        <Pressable
+                        <Button
+                            size={"small"}
                             onPress={openCreateModal}
-                            className={twMerge("bg-success-point px-3 py-1 rounded-full")}>
-                            <TextComponent className={twMerge("text-[12px] font-bold")}>
-                                + 추가
-                            </TextComponent>
-                        </Pressable>
+                            className={"px-0 py-0 w-[48px] h-[48px]"}>
+                            <Plus size={20} className={twMerge(["text-text-default"])} />
+                        </Button>
                     </View>
 
                     {data.history?.map(item => (

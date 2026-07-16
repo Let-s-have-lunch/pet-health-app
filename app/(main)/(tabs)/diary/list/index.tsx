@@ -16,8 +16,6 @@ export default function DailyDetailScreen() {
     const [diaries, setDiaries] = useState<Diary[]>([]);
     const [todos, setTodos] = useState<Todo[]>([]);
 
-    console.log(date);
-
     const loadDailyData = useCallback(async () => {
         if (!date) return;
         setIsLoading(true);

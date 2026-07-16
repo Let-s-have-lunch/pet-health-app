@@ -148,14 +148,6 @@ export function ReplyItem({ item, onRefresh, isLast }: ReplyItemProps) {
                 {isAuthor && !isEditing && (
                     <View className="flex-row gap-1.5">
                         <Button
-                            className={"border-success-main"}
-                            textColor={"text-success-point"}
-                            variant={"outlined"}
-                            size={"mini"}
-                            onPress={() => setIsEditing(true)}>
-                            수정
-                        </Button>
-                        <Button
                             className={"border-error-main"}
                             textColor={"text-error-point"}
                             variant={"outlined"}
@@ -163,6 +155,14 @@ export function ReplyItem({ item, onRefresh, isLast }: ReplyItemProps) {
                             color={"error"}
                             onPress={handleDelete}>
                             삭제
+                        </Button>
+                        <Button
+                            className={"border-success-main"}
+                            textColor={"text-success-point"}
+                            variant={"outlined"}
+                            size={"mini"}
+                            onPress={() => setIsEditing(true)}>
+                            수정
                         </Button>
                     </View>
                 )}

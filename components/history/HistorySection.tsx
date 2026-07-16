@@ -76,7 +76,7 @@ export default function HistorySection() {
             renderBottom: () => (
                 <View className="flex-row justify-end items-center gap-3">
                     <Ionicons name="paw" size={22} color="#BACFCD" />
-                    <TextComponent className="font-bold text-2xl" style={{ color: "#2C2C2C" }}>
+                    <TextComponent className="font-bold text-2xl text-text-default">
                         {data?.walk.count ?? 0}회
                     </TextComponent>
                 </View>
@@ -92,7 +92,7 @@ export default function HistorySection() {
                     // 💡 기록이 있을 때 (원래 스타일)
                     <View className="flex-row justify-end items-center gap-1">
                         <Ionicons name="fitness" size={22} color="#D9A05B" />
-                        <TextComponent className="font-bold text-2xl" style={{ color: "#2C2C2C" }}>
+                        <TextComponent className="font-bold text-2xl text-text-default">
                             {data.weight.value}kg
                         </TextComponent>
                     </View>
@@ -115,8 +115,7 @@ export default function HistorySection() {
                 <View className={twMerge("flex-row", "justify-end", "items-center", "gap-1.5")}>
                     <Ionicons name={"water"} size={22} color={"#A9C6D9"} />
                     <TextComponent
-                        className="font-bold text-2xl text-right"
-                        style={{ color: "#2C2C2C" }}>
+                        className={twMerge(["font-bold text-2xl text-right text-text-default"])}>
                         {data?.water.totalAmount ?? 0}ml
                     </TextComponent>
                 </View>
@@ -135,8 +134,7 @@ export default function HistorySection() {
                         <Ionicons name="medkit" size={20} color="#E8A7A1" />
                         <View className="items-end">
                             <TextComponent
-                                className="text-sm font-semibold"
-                                style={{ color: "#2C2C2C" }}>
+                                className={twMerge(["text-sm font-semibold", "text-text-default"])}>
                                 {data.vetRecord.purpose}
                             </TextComponent>
                             <TextComponent className="text-xs" style={{ color: "#7F8F8D" }}>
@@ -161,7 +159,7 @@ export default function HistorySection() {
 
     return (
         <ScrollView className="flex-1 pt-1.8 bg-background-default">
-            <View className="flex-row flex-wrap justify-between mt-6">
+            <View className="flex-row flex-wrap justify-between mt-2">
                 {cardConfig.map(card => (
                     <Pressable
                         key={card.id}
@@ -171,7 +169,7 @@ export default function HistorySection() {
                             "w-[48%]",
                             "h-40",
                             "p-5",
-                            "mb-4",
+                            "mt-4",
                             "justify-between",
                             "rounded-[28px]",
                             "bg-background-paper",

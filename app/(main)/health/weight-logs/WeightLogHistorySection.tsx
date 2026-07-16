@@ -115,7 +115,7 @@ function WeightLogHistorySection({ history, onAddPress, onEditPress, onDeletePre
                     <Card
                         shadow={"sm"}
                         className={twMerge("text-center text-gray-400 py-6 text-sm")}>
-                        기록된 몸무게가 없습니다.
+                        <TextComponent>기록된 몸무게가 없습니다.</TextComponent>
                     </Card>
                 )}
             </View>
