@@ -71,8 +71,9 @@ export default function VetRecordDetailModal({
     };
 
     const handleUpdateSuccess = async () => {
-        await fetchRecord(); // 상세 모달 데이터 리로드
-        if (onUpdateComplete) onUpdateComplete(); // 부모 목록 페이지 데이터 리로드
+        await fetchRecord();
+        if (onUpdateComplete) onUpdateComplete();
+        setIsUpdateModalOpen(false);
     };
 
     return (
@@ -109,7 +110,9 @@ export default function VetRecordDetailModal({
                                 <ActivityIndicator />
                             </View>
                         ) : !record ? null : (
-                            <ScrollView className={twMerge("px-6 pb-6")}>
+                            <ScrollView
+                                className={twMerge("px-6 pb-6")}
+                                showsVerticalScrollIndicator={false}>
                                 {/* 날짜 */}
                                 <TextComponent
                                     className={twMerge(
@@ -203,12 +206,10 @@ export default function VetRecordDetailModal({
                                             "flex-1 h-12 border border-divider rounded-[12px] items-center justify-center bg-error-main",
                                         )}>
                                         <TextComponent
-                                            className={twMerge("bg-text-default font-semibold")}>
+                                            className={twMerge("text-text-default font-semibold")}>
                                             삭제
                                         </TextComponent>
                                     </Pressable>
-
-                                    {/* 🌟 변경: router.push 대신 모달 띄우기 */}
                                     <Pressable
                                         onPress={() => setIsUpdateModalOpen(true)}
                                         className={twMerge(
