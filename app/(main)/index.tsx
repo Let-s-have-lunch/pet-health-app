@@ -1,17 +1,34 @@
 import { View, Pressable } from "react-native";
 import { twMerge } from "tailwind-merge";
 import TextComponent from "@/components/common/text/TextComponent";
-import { useRouter } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
+import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 
 export default function LandingScreen() {
     const router = useRouter();
+    const { isLoggedIn, isInitialized } = useAuthStore();
 
+    if (!isInitialized) {
+        return (
+            <LoadingIndicator
+                fullScreen={true}
+            />
+        );
+    }
+
+    // 2. 로그인된 사용자라면 홈으로 즉시 이동
+    if (isLoggedIn) {
+        return <Redirect href="/home" />;
+    }
+
+    // 3. 로그인/회원가입 랜딩 페이지 UI
     return (
         <View className={twMerge("flex-1", "bg-background-default")}>
             <ContentContainer className="justify-center items-center">
-                {/* 1. 상단 로고 및 타이틀 영역 */}
+                {/* 상단 로고 및 타이틀 영역 */}
                 <View className="items-center mb-10">
                     <View className="relative flex-row items-center justify-center mb-2">
                         <Ionicons
@@ -41,20 +58,20 @@ export default function LandingScreen() {
                     </TextComponent>
                 </View>
 
-                {/* 2. 서브 타이틀 영역 */}
+                {/* 서브 타이틀 영역 */}
                 <View className="mb-16">
                     <TextComponent className="text-lg text-text-default text-center">
                         반려동물의 건강과 성장을 기록하세요
                     </TextComponent>
                 </View>
 
-                {/* 3. 하단 버튼 영역 */}
+                {/* 버튼 영역 */}
                 <View className="w-full items-center">
                     <TextComponent className="text-sm text-text-secondary text-center mb-8">
                         계속하려면 로그인해 주세요
                     </TextComponent>
 
-                    {/* 로그인 버튼: max-w-[200px]로 너비 축소 */}
+                    {/* 로그인 버튼 */}
                     <Pressable
                         onPress={() => router.push("/auth/login")}
                         className="bg-background-paper w-full max-w-[200px] py-3 items-center justify-center rounded-full shadow-sm mb-3">
@@ -67,12 +84,19 @@ export default function LandingScreen() {
                         OR
                     </TextComponent>
 
-                    {/* 회원가입 버튼: max-w-[200px]로 너비 축소 */}
+                    {/* 회원가입 버튼 */}
                     <Pressable
                         onPress={() => router.push("/auth/register")}
-                        className="bg-background-paper w-full max-w-[200px] py-3 items-center justify-center rounded-full shadow-sm">
+                        className="bg-background-paper w-full max-w-[200px] py-3 items-center justify-center rounded-full shadow-sm mb-6">
                         <TextComponent className="text-base font-bold text-text-default">
                             회원가입
+                        </TextComponent>
+                    </Pressable>
+
+                    {/* 게스트 입장 */}
+                    <Pressable onPress={() => router.push("/home")} className="p-2">
+                        <TextComponent className="text-sm text-text-secondary underline underline-offset-4">
+                            게스트로 입장하기
                         </TextComponent>
                     </Pressable>
                 </View>
