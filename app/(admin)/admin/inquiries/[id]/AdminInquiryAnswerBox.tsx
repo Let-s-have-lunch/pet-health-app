@@ -56,7 +56,8 @@ function AdminInquiryAnswerBox({ inquiry, reload, setIsEdit }: Props) {
                     답변 일시 : {inquiry.answeredAt && inquiry.answeredAt.substring(0, 10)}
                 </TextComponent>
             </View>
-            <TextComponent className={"py-3 md:py-6 leading-relaxed whitespace-pre-wrap break-words"}>
+            <TextComponent
+                className={"py-3 md:py-6 leading-relaxed whitespace-pre-wrap break-words"}>
                 {inquiry.answer}
             </TextComponent>
 
@@ -66,15 +67,15 @@ function AdminInquiryAnswerBox({ inquiry, reload, setIsEdit }: Props) {
                     ["mt-10", "pt-6", "gap-3"],
                     ["border-divider", "border-t"],
                 )}>
-                <Button size={"small"} variant={"contained"} onPress={() => setIsEdit(true)}>
-                    답변 수정
-                </Button>
                 <Button
                     size={"small"}
                     variant={"outlined"}
                     color={"error"}
                     onPress={handleDeleteAnswer}>
                     답변 삭제
+                </Button>
+                <Button size={"small"} variant={"contained"} onPress={() => setIsEdit(true)}>
+                    답변 수정
                 </Button>
             </View>
         </View>

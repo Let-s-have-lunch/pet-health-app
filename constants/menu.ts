@@ -11,3 +11,9 @@ export const ADMIN_NAV_LIST = [
     { path: "/admin/inquiries", label: "1:1 문의관리", icon: "message-square" },
     { path: "/", label: "서비스로 돌아가기", icon: "home" },
 ];
+
+export const SETTINGS_MENU_LIST = [
+    { label: "공지사항", path: "/notices" },
+    { label: "1:1 문의", path: "/inquiry" },
+    { label: "고객센터", path: "/customer-center" },
+];

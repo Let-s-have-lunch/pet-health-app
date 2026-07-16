@@ -78,10 +78,9 @@ function MyInquiryListPage() {
             <Title
                 title="나의 1:1 문의 게시판"
                 showBackButton={true}
-                onBackPress={() => router.push("/my")}
-                className={"bg-background-paper"}
-            />
-            <ContentContainer className={"overflow-hidden flex-1 pt-0"}>
+                onBackPress={() => router.back()}
+                className={"bg-background-paper"}></Title>
+            <ContentContainer className={"overflow-hidden flex-1"}>
                 <ScrollView className={"flex-1"}>
                     <View className={twMerge(["pt-[25px]"])}>
                         <View

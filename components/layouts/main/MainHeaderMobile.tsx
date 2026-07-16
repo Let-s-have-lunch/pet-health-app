@@ -1,4 +1,4 @@
-import { Image, Pressable, View } from "react-native";
+import { Image, Pressable, useWindowDimensions, View } from "react-native";
 import { useRouter } from "expo-router";
 import { twMerge } from "tailwind-merge";
 import { Ionicons } from "@expo/vector-icons";
@@ -7,6 +7,9 @@ import { useThemeStore } from "@/stores/theme/useThemeStore";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { Role } from "@/types/user";
 import { usePetStore } from "@/stores/usePetStore";
+import SettingsDesktop from "@/app/(main)/(tabs)/SettingsDesktop";
+import { useState } from "react";
+import SettingsMobile from "@/app/(main)/(tabs)/SettingMobile";
 
 function MainHeaderMobile() {
     const router = useRouter();
@@ -14,11 +17,14 @@ function MainHeaderMobile() {
     const { theme, onChangeTheme } = useThemeStore();
     const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
     const { selectedPet, isAddCardSelected } = usePetStore();
+
+    const { width } = useWindowDimensions();
+    const isMobile = width < 768;
     const profileImageUrl = selectedPet?.profileImage
         ? `${BASE_URL}${selectedPet.profileImage}`
         : undefined;
 
-
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     return (
         <View
@@ -33,7 +39,7 @@ function MainHeaderMobile() {
                         ["flex-row", "h-20", "justify-between", "items-center"],
                         ["flex-1", "px-4", "h-full"],
                     )}>
-                    <Pressable className={twMerge(["flex-row", "items-center", "gap-1", "h-full"])}>
+                    <Pressable className={twMerge(["flex-row", "items-center", "gap-3", "h-full"])}>
                         {!isAddCardSelected && selectedPet?.profileImage ? (
                             <Image
                                 source={{ uri: profileImageUrl }}
@@ -46,10 +52,10 @@ function MainHeaderMobile() {
                                     ["items-center", "justify-center"],
                                     ["rounded-full", "bg-success-main"],
                                 )}>
-                                <Ionicons name="person" size={24} color="white" />
+                                <Ionicons name="paw" size={26} color="white" />
                             </View>
                         )}
-                        <TextComponent className={twMerge(["text-xl", "font-bold"])}>
+                        <TextComponent className={twMerge(["text-[22px]", "font-bold"])}>
                             {isAddCardSelected ? "반려동물 등록" : selectedPet?.name}
                         </TextComponent>
                     </Pressable>
@@ -63,7 +69,7 @@ function MainHeaderMobile() {
                             ["active:bg-background-default"],
                         )}>
                         <Ionicons
-                            name={theme === "light" ? "paw" : "paw-outline"}
+                            name={theme === "light" ? "color-palette-outline" : "color-palette"}
                             size={24}
                             className={twMerge("text-text-default")}
                         />
@@ -84,6 +90,7 @@ function MainHeaderMobile() {
                         </Pressable>
                     )}
                     <Pressable
+                        onPress={() => setIsSettingsOpen(true)}
                         className={twMerge(
                             ["p-2", "rounded-full"],
                             ["transition-all", "active:bg-background-default"],
@@ -96,6 +103,14 @@ function MainHeaderMobile() {
                     </Pressable>
                 </View>
             </View>
+            {isMobile ? (
+                <SettingsMobile visible={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+            ) : (
+                <SettingsDesktop
+                    visible={isSettingsOpen}
+                    onClose={() => setIsSettingsOpen(false)}
+                />
+            )}
         </View>
     );
 }

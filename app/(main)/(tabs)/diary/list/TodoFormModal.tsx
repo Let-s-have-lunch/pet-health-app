@@ -116,6 +116,9 @@ export default function TodoFormModal({
                         </View>
 
                         <View className="flex-row mt-4 gap-3">
+                            <Button variant={"outlined"} wrap={true} onPress={onClose}>
+                                취소
+                            </Button>
                             <Button
                                 wrap={true}
                                 onPress={handleSubmit(onSubmit)}
@@ -127,9 +130,6 @@ export default function TodoFormModal({
                                     : isSubmitting
                                       ? "등록중..."
                                       : "등록"}
-                            </Button>
-                            <Button variant={"outlined"} wrap={true} onPress={onClose}>
-                                취소
                             </Button>
                         </View>
                     </Pressable>
