@@ -12,7 +12,7 @@ function MainLayout() {
     const router = useRouter();
 
     const currentSegment = segments[segments.length - 1];
-    const isMyPage = currentSegment === "my";
+    const isMyPage = currentSegment === "profile";
     const isDiaryListPage = pathname.includes("/diary/list");
 
     return (
@@ -26,6 +26,7 @@ function MainLayout() {
                     onBackPress={() => router.back()}
                     className="bg-white"
                 />
+
             ) : (
                 <MainHeaderMobile />
             )}

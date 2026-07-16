@@ -77,7 +77,7 @@ export default function TodoSection({ todos, targetDate, onRefresh }: Props) {
 
     return (
         <View className="mt-6 w-full ">
-            <ContentContainer className={"overflow-hidden flex-1 p-0 rounded-[28px]"}>
+            <ContentContainer className={"overflow-hidden flex-1 p-0"}>
                 <TodoHistorySection
                     todos={todos}
                     onAddPress={handleOpenAddModal}

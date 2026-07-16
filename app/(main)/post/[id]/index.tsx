@@ -212,10 +212,9 @@ function CommunityPostDetailPage() {
                                                 )}
                                                 variant={"contained"}
                                                 size={"small"}
-                                                onPress={() =>
-                                                    router.push(`/post/${postId}/update`)
-                                                }>
-                                                수정
+                                                color={"error"}
+                                                onPress={handleDelete}>
+                                                삭제
                                             </Button>
                                             <Button
                                                 className={twMerge(
@@ -224,9 +223,10 @@ function CommunityPostDetailPage() {
                                                 )}
                                                 variant={"contained"}
                                                 size={"small"}
-                                                color={"error"}
-                                                onPress={handleDelete}>
-                                                삭제
+                                                onPress={() =>
+                                                    router.push(`/post/${postId}/update`)
+                                                }>
+                                                수정
                                             </Button>
                                         </>
                                     )}
@@ -237,7 +237,11 @@ function CommunityPostDetailPage() {
                 </ScrollView>
             </View>
 
-            <View className="bg-background-paper border-t border-divider px-5 py-10 pb-6 rounded-t-[30px]">
+            <View
+                className={twMerge(
+                    ["w-full", "max-w-7xl", "mx-auto"],
+                    ["bg-background-paper border-t border-divider px-5 py-10 pb-6 rounded-t-[30px]"]
+                )}>
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => setIsReplyModalOpen(true)}

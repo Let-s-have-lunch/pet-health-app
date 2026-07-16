@@ -29,12 +29,12 @@ interface VetLogCreateModalProps {
 }
 
 export default function VetRecordLogCreateModal({
-                                              visible,
-                                              onClose,
-                                              petId,
-                                              petName,
-                                              reload,
-                                          }: VetLogCreateModalProps) {
+    visible,
+    onClose,
+    petId,
+    petName,
+    reload,
+}: VetLogCreateModalProps) {
     const [hospitalName, setHospitalName] = useState("");
     const [visitPurpose, setVisitPurpose] = useState("");
     const [visitDate, setVisitDate] = useState(format(new Date(), "yyyy-MM-dd"));
@@ -58,7 +58,8 @@ export default function VetRecordLogCreateModal({
 
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            //  이전 버전 mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            mediaTypes: ["images"],
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
@@ -143,12 +144,10 @@ export default function VetRecordLogCreateModal({
                     <Pressable
                         onPress={e => e.stopPropagation()}
                         className="bg-background-paper w-full max-w-xl rounded-3xl overflow-hidden shadow-xl max-h-[90%]">
-
                         <ScrollView
                             className="p-6"
                             showsVerticalScrollIndicator={false}
-                            contentContainerStyle={{ paddingBottom: 20 }}
-                        >
+                            contentContainerStyle={{ paddingBottom: 20 }}>
                             <Title
                                 title={`${petName ? petName + " " : ""}병원 기록 등록`}
                                 className={"h-auto pb-6 mb-2"}
@@ -176,7 +175,11 @@ export default function VetRecordLogCreateModal({
                                         <Pressable
                                             className="border border-dashed border-divider p-8 rounded-lg mb-2 items-center"
                                             onPress={pickImage}>
-                                            <Ionicons name="camera-outline" size={32} color="#7F8C8D" />
+                                            <Ionicons
+                                                name="camera-outline"
+                                                size={32}
+                                                color="#7F8C8D"
+                                            />
                                             <TextComponent className="text-text-secondary mt-2">
                                                 사진 선택
                                             </TextComponent>
@@ -227,16 +230,12 @@ export default function VetRecordLogCreateModal({
                                 />
                             </View>
 
-                            {/* 버튼 영역 */}
                             <View className="flex-row mt-6 gap-3">
-                                <Button
-                                    wrap={true}
-                                    onPress={onSubmit}
-                                    disabled={isSubmitting}>
-                                    {isSubmitting ? "등록중..." : "등록"}
-                                </Button>
                                 <Button variant={"outlined"} wrap={true} onPress={onClose}>
                                     취소
+                                </Button>
+                                <Button wrap={true} onPress={onSubmit} disabled={isSubmitting}>
+                                    {isSubmitting ? "등록중..." : "등록"}
                                 </Button>
                             </View>
                         </ScrollView>
