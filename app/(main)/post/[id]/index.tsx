@@ -103,7 +103,7 @@ function CommunityPostDetailPage() {
         try {
             setIsLoading(true);
             await postApi.deletePost(postId);
-            router.push("/posts");
+            router.push("/");
         } catch (error) {
             console.log(error);
             const errorMsg = "게시글 삭제에 실패했습니다.";
@@ -127,7 +127,7 @@ function CommunityPostDetailPage() {
             <Title
                 title={"커뮤니티"}
                 showBackButton={true}
-                onBackPress={() => router.push("/posts")}
+                onBackPress={() => router.push("/post")}
                 className={"bg-background-paper"}
             />
 
@@ -199,7 +199,7 @@ function CommunityPostDetailPage() {
                                         )}
                                         variant={"outlined"}
                                         size={"small"}
-                                        onPress={() => router.push("/posts")}>
+                                        onPress={() => router.push("/post")}>
                                         목록
                                     </Button>
 

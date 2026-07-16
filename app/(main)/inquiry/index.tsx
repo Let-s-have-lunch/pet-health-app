@@ -79,123 +79,130 @@ function MyInquiryListPage() {
                 title="나의 1:1 문의 게시판"
                 showBackButton={true}
                 onBackPress={() => router.push("/my")}
-                className={"bg-background-paper"}></Title>
-            <ContentContainer className={"overflow-hidden flex-1"}>
+                className={"bg-background-paper"}
+            />
+            <ContentContainer className={"overflow-hidden flex-1 pt-0"}>
                 <ScrollView className={"flex-1"}>
-                    <View
-                        className={twMerge(
-                            ["hidden", "md:flex"],
-                            ["flex-row", "items-center", "px-4", "py-3"],
-                            [
-                                "bg-background-light",
-                                "border-b",
-                                "border-divider",
-                                "rounded-t-xl",
-                            ],
-                        )}>
-                        <TextComponent
-                            className={twMerge(
-                                ["hidden", "md:flex", "w-12"],
-                                ["font-bold", "text-text-secondary"],
-                            )}>
-                            ID
-                        </TextComponent>
-                        <TextComponent
-                            className={twMerge(
-                                ["flex-1"],
-                                ["font-bold", "text-text-secondary", "px-2", ""],
-                            )}>
-                            제목
-                        </TextComponent>
-                        <TextComponent
-                            className={twMerge(
-                                ["w-24"],
-                                ["font-bold", "text-text-secondary", "text-center"],
-                            )}>
-                            등록일
-                        </TextComponent>
-                        <TextComponent
-                            className={twMerge(
-                                ["w-24"],
-                                ["font-bold", "text-text-secondary", "text-center"],
-                            )}>
-                            답변
-                        </TextComponent>
-                    </View>
-
-                    {isLoading && (
-                        <View className={"py-20"}>
-                            <LoadingIndicator />
-                        </View>
-                    )}
-                    {list.length === 0 && (
-                        <View className={twMerge("py-20", "justify-center", "items-center")}>
-                            <TextComponent className={"text-text-secondary"}>
-                                아직 작성된 문의글이 없습니다.
-                            </TextComponent>
-                        </View>
-                    )}
-                    {list.map((item, index) => (
+                    <View className={twMerge(["pt-[25px]"])}>
                         <View
-                            key={item.id}
                             className={twMerge(
-                                ["my-1", "md:my-0"],
-                                "flex-col",
-                                "md:flex-row",
-                                "md:items-center",
-                                "px-4",
-                                "py-3",
-                                "transition-all",
-                                "bg-background-paper",
-                                ["border-b", "border-background-default"],
-                                ["rounded-xl", "md:rounded-none"],
-                                "hover:bg-background-light",
-                                index === list.length - 1 && ["md:rounded-b-xl", "border-b-0"],
+                                ["hidden", "md:flex"],
+                                ["flex-row", "items-center", "px-4", "py-3"],
+                                [
+                                    "bg-background-light",
+                                    "border-b",
+                                    "border-divider",
+                                    "rounded-t-xl",
+                                ],
                             )}>
                             <TextComponent
                                 className={twMerge(
                                     ["hidden", "md:flex", "w-12"],
-                                    ["text-center", "text-text-secondary"],
+                                    ["font-bold", "text-text-secondary"],
                                 )}>
-                                {item.id}
+                                ID
                             </TextComponent>
-                            <Pressable
-                                className={twMerge("flex-1", "justify-center", "px-2")}
-                                onPress={() => router.push(`/inquiry/${item.id}`)}>
-                                <TextComponent
-                                    className={twMerge([
-                                        "font-medium",
-                                        "transition-all",
-                                        "hover:text-primary-main",
-                                        ["pb-2", "md:pb-0"],
-                                    ])}
-                                    numberOfLines={1}>
-                                    {item.title}
-                                </TextComponent>
-                            </Pressable>
-                            <View
-                                className={twMerge("flex-row", "items-center", "justify-between")}>
-                                <TextComponent
-                                    className={twMerge("w-24", [
-                                        "text-sm",
-                                        "text-text-secondary",
-                                        "text-center",
-                                    ])}>
-                                    {item.createdAt.substring(0, 10)}
-                                </TextComponent>
-                                <TextComponent
-                                    className={twMerge("w-24", [
-                                        "text-sm",
-                                        "text-text-secondary",
-                                        "text-center",
-                                    ])}>
-                                    <Badge color={item.answer ? "success" : "info"}>
-                                        {item.answer ? "답변완료" : "답변대기"}
-                                    </Badge>
+                            <TextComponent
+                                className={twMerge(
+                                    ["flex-1"],
+                                    ["font-bold", "text-text-secondary", "px-2", ""],
+                                )}>
+                                제목
+                            </TextComponent>
+                            <TextComponent
+                                className={twMerge(
+                                    ["w-24"],
+                                    ["font-bold", "text-text-secondary", "text-center"],
+                                )}>
+                                등록일
+                            </TextComponent>
+                            <TextComponent
+                                className={twMerge(
+                                    ["w-24"],
+                                    ["font-bold", "text-text-secondary", "text-center"],
+                                )}>
+                                답변
+                            </TextComponent>
+                        </View>
+
+                        {isLoading && (
+                            <View className={"py-20"}>
+                                <LoadingIndicator />
+                            </View>
+                        )}
+                        {list.length === 0 && (
+                            <View className={twMerge("py-20", "justify-center", "items-center")}>
+                                <TextComponent className={"text-text-secondary"}>
+                                    아직 작성된 문의글이 없습니다.
                                 </TextComponent>
                             </View>
-                        </View>
-                    ))}
+                        )}
+                        {list.map((item, index) => (
+                            <View
+                                key={item.id}
+                                className={twMerge(
+                                    ["my-1", "md:my-0"],
+                                    "flex-col",
+                                    "md:flex-row",
+                                    "md:items-center",
+                                    "px-4",
+                                    "py-3",
+                                    "transition-all",
+                                    "bg-background-paper",
+                                    ["border-b", "border-background-default"],
+                                    ["rounded-xl", "md:rounded-none"],
+                                    "hover:bg-background-light",
+                                    index === list.length - 1 && ["md:rounded-b-xl", "border-b-0"],
+                                )}>
+                                <TextComponent
+                                    className={twMerge(
+                                        ["hidden", "md:flex", "w-12"],
+                                        ["text-center", "text-text-secondary"],
+                                    )}>
+                                    {item.id}
+                                </TextComponent>
+                                <Pressable
+                                    className={twMerge("flex-1", "justify-center", "px-2")}
+                                    onPress={() => router.push(`/inquiry/${item.id}`)}>
+                                    <TextComponent
+                                        className={twMerge([
+                                            "font-medium",
+                                            "transition-all",
+                                            "hover:text-primary-main",
+                                            ["pb-2", "md:pb-0"],
+                                        ])}
+                                        numberOfLines={1}>
+                                        {item.title}
+                                    </TextComponent>
+                                </Pressable>
+                                <View
+                                    className={twMerge(
+                                        "flex-row",
+                                        "items-center",
+                                        "justify-between",
+                                    )}>
+                                    <TextComponent
+                                        className={twMerge("w-24", [
+                                            "text-sm",
+                                            "text-text-secondary",
+                                            "text-center",
+                                        ])}>
+                                        {item.createdAt.substring(0, 10)}
+                                    </TextComponent>
+                                    <TextComponent
+                                        className={twMerge("w-24", [
+                                            "text-sm",
+                                            "text-text-secondary",
+                                            "text-center",
+                                        ])}>
+                                        <Badge color={item.answer ? "success" : "info"}>
+                                            {item.answer ? "답변완료" : "답변대기"}
+                                        </Badge>
+                                    </TextComponent>
+                                </View>
+                            </View>
+                        ))}
+                    </View>
                 </ScrollView>
                 <Button
                     isFloating

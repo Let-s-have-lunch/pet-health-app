@@ -12,7 +12,7 @@ import { PostListItemType } from "@/types/post";
 import Pagination from "@/components/common/pagination/Pagination";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
 
-function CommunityPostListPage() {
+function CommunityPostList() {
     const router = useRouter();
     const { id, page, size } = useLocalSearchParams<{ id: string; page: string; size: string }>();
     const categoryId = Number(id);
@@ -235,4 +235,4 @@ function CommunityPostListPage() {
     );
 }
 
-export default CommunityPostListPage;
+export default CommunityPostList;

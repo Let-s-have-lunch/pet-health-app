@@ -26,11 +26,13 @@ function MainFooter() {
             }
         }
     };
+
     return (
         <View
             className={twMerge(
                 ["w-full", "h-20", "justify-center", "items-center"],
                 ["px-7", "bg-background-paper"],
+                ["shadow-[0_-2px_4px_rgba(0,0,0,0.05)]", "elevation-3"],
             )}>
             <View
                 className={twMerge(

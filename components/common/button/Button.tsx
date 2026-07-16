@@ -63,7 +63,7 @@ function Button({
                 fullWidth && !isCircle ? "w-full" : "",
                 wrap && "flex-1",
 
-                isFloating && "absolute bottom-4 right-4 z-50 shadow-lg",
+                isFloating && "absolute bottom-6 right-6 z-50 shadow-lg",
 
                 className,
             )}
