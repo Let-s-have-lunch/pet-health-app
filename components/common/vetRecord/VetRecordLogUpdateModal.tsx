@@ -23,9 +23,9 @@ import { vetLogApi } from "@/api/user/vetLogApi";
 interface VetLogUpdateModalProps {
     visible: boolean;
     onClose: () => void;
-    logId: number | undefined; // 수정을 위해 선택된 기록의 ID
+    logId: number | undefined;
     petName?: string;
-    reload: () => Promise<void>; // 수정 완료 후 목록을 새로고침할 함수
+    reload: () => Promise<void>;
 }
 
 export default function VetRecordLogUpdateModal({
@@ -37,11 +37,8 @@ export default function VetRecordLogUpdateModal({
 }: VetLogUpdateModalProps) {
     const BACKEND_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 
-    // 로딩 및 제출 상태
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    // 폼 상태
     const [hospitalName, setHospitalName] = useState("");
     const [visitPurpose, setVisitPurpose] = useState("");
     const [visitDate, setVisitDate] = useState("");
@@ -49,7 +46,6 @@ export default function VetRecordLogUpdateModal({
     const [memo, setMemo] = useState("");
     const [image, setImage] = useState<string | null>(null);
 
-    // 모달이 열리고 logId가 바뀔 때마다 기존 상세 데이터 조회
     useEffect(() => {
         const loadExistingData = async () => {
             if (!visible || !logId) return;
@@ -94,7 +90,7 @@ export default function VetRecordLogUpdateModal({
             }
         };
 
-        loadExistingData();
+        loadExistingData().then(() => {})
     }, [visible, logId]);
 
     const pickImage = async () => {

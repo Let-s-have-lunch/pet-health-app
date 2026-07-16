@@ -13,11 +13,7 @@ const getMyPetList = async (): Promise<Pet[]> => {
     return response.data.data;
 };
 const registerPet = async (formData: FormData): Promise<Pet> => {
-    const response = await axiosInstance.post("/pet/create", formData, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-    });
+    const response = await axiosInstance.post("/pet/create", formData);
     return response.data.data;
 };
 
