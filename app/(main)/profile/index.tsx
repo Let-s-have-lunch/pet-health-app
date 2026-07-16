@@ -18,6 +18,15 @@ function MyProfilePage() {
 
     const { user, logout } = useAuthStore();
 
+    // 💡 백엔드 URL 설정 (이미지 경로 처리용)
+    const BACKEND_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
+
+    // 💡 이미지 경로를 절대 경로로 바꿔주는 함수
+    const getImageUrl = (path?: string | null) => {
+        if (!path) return null;
+        return path.startsWith("http") ? path : `${BACKEND_URL}${path}`;
+    };
+
     useEffect(() => {
         const loadPets = async () => {
             try {
@@ -27,7 +36,7 @@ function MyProfilePage() {
                 console.log(error);
             }
         };
-        loadPets().then(() => {});
+        loadPets().then(() => {})
     }, []);
 
     return (
@@ -80,9 +89,10 @@ function MyProfilePage() {
                                             "flex-row items-center",
                                             index !== pets.length - 1 ? "mb-4" : "",
                                         )}>
+                                        {/* 💡 getImageUrl 적용 부분 */}
                                         {pet.profileImage ? (
                                             <Image
-                                                source={{ uri: pet.profileImage }}
+                                                source={{ uri: getImageUrl(pet.profileImage) || "" }}
                                                 className="w-14 h-14 rounded-full mr-4 bg-gray-200"
                                                 resizeMode="cover"
                                             />
