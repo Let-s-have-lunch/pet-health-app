@@ -1,4 +1,4 @@
-import { Modal, View, Image, Pressable, ScrollView, Alert } from "react-native";
+import { Modal, View, Image, Pressable, ScrollView, Alert, Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Diary } from "@/types/diary";
 import TextComponent from "@/components/common/text/TextComponent";
@@ -37,28 +37,36 @@ export default function DiaryDetailModal({ diary, visible, onClose, onRefresh, o
     };
 
     const handleDelete = async () => {
-        Alert.alert("일기 삭제", "정말 삭제하시겠습니까?", [
-            {
-                text: "취소",
-                style: "cancel",
-            },
-            {
-                text: "삭제",
-                style: "destructive",
-                onPress: async () => {
-                    try {
-                        await diaryApi.deleteDiary(diary.id);
+        const ok =
+            Platform.OS === "web"
+                ? window.confirm("삭제하시겠습니까?")
+                : await new Promise<boolean>(resolve => {
+                      Alert.alert("일기 삭제", "삭제하시겠습니까?", [
+                          {
+                              text: "취소",
+                              onPress: () => resolve(false),
+                              style: "cancel",
+                          },
+                          {
+                              text: "삭제",
+                              onPress: () => resolve(true),
+                              style: "destructive",
+                          },
+                      ]);
+                  });
 
-                        onClose();
-                        onRefresh();
-                    } catch {
-                        Alert.alert("오류", "삭제에 실패했습니다.");
-                    }
-                },
-            },
-        ]);
+        if (!ok) return;
+
+        try {
+            await diaryApi.deleteDiary(diary.id);
+
+            onClose();
+            await onRefresh();
+        } catch (e) {
+            console.error(e);
+            Alert.alert("삭제 실패");
+        }
     };
-
     return (
         <Modal
             visible={visible}
@@ -132,7 +140,13 @@ export default function DiaryDetailModal({ diary, visible, onClose, onRefresh, o
                     {/* 하단 버튼 */}
                     <View className="border-t border-gray-100 px-6 py-5">
                         <View className="flex-row gap-3">
-                            <Button variant="outlined" className="flex-1" onPress={handleDelete}>
+                            <Button
+                                variant="outlined"
+                                className="flex-1"
+                                onPress={() => {
+                                    console.log("삭제 버튼 클릭");
+                                    handleDelete();
+                                }}>
                                 삭제
                             </Button>
 

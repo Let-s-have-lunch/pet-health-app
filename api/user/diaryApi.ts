@@ -116,7 +116,7 @@ const updateDiary = async (
     return response.data.data;
 };
 
-const deleteDiary = async (id: number) => {
+const deleteDiary = async (id: number): Promise<void> => {
     await axiosInstance.delete(`/diary/${id}`);
 };
 
