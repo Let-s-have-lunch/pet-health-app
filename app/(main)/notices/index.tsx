@@ -54,7 +54,7 @@ function NoticeListPage() {
             <Title
                 title="공지사항"
                 showBackButton={true}
-                onBackPress={() => router.push("/my")}
+                onBackPress={() => router.back()}
                 className={"bg-background-paper"}
             />
             <ContentContainer className={"overflow-hidden flex-1"}>

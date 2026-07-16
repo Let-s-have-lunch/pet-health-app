@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter, Href } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginUserInputType, loginUserSchema } from "@/schemas/user/loginUserSchema";
@@ -18,6 +18,7 @@ import ErrorMessage from "@/components/common/label/ErrorMessage";
 function AuthLoginPage() {
     const router = useRouter();
     const { login } = useAuthStore();
+    const { returnUrl } = useLocalSearchParams();
 
     const {
         control,
@@ -41,7 +42,11 @@ function AuthLoginPage() {
                 login(result.user, result.token);
             }
 
-            router.push("/");
+            if (returnUrl) {
+                router.replace(returnUrl as Href);
+            } else {
+                router.replace("/");
+            }
         } catch (error) {
             console.log(error);
             let errorMessage = "로그인 중 오류가 발생했습니다.";

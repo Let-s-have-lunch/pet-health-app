@@ -215,6 +215,9 @@ function WalkLogModal({ visible, onClose, petId, reload, initialData }: WalkLogM
                         </View>
 
                         <View className="flex-row mt-4 gap-3">
+                            <Button variant={"outlined"} wrap={true} onPress={onClose}>
+                                취소
+                            </Button>
                             <Button
                                 wrap={true}
                                 onPress={handleSubmit(onSubmit)}
@@ -226,9 +229,6 @@ function WalkLogModal({ visible, onClose, petId, reload, initialData }: WalkLogM
                                     : isSubmitting
                                       ? "등록중..."
                                       : "등록"}
-                            </Button>
-                            <Button variant={"outlined"} wrap={true} onPress={onClose}>
-                                취소
                             </Button>
                         </View>
                     </Pressable>

@@ -1,4 +1,4 @@
-import { Image, Pressable, View } from "react-native";
+import { Image, Pressable, useWindowDimensions, View } from "react-native";
 import { useRouter } from "expo-router";
 import { twMerge } from "tailwind-merge";
 import { Ionicons } from "@expo/vector-icons";
@@ -7,6 +7,9 @@ import { useThemeStore } from "@/stores/theme/useThemeStore";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { Role } from "@/types/user";
 import { usePetStore } from "@/stores/usePetStore";
+import SettingsDesktop from "@/app/(main)/(tabs)/SettingsDesktop";
+import { useState } from "react";
+import SettingsMobile from "@/app/(main)/(tabs)/SettingMobile";
 
 function MainHeaderMobile() {
     const router = useRouter();
@@ -14,11 +17,14 @@ function MainHeaderMobile() {
     const { theme, onChangeTheme } = useThemeStore();
     const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
     const { selectedPet, isAddCardSelected } = usePetStore();
+
+    const { width } = useWindowDimensions();
+    const isMobile = width < 768;
     const profileImageUrl = selectedPet?.profileImage
         ? `${BASE_URL}${selectedPet.profileImage}`
         : undefined;
 
-
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     return (
         <View
@@ -84,6 +90,7 @@ function MainHeaderMobile() {
                         </Pressable>
                     )}
                     <Pressable
+                        onPress={() => setIsSettingsOpen(true)}
                         className={twMerge(
                             ["p-2", "rounded-full"],
                             ["transition-all", "active:bg-background-default"],
@@ -96,6 +103,14 @@ function MainHeaderMobile() {
                     </Pressable>
                 </View>
             </View>
+            {isMobile ? (
+                <SettingsMobile visible={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+            ) : (
+                <SettingsDesktop
+                    visible={isSettingsOpen}
+                    onClose={() => setIsSettingsOpen(false)}
+                />
+            )}
         </View>
     );
 }

@@ -78,7 +78,7 @@ function MyInquiryListPage() {
             <Title
                 title="나의 1:1 문의 게시판"
                 showBackButton={true}
-                onBackPress={() => router.push("/my")}
+                onBackPress={() => router.back()}
                 className={"bg-background-paper"}></Title>
             <ContentContainer className={"overflow-hidden flex-1"}>
                 <ScrollView className={"flex-1"}>

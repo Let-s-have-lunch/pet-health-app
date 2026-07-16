@@ -175,6 +175,9 @@ function WaterLogModal({ visible, onClose, petId, reload, initialData }: WaterLo
                         </View>
 
                         <View className="flex-row mt-4 gap-3">
+                            <Button variant={"outlined"} wrap={true} onPress={onClose}>
+                                취소
+                            </Button>
                             <Button
                                 wrap={true}
                                 onPress={handleSubmit(onSubmit)}
@@ -186,9 +189,6 @@ function WaterLogModal({ visible, onClose, petId, reload, initialData }: WaterLo
                                     : isSubmitting
                                       ? "등록중..."
                                       : "등록"}
-                            </Button>
-                            <Button variant={"outlined"} wrap={true} onPress={onClose}>
-                                취소
                             </Button>
                         </View>
                     </Pressable>
