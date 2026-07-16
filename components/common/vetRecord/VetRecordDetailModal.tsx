@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { View, Image, Pressable, ScrollView, ActivityIndicator, Modal, Alert } from "react-native";
-import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { twMerge } from "tailwind-merge";
 import axiosInstance from "@/api/axiosInstance";
@@ -8,6 +7,7 @@ import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { vetLogApi } from "@/api/user/vetLogApi";
 import { VetRecord } from "@/types/vetRecord";
 import TextComponent from "@/components/common/text/TextComponent";
+import VetRecordLogUpdateModal from "@/components/common/vetRecord/VetRecordLogUpdateModal";
 
 interface Props {
     visible: boolean;
@@ -22,10 +22,10 @@ export default function VetRecordDetailModal({
     onClose,
     onUpdateComplete,
 }: Props) {
-    const router = useRouter();
     const BACKEND_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
     const [record, setRecord] = useState<VetRecord | null>(null);
     const [loading, setLoading] = useState(false);
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
     const getImageUrl = (path?: string | null) => {
         if (!path) return null;
@@ -70,152 +70,168 @@ export default function VetRecordDetailModal({
         }
     };
 
+    const handleUpdateSuccess = async () => {
+        await fetchRecord(); // 상세 모달 데이터 리로드
+        if (onUpdateComplete) onUpdateComplete(); // 부모 목록 페이지 데이터 리로드
+    };
+
     return (
-        <Modal visible={visible} transparent={true} animationType="fade" onRequestClose={onClose}>
-            <Pressable
-                className={twMerge("flex-1 bg-black/50 justify-center items-center p-5")}
-                onPress={onClose}>
-                {/* 배경 흰색 고정 (bg-white) */}
+        <>
+            <Modal
+                visible={visible}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={onClose}>
                 <Pressable
-                    className={twMerge(
-                        "bg-white w-full rounded-[24px] overflow-hidden max-h-[85%]",
-                    )}
-                    onPress={e => e.stopPropagation()}>
-                    {/* 헤더 */}
-                    <View
-                        className={twMerge("flex-row items-center justify-between px-6 pt-6 pb-2")}>
-                        <TextComponent
-                            className={twMerge("text-[20px] font-bold text-text-default")}>
-                            {record?.visitPurpose || "상세 기록"}
-                        </TextComponent>
-                        <Pressable onPress={onClose} className={twMerge("p-1")}>
-                            <Ionicons name="close" size={24} color="#2C2C2C" />
-                        </Pressable>
-                    </View>
-
-                    {loading ? (
-                        <View className="h-40 justify-center">
-                            <ActivityIndicator />
-                        </View>
-                    ) : !record ? null : (
-                        <ScrollView className={twMerge("px-6 pb-6")}>
-                            {/* 날짜 */}
+                    className={twMerge("flex-1 bg-black/50 justify-center items-center p-5")}
+                    onPress={onClose}>
+                    <Pressable
+                        className={twMerge(
+                            "bg-white w-full max-w-xl rounded-[24px] overflow-hidden max-h-[85%]",
+                        )}
+                        onPress={e => e.stopPropagation()}>
+                        {/* 헤더 */}
+                        <View
+                            className={twMerge(
+                                "flex-row items-center justify-between px-6 pt-6 pb-2",
+                            )}>
                             <TextComponent
-                                className={twMerge(
-                                    "text-[15px] text-text-default font-bold mb-4 text-right",
-                                )}>
-                                {formatLongDate(record.visitDate)}
+                                className={twMerge("text-[20px] font-bold text-text-default")}>
+                                {record?.visitPurpose || "상세 기록"}
                             </TextComponent>
+                            <Pressable onPress={onClose} className={twMerge("p-1")}>
+                                <Ionicons name="close" size={24} color="#2C2C2C" />
+                            </Pressable>
+                        </View>
 
-                            {/* 이미지 */}
-                            {record.receiptImage ? (
-                                <Image
-                                    source={{ uri: getImageUrl(record.receiptImage) || "" }}
-                                    className={twMerge("w-full h-[180px] rounded-[16px] mb-6")}
-                                    resizeMode="cover"
-                                />
-                            ) : (
+                        {loading ? (
+                            <View className="h-40 justify-center">
+                                <ActivityIndicator />
+                            </View>
+                        ) : !record ? null : (
+                            <ScrollView className={twMerge("px-6 pb-6")}>
+                                {/* 날짜 */}
+                                <TextComponent
+                                    className={twMerge(
+                                        "text-[15px] text-text-default font-bold mb-4 text-right",
+                                    )}>
+                                    {formatLongDate(record.visitDate)}
+                                </TextComponent>
+
+                                {/* 이미지 */}
+                                {record.receiptImage ? (
+                                    <Image
+                                        source={{ uri: getImageUrl(record.receiptImage) || "" }}
+                                        className={twMerge("w-full h-[300px] rounded-[16px] mb-6")}
+                                        resizeMode="cover"
+                                    />
+                                ) : (
+                                    <View
+                                        className={twMerge(
+                                            "w-full h-[300px] rounded-[16px] mb-6 border-2 border-dashed border-divider items-center justify-center bg-bg-light",
+                                        )}>
+                                        <Ionicons name="image-outline" size={40} color="#7F8C8D" />
+                                    </View>
+                                )}
+
+                                {/* 정보 리스트 */}
+                                <View className={twMerge("gap-3 mb-6")}>
+                                    <View className={twMerge("flex-row items-center gap-3")}>
+                                        <View
+                                            className={twMerge(
+                                                "w-8 h-8 rounded-full bg-error-main items-center justify-center",
+                                            )}>
+                                            <Ionicons
+                                                name="medkit-outline"
+                                                size={18}
+                                                color="#E95244"
+                                            />
+                                        </View>
+                                        <TextComponent
+                                            className={twMerge(
+                                                "text-[16px] text-text-default font-medium",
+                                            )}>
+                                            {record.hospitalName}
+                                        </TextComponent>
+                                    </View>
+                                    <View className={twMerge("flex-row items-center gap-3")}>
+                                        <View
+                                            className={twMerge(
+                                                "w-8 h-8 rounded-full bg-success-main items-center justify-center",
+                                            )}>
+                                            <Ionicons
+                                                name="cash-outline"
+                                                size={18}
+                                                color="#35B18C"
+                                            />
+                                        </View>
+                                        <TextComponent
+                                            className={twMerge(
+                                                "text-[16px] text-text-default font-medium",
+                                            )}>
+                                            {record.cost?.toLocaleString()}원
+                                        </TextComponent>
+                                    </View>
+                                </View>
+
+                                <View className={twMerge("h-[1px] bg-divider mb-6")} />
+
+                                {/* 메모 박스 */}
                                 <View
                                     className={twMerge(
-                                        "w-full h-[150px] rounded-[16px] mb-6 border-2 border-dashed border-divider items-center justify-center bg-bg-light",
+                                        "bg-bg-light p-4 rounded-[16px] border border-divider mb-8",
                                     )}>
-                                    <Ionicons name="image-outline" size={40} color="#7F8C8D" />
-                                </View>
-                            )}
-
-                            {/* 정보 리스트 */}
-                            <View className={twMerge("gap-3 mb-6")}>
-                                {/* 병원 정보 */}
-                                <View className={twMerge("flex-row items-center gap-3")}>
-                                    <View
-                                        className={twMerge(
-                                            "w-8 h-8 rounded-full bg-error-main items-center justify-center",
-                                        )}>
-                                        <Ionicons name="medkit-outline" size={18} color="#E95244" />
-                                    </View>
                                     <TextComponent
                                         className={twMerge(
-                                            "text-[16px] text-text-default font-medium",
+                                            "text-[13px] text-text-secondary font-bold mb-2",
                                         )}>
-                                        {record.hospitalName}
+                                        메모
+                                    </TextComponent>
+                                    <TextComponent
+                                        className={twMerge(
+                                            "text-[15px] text-text-default leading-6",
+                                        )}>
+                                        {record.memo || "작성된 메모가 없습니다."}
                                     </TextComponent>
                                 </View>
-                                {/* 비용 정보 */}
-                                <View className={twMerge("flex-row items-center gap-3")}>
-                                    <View
+
+                                {/* 버튼 영역 */}
+                                <View className={twMerge("flex-row gap-3")}>
+                                    <Pressable
+                                        onPress={handleDelete}
                                         className={twMerge(
-                                            "w-8 h-8 rounded-full bg-success-main items-center justify-center",
+                                            "flex-1 h-12 border border-divider rounded-[12px] items-center justify-center bg-error-main",
                                         )}>
-                                        <Ionicons name="cash-outline" size={18} color="#35B18C" />
-                                    </View>
-                                    <TextComponent
+                                        <TextComponent
+                                            className={twMerge("bg-text-default font-semibold")}>
+                                            삭제
+                                        </TextComponent>
+                                    </Pressable>
+
+                                    {/* 🌟 변경: router.push 대신 모달 띄우기 */}
+                                    <Pressable
+                                        onPress={() => setIsUpdateModalOpen(true)}
                                         className={twMerge(
-                                            "text-[16px] text-text-default font-medium",
+                                            "flex-1 h-12 rounded-[12px] items-center justify-center bg-primary-main",
                                         )}>
-                                        {record.cost?.toLocaleString()}원
-                                    </TextComponent>
+                                        <TextComponent
+                                            className={twMerge("text-text-default font-semibold")}>
+                                            수정
+                                        </TextComponent>
+                                    </Pressable>
                                 </View>
-                            </View>
-
-                            <View className={twMerge("h-[1px] bg-divider mb-6")} />
-
-                            {/* 메모 박스 */}
-                            <View
-                                className={twMerge(
-                                    "bg-bg-light p-4 rounded-[16px] border border-divider mb-8",
-                                )}>
-                                <TextComponent
-                                    className={twMerge(
-                                        "text-[13px] text-text-secondary font-bold mb-2",
-                                    )}>
-                                    메모
-                                </TextComponent>
-                                <TextComponent
-                                    className={twMerge("text-[15px] text-text-default leading-6")}>
-                                    {record.memo || "작성된 메모가 없습니다."}
-                                </TextComponent>
-                            </View>
-
-                            <View className={twMerge("flex-row gap-3")}>
-                                <Pressable
-                                    onPress={handleDelete}
-                                    className={twMerge(
-                                        "flex-1 h-12 border border-divider rounded-[12px] items-center justify-center bg-error-main",
-                                    )}>
-                                    <TextComponent
-                                        className={twMerge("bg-text-default font-semibold")}>
-                                        삭제
-                                    </TextComponent>
-                                </Pressable>
-                                <Pressable
-                                    onPress={() => {
-                                        onClose();
-                                        router.push({
-                                            pathname: "/(main)/health/vet-records/[id]/update",
-                                            params: {
-                                                id: record.id,
-                                                hospitalName: record.hospitalName,
-                                                visitPurpose: record.visitPurpose,
-                                                visitDate: record.visitDate,
-                                                cost: record.cost,
-                                                memo: record.memo,
-                                                receiptImage: record.receiptImage,
-                                            },
-                                        });
-                                    }}
-                                    className={twMerge(
-                                        "flex-1 h-12 rounded-[12px] items-center justify-center bg-primary-main",
-                                    )}>
-                                    <TextComponent
-                                        className={twMerge("text-text-default font-semibold")}>
-                                        수정
-                                    </TextComponent>
-                                </Pressable>
-                            </View>
-                        </ScrollView>
-                    )}
+                            </ScrollView>
+                        )}
+                    </Pressable>
                 </Pressable>
-            </Pressable>
-        </Modal>
+            </Modal>
+
+            <VetRecordLogUpdateModal
+                visible={isUpdateModalOpen}
+                onClose={() => setIsUpdateModalOpen(false)}
+                logId={recordId ?? undefined}
+                reload={handleUpdateSuccess}
+            />
+        </>
     );
 }
