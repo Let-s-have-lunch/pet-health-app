@@ -13,6 +13,7 @@ import FormContainer from "@/components/layouts/common/FormContainer";
 import InputGroup from "@/components/common/input/InputGroup";
 import Button from "@/components/common/button/Button";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
+import ErrorMessage from "@/components/common/label/ErrorMessage";
 
 function AuthLoginPage() {
     const router = useRouter();
@@ -103,6 +104,7 @@ function AuthLoginPage() {
                             );
                         }}
                     />
+                    {errors.root?.message && <ErrorMessage>{errors.root.message}</ErrorMessage>}
 
                     <View className={"md:flex-row mt-9 gap-3"}>
                         <Button
