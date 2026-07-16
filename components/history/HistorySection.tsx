@@ -31,11 +31,9 @@ export default function HistorySection() {
         }
 
         try {
-            // 💡 불필요한 호출을 지우고, 대시보드 데이터 딱 하나만 가져오기!
             const dashboardResult = await getHomeDashboard(petId, todayDate);
 
             if (dashboardResult.success) {
-                // 백엔드에서 이미 다 가공해서 줬으니, 그대로 꽂아 넣으면 끝!
                 setData(dashboardResult.data);
             }
         } catch (error) {

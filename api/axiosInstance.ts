@@ -3,7 +3,6 @@ import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { Alert, Platform } from "react-native";
 import { router } from "expo-router";
 
-
 const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 
 const api = create({
@@ -13,7 +12,6 @@ const api = create({
 });
 
 export default api;
-
 
 api.interceptors.request.use(config => {
     const { token } = useAuthStore.getState();
@@ -30,18 +28,22 @@ api.interceptors.response.use(
     error => {
         if (isAxiosError(error) && error.response) {
             if (error.response.status === 401) {
-                useAuthStore.getState().logout();
+                const isLoginRequest = error.config?.url?.includes("/login");
 
-                if (Platform.OS === "web") {
-                    window.alert("로그인 세션이 만료되었습니다. 다시 로그인 해주세요.");
-                    router.replace("/auth/login");
-                } else {
-                    Alert.alert("알림", "로그인 세션이 만료되었습니다. 다시 로그인 해주세요.", [
-                        {
-                            text: "확인",
-                            onPress: () => router.replace("/auth/login"),
-                        },
-                    ]);
+                if (!isLoginRequest) {
+                    useAuthStore.getState().logout();
+
+                    if (Platform.OS === "web") {
+                        window.alert("로그인 세션이 만료되었습니다. 다시 로그인 해주세요.");
+                        router.replace("/auth/login");
+                    } else {
+                        Alert.alert("알림", "로그인 세션이 만료되었습니다. 다시 로그인 해주세요.", [
+                            {
+                                text: "확인",
+                                onPress: () => router.replace("/auth/login"),
+                            },
+                        ]);
+                    }
                 }
             }
         }

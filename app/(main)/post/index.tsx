@@ -1,4 +1,4 @@
-import { Alert, Platform, Pressable, ScrollView, View } from "react-native";
+import { Alert, Platform, Pressable, ScrollView, TouchableOpacity, View } from "react-native";
 import TextComponent from "@/components/common/text/TextComponent";
 import { twMerge } from "tailwind-merge";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -150,11 +150,14 @@ function CommunityPostListPage() {
                                             )}>
                                             {item.id}
                                         </TextComponent>
-                                        <Pressable
+                                        <TouchableOpacity
                                             className={twMerge(
                                                 ["flex-1", "flex-row", "items-center", "gap-2"],
                                                 ["md:px-2", "mb-1.5", "md:mb-0"],
                                             )}
+                                            disabled={isLoading}
+                                            activeOpacity={0.6}
+                                            hitSlop={10}
                                             onPress={() => router.push(`/post/${item.id}`)}>
                                             <TextComponent
                                                 className={twMerge(
@@ -168,7 +171,7 @@ function CommunityPostListPage() {
                                                 numberOfLines={1}>
                                                 {item.title}
                                             </TextComponent>
-                                        </Pressable>
+                                        </TouchableOpacity>
 
                                         <View
                                             className={twMerge([
