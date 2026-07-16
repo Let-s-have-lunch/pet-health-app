@@ -24,6 +24,7 @@ import TextComponent from "@/components/common/text/TextComponent";
 import { ReplyItem } from "./CommunityPostDetailReplyListPage";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { useRouter } from "expo-router";
+import { twMerge } from "tailwind-merge";
 
 interface Props {
     postId: number;
@@ -153,7 +154,11 @@ function CommunityPostDetailReply({ postId, isOpen, onClose, onTotalChange }: Pr
                 />
 
                 <View
-                    className="h-[70%] bg-background-paper rounded-t-[30px] overflow-hidden border-t border-divider shadow-2xl"
+                    className={twMerge(
+                        ["h-[70%] bg-background-paper rounded-t-[30px] overflow-hidden shadow-2xl"],
+                        ["border-t border-divider"],
+                        ["mx-auto", "w-full", "max-w-7xl"]
+                    )}
                     style={Platform.select({
                         ios: {
                             shadowColor: "#000",

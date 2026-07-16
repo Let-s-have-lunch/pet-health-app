@@ -8,6 +8,7 @@ import { vetLogApi } from "@/api/user/vetLogApi";
 import { VetRecord } from "@/types/vetRecord";
 import TextComponent from "@/components/common/text/TextComponent";
 import VetRecordLogUpdateModal from "@/components/common/vetRecord/VetRecordLogUpdateModal";
+import Button from "@/components/common/button/Button";
 
 interface Props {
     visible: boolean;
@@ -200,26 +201,18 @@ export default function VetRecordDetailModal({
 
                                 {/* 버튼 영역 */}
                                 <View className={twMerge("flex-row gap-3")}>
-                                    <Pressable
+                                    <Button
+                                        variant={"outlined"}
                                         onPress={handleDelete}
-                                        className={twMerge(
-                                            "flex-1 h-12 border border-divider rounded-[12px] items-center justify-center bg-error-main",
-                                        )}>
-                                        <TextComponent
-                                            className={twMerge("text-text-default font-semibold")}>
-                                            삭제
-                                        </TextComponent>
-                                    </Pressable>
-                                    <Pressable
-                                        onPress={() => setIsUpdateModalOpen(true)}
-                                        className={twMerge(
-                                            "flex-1 h-12 rounded-[12px] items-center justify-center bg-primary-main",
-                                        )}>
-                                        <TextComponent
-                                            className={twMerge("text-text-default font-semibold")}>
-                                            수정
-                                        </TextComponent>
-                                    </Pressable>
+                                        className={twMerge(["flex-1"])}>
+                                        삭제
+                                    </Button>
+                                    <Button
+                                        className={twMerge(["flex-1"])}
+                                        variant={"contained"}
+                                        onPress={() => setIsUpdateModalOpen(true)}>
+                                        수정
+                                    </Button>
                                 </View>
                             </ScrollView>
                         )}
