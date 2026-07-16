@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import DiaryDetailModal from "./DiaryDetailModal";
 import { View, ScrollView } from "react-native";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import todoApi from "@/api/user/todoApi";
@@ -15,13 +16,12 @@ export default function DailyDetailScreen() {
     const [isLoading, setIsLoading] = useState(true);
     const [diaries, setDiaries] = useState<Diary[]>([]);
     const [todos, setTodos] = useState<Todo[]>([]);
-
-    console.log(date);
+    const [selectedDiary, setSelectedDiary] = useState<Diary | null>(null);
 
     const loadDailyData = useCallback(async () => {
         if (!date) return;
         setIsLoading(true);
-        
+
         try {
             const [diaryList, todoList] = await Promise.all([
                 diaryApi.getDiaryList(date),
@@ -55,9 +55,16 @@ export default function DailyDetailScreen() {
         <View className="flex-1">
             <ScrollView className={"flex-1"}>
                 <ContentContainer className={"p-0"}>
-                    <DiarySection diaryList={diaries} date={date} />
+                    <DiarySection diaryList={diaries} date={date} onPressDiary={setSelectedDiary} />
 
-                    <TodoSection todos={todos} targetDate={date} onRefresh={loadDailyData}/>
+                    <TodoSection todos={todos} targetDate={date} onRefresh={loadDailyData} />
+
+                    <DiaryDetailModal
+                        diary={selectedDiary}
+                        visible={!!selectedDiary}
+                        onClose={() => setSelectedDiary(null)}
+                        onRefresh={loadDailyData}
+                    />
                 </ContentContainer>
             </ScrollView>
         </View>

@@ -11,9 +11,10 @@ const BACKEND_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 type Props = {
     diaryList: Diary[];
     date: string;
+    onPressDiary: (diary: Diary) => void;
 };
 
-export default function DiarySection({ diaryList = [], date }: Props) {
+export default function DiarySection({ diaryList = [], date, onPressDiary }: Props) {
     const getImageUrl = (path?: string | null) => {
         if (!path) return undefined;
         return path.startsWith("http") ? path : `${BACKEND_URL}${path}`;
@@ -24,6 +25,7 @@ export default function DiarySection({ diaryList = [], date }: Props) {
         const days = ["일", "월", "화", "수", "목", "금", "토"];
         return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 ${days[d.getDay()]}요일`;
     };
+
 
     // 일기가 하나도 없는 경우
     if (!diaryList || diaryList.length === 0) {
@@ -92,12 +94,10 @@ export default function DiarySection({ diaryList = [], date }: Props) {
             {diaryList.map(diary => (
                 <Pressable
                     key={diary.id}
-                    onPress={() =>
-                        router.push({
-                            pathname: "/(main)/(tabs)/diary/create",
-                            params: { date },
-                        })
-                    }
+                    onPress={() => {
+                        console.log("카드 클릭", diary);
+                        onPressDiary(diary);
+                    }}
                     className="bg-background-paper rounded-[28px] overflow-hidden">
                     <View className="bg-[#F5C8C7] px-5 py-4">
                         <TextComponent className="text-[17px] font-bold">
