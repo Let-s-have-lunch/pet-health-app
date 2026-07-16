@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Modal,
     View,
@@ -8,14 +8,16 @@ import {
     Pressable,
     Keyboard,
 } from "react-native";
-import { Todo } from "@/types/todo";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { format } from "date-fns";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TodoFormInputType, todoFormSchema } from "@/schemas/todo/todoFormSchema";
-import todoApi from "@/api/user/todoApi";
-import Title from "@/components/common/title/Title";
-import InputGroup from "@/components/common/input/InputGroup";
 import Button from "@/components/common/button/Button";
+import InputGroup from "@/components/common/input/InputGroup";
+import Title from "@/components/common/title/Title";
+import todoApi from "@/api/user/todoApi";
+import { TodoFormInputType, todoFormSchema } from "@/schemas/todo/todoFormSchema";
+import { Todo } from "@/types/todo";
 
 interface Props {
     visible: boolean;
@@ -32,51 +34,51 @@ export default function TodoFormModal({
     initialData,
     onRefresh,
 }: Props) {
+    const [showPicker, setShowPicker] = useState(false);
+
     const {
         control,
         reset,
         handleSubmit,
+        setValue,
+        watch,
         formState: { errors, isSubmitting },
     } = useForm<TodoFormInputType>({
         resolver: zodResolver(todoFormSchema),
-        defaultValues: {
-            title: ""
-        },
+        defaultValues: { title: "", date: new Date() },
     });
+
+    const selectedDate = watch("date");
 
     useEffect(() => {
         if (visible) {
-            if (initialData) {
-                reset({
-                    title: initialData?.title,
-                });
-            } else {
-                reset({
-                    title: ""
-                });
-            }
+            reset({
+                title: initialData?.title || "",
+                date: initialData ? new Date(initialData.date) : new Date(),
+            });
         }
     }, [visible, reset, initialData]);
 
     const onSubmit = async (data: TodoFormInputType) => {
+        const [year, month, day] = targetDate.split("-").map(Number);
+        const finalDate = new Date(year, month - 1, day);
+        finalDate.setHours(data.date.getHours(), data.date.getMinutes(), 0, 0);
+
+        const payload = {
+            title: data.title,
+            date: finalDate,
+        };
+
         try {
             if (initialData) {
-                await todoApi.updateTodo(initialData.id, targetDate, data);
+                await todoApi.updateTodo(initialData.id, payload);
             } else {
-                await todoApi.createTodo(targetDate, data);
+                await todoApi.createTodo(payload);
             }
-
             await onRefresh();
             onClose();
         } catch (error) {
-            console.log(error);
-            const errorActionText = initialData ? "수정하는" : "등록하는";
-
-            if (Platform.OS === "web") {
-                alert(`일정을 ${errorActionText} 중 오류가 발생했습니다.`);
-            } else {
-                Alert.alert("오류", `일정을 ${errorActionText} 중 오류가 발생했습니다.`);
-            }
+            Alert.alert("오류", "저장 중 문제가 발생했습니다.");
         }
     };
 
@@ -96,26 +98,58 @@ export default function TodoFormModal({
                             className={"h-auto pb-6 mb-6"}
                         />
 
-                        <View className={"gap-2"}>
-                            <Controller
-                                control={control}
-                                name={"title"}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <InputGroup
-                                        id={"title"}
-                                        label="제목"
-                                        onBlur={onBlur}
-                                        onChangeText={onChange}
-                                        value={value}
-                                        errorMessage={errors.title?.message}
-                                        maxLength={20}
-                                        placeholder={"제목은 20자 이내로 작성해주세요."}
-                                    />
-                                )}
-                            />
-                        </View>
+                        <Controller
+                            control={control}
+                            name="title"
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <InputGroup
+                                    label="제목"
+                                    onBlur={onBlur}
+                                    onChangeText={onChange}
+                                    value={value}
+                                    errorMessage={errors.title?.message}
+                                    placeholder="할 일을 입력해주세요."
+                                />
+                            )}
+                        />
 
-                        <View className="flex-row mt-4 gap-3">
+                        {/* 플랫폼별 시간 선택 UI */}
+                        <InputGroup label="시간">
+                            {Platform.OS === "web" ? (
+                                <input
+                                    type="time"
+                                    value={format(selectedDate, "HH:mm")}
+                                    onChange={e => {
+                                        const [hours, minutes] = e.target.value
+                                            .split(":")
+                                            .map(Number);
+                                        const newDate = new Date(selectedDate);
+                                        newDate.setHours(hours, minutes);
+                                        setValue("date", newDate);
+                                    }}
+                                    className="w-full p-2 border border-gray-300 rounded-lg text-lg"
+                                />
+                            ) : (
+                                <>
+                                    <Button variant="outlined" onPress={() => setShowPicker(true)}>
+                                        {format(selectedDate, "a hh:mm")}
+                                    </Button>
+                                    {showPicker && (
+                                        <DateTimePicker
+                                            value={selectedDate}
+                                            mode="time"
+                                            display={Platform.OS === "ios" ? "spinner" : "default"}
+                                            onChange={(event, date) => {
+                                                if (Platform.OS !== "ios") setShowPicker(false);
+                                                if (date) setValue("date", date);
+                                            }}
+                                        />
+                                    )}
+                                </>
+                            )}
+                        </InputGroup>
+
+                        <View className="flex-row mt-6 gap-3">
                             <Button variant={"outlined"} wrap={true} onPress={onClose}>
                                 취소
                             </Button>
@@ -123,13 +157,7 @@ export default function TodoFormModal({
                                 wrap={true}
                                 onPress={handleSubmit(onSubmit)}
                                 disabled={isSubmitting}>
-                                {initialData
-                                    ? isSubmitting
-                                        ? "수정중..."
-                                        : "수정"
-                                    : isSubmitting
-                                      ? "등록중..."
-                                      : "등록"}
+                                {isSubmitting ? "처리중..." : initialData ? "수정" : "등록"}
                             </Button>
                         </View>
                     </Pressable>
