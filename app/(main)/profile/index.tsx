@@ -27,7 +27,7 @@ function MyProfilePage() {
                 console.log(error);
             }
         };
-        loadPets();
+        loadPets().then(() => {})
     }, []);
 
     return (
