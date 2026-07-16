@@ -7,7 +7,7 @@ import { Diary } from "@/types/diary";
 import { Todo } from "@/types/todo";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
-import DiarySection from "@/app/(main)/(tabs)/diary/create/DiarySection";
+import DiarySection from "@/app/(main)/(tabs)/diary/list/DiarySection";
 import TodoSection from "@/app/(main)/(tabs)/diary/list/TodoSection";
 
 export default function DailyDetailScreen() {
