@@ -11,9 +11,11 @@ const BACKEND_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 type Props = {
     diaryList: Diary[];
     date: string;
+    onPressDiary: (diary: Diary) => void;
+    onCreateDiary: () => void;
 };
 
-export default function DiarySection({ diaryList = [], date }: Props) {
+export default function DiarySection({ diaryList = [], date, onPressDiary, onCreateDiary }: Props) {
     const getImageUrl = (path?: string | null) => {
         if (!path) return undefined;
         return path.startsWith("http") ? path : `${BACKEND_URL}${path}`;
@@ -29,12 +31,7 @@ export default function DiarySection({ diaryList = [], date }: Props) {
     if (!diaryList || diaryList.length === 0) {
         return (
             <Pressable
-                onPress={() =>
-                    router.push({
-                        pathname: "/(main)/(tabs)/diary/create",
-                        params: { date },
-                    })
-                }
+                onPress={onCreateDiary}
                 className={twMerge(
                     "bg-background-paper",
                     "rounded-[28px]",
@@ -92,12 +89,10 @@ export default function DiarySection({ diaryList = [], date }: Props) {
             {diaryList.map(diary => (
                 <Pressable
                     key={diary.id}
-                    onPress={() =>
-                        router.push({
-                            pathname: "/(main)/(tabs)/diary/create",
-                            params: { date },
-                        })
-                    }
+                    onPress={() => {
+                        console.log("카드 클릭", diary);
+                        onPressDiary(diary);
+                    }}
                     className="bg-background-paper rounded-[28px] overflow-hidden">
                     <View className="bg-[#F5C8C7] px-5 py-4">
                         <TextComponent className="text-[17px] font-bold">
