@@ -3,7 +3,7 @@ import { Slot, usePathname, useRouter, useSegments } from "expo-router";
 import MainHeaderMobile from "@/components/layouts/main/MainHeaderMobile";
 import MainFooter from "@/components/layouts/main/MainFooter";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
-import MyPageHeader from "@/components/layouts/main/MyPageHeader";
+import PostPageHeader from "@/components/layouts/main/PostPageHeader";
 import Title from "@/components/common/title/Title";
 
 function MainLayout() {
@@ -12,14 +12,14 @@ function MainLayout() {
     const router = useRouter();
 
     const currentSegment = segments[segments.length - 1];
-    const isMyPage = currentSegment === "my";
+    const isPostsPage = currentSegment === "posts";
     const isDiaryListPage = pathname.includes("/diary/list");
 
     return (
         <View className={"flex-1 bg-background-default"}>
-            {isMyPage ? (
-                <MyPageHeader />
-            ) : isDiaryListPage ? (
+            {isPostsPage ? (
+                <PostPageHeader />
+            ) :  isDiaryListPage ? (
                 <Title
                     title="일기 목록"
                     showBackButton={true}

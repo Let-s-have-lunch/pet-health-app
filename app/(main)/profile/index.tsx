@@ -82,29 +82,36 @@ function MyProfilePage() {
                                     등록된 반려동물이 없습니다.
                                 </TextComponent>
                             ) : (
-                                pets.map((pet, index) => (
-                                    <View
-                                        key={pet.id}
-                                        className={twMerge(
-                                            "flex-row items-center",
-                                            index !== pets.length - 1 ? "mb-4" : "",
-                                        )}>
-                                        {/* 💡 getImageUrl 적용 부분 */}
-                                        {pet.profileImage ? (
-                                            <Image
-                                                source={{ uri: getImageUrl(pet.profileImage) || "" }}
-                                                className="w-14 h-14 rounded-full mr-4 bg-gray-200"
-                                                resizeMode="cover"
-                                            />
-                                        ) : (
-                                            <View className="w-14 h-14 rounded-full mr-4 bg-success-main" />
-                                        )}
+                                pets.map((pet, index) => {
+                                    // 💡 마지막 인덱스인지 확인
+                                    const isLast = index === pets.length - 1;
 
-                                        <TextComponent className="text-base font-medium">
-                                            {pet.name}
-                                        </TextComponent>
-                                    </View>
-                                ))
+                                    return (
+                                        <View
+                                            key={pet.id}
+                                            className={twMerge(
+                                                "flex-row items-center",
+                                                // 💡 마지막 항목이 아니면 아래 여백, 안쪽 여백, 그리고 밑줄을 추가합니다.
+                                                !isLast && "mb-4 pb-4 border-b border-divider",
+                                            )}>
+                                            {pet.profileImage ? (
+                                                <Image
+                                                    source={{
+                                                        uri: getImageUrl(pet.profileImage) || "",
+                                                    }}
+                                                    className="w-14 h-14 rounded-full mr-4 bg-gray-200"
+                                                    resizeMode="cover"
+                                                />
+                                            ) : (
+                                                <View className="w-14 h-14 rounded-full mr-4 bg-success-main" />
+                                            )}
+
+                                            <TextComponent className="text-base font-medium">
+                                                {pet.name}
+                                            </TextComponent>
+                                        </View>
+                                    );
+                                })
                             )}
                         </Card>
 
