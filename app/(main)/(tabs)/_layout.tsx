@@ -13,7 +13,6 @@ function MainLayout() {
     const router = useRouter();
 
     const currentSegment = segments[segments.length - 1];
-    const isMyPage = currentSegment === "my";
     const isPostsPage = currentSegment === "posts";
     const isDiaryListPage = pathname.includes("/diary/list");
 
@@ -21,9 +20,7 @@ function MainLayout() {
         <View className={"flex-1 bg-background-default"}>
             {isPostsPage ? (
                 <PostPageHeader />
-            ) : isMyPage ? (
-                <MyPageHeader />
-            ) : isDiaryListPage ? (
+            ) :  isDiaryListPage ? (
                 <Title
                     title="일기 목록"
                     showBackButton={true}
