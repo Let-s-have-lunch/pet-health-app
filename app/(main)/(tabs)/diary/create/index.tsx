@@ -23,6 +23,7 @@ export default function CreateDiaryModal({ visible, diary, date, onClose, onRefr
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [imageUri, setImageUri] = useState<string | null>(null);
+    const [imageFile, setImageFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -41,16 +42,34 @@ export default function CreateDiaryModal({ visible, diary, date, onClose, onRefr
             } else {
                 setImageUri(null);
             }
+
+            setImageFile(null); // 추가
         } else {
             setTitle("");
             setContent("");
             setImageUri(null);
+            setImageFile(null); // 추가
         }
     }, [visible, diary]);
 
     const pickImage = async () => {
         if (Platform.OS === "web") {
-            Alert.alert("웹에서는 아직 이미지 변경이 지원되지 않습니다.");
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = "image/*";
+
+            input.onchange = e => {
+                const file = (e.target as HTMLInputElement).files?.[0];
+
+                if (!file) return;
+
+                const previewUrl = URL.createObjectURL(file);
+
+                setImageFile(file);
+                setImageUri(previewUrl);
+            };
+
+            input.click();
             return;
         }
 
@@ -72,6 +91,15 @@ export default function CreateDiaryModal({ visible, diary, date, onClose, onRefr
     };
 
     const handleSave = async () => {
+
+        const uploadImage =
+            Platform.OS === "web"
+                ? (imageFile ?? undefined)
+                : imageUri && !imageUri.startsWith(BACKEND_URL)
+                  ? imageUri
+                  : undefined;
+
+
         if (!title.trim()) {
             Alert.alert("제목을 입력해주세요.");
             return;
@@ -85,6 +113,13 @@ export default function CreateDiaryModal({ visible, diary, date, onClose, onRefr
         try {
             setLoading(true);
 
+            const uploadImage =
+                Platform.OS === "web"
+                    ? (imageFile ?? undefined)
+                    : imageUri && !imageUri.startsWith(BACKEND_URL)
+                      ? imageUri
+                      : undefined;
+
             if (diary) {
                 await diaryApi.updateDiary(
                     diary.id,
@@ -93,7 +128,7 @@ export default function CreateDiaryModal({ visible, diary, date, onClose, onRefr
                         content,
                         date: new Date(diary.date),
                     },
-                    imageUri ?? undefined,
+                    uploadImage,
                 );
             } else {
                 await diaryApi.createDiary(
@@ -102,13 +137,14 @@ export default function CreateDiaryModal({ visible, diary, date, onClose, onRefr
                         content,
                         date: new Date(date),
                     },
-                    imageUri ?? undefined,
+                    uploadImage,
                 );
             }
 
-            onClose();
             onRefresh();
+            onClose();
         } catch (e) {
+            console.error(e);
             Alert.alert("저장 실패");
         } finally {
             setLoading(false);
