@@ -1,13 +1,23 @@
-import { Redirect, Slot } from "expo-router";
+import { Slot, useRouter } from "expo-router";
 import { ScrollView, View } from "react-native";
 import { twMerge } from "tailwind-merge";
 import AdminAsideDesktop from "@/components/layouts/admin/AdminAsideDesktop";
 import AdminAsideMobile from "@/components/layouts/admin/AdminAsideMobile";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
+import { useEffect } from "react";
 
 function AdminLayout() {
     const { user, isInitialized } = useAuthStore();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (isInitialized) {
+            if (!user || user.role !== "ADMIN") {
+                router.replace("/");
+            }
+        }
+    }, [isInitialized, user, router]);
 
     if (!isInitialized) {
         return (
@@ -18,7 +28,7 @@ function AdminLayout() {
     }
 
     if (!user || user.role !== "ADMIN") {
-        return <Redirect href="/" />;
+        return null;
     }
 
     return (
