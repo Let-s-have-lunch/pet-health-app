@@ -28,7 +28,7 @@ export default function CustomerServiceScreen() {
             <Title
                 title="고객센터"
                 showBackButton={true}
-                onBackPress={() => router.back()}
+                onBackPress={() => router.push("/home")}
                 className="bg-background-paper"
             />
 

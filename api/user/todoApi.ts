@@ -23,19 +23,13 @@ const getTodoListByRange = async (startDate: string, endDate: string): Promise<T
     return response.data.data;
 };
 
-const createTodo = async (date: string, data: TodoFormInputType): Promise<Todo> => {
-    const response = await axiosInstance.post(`/todo/create`, {
-        date,
-        title: data.title,
-    });
+const createTodo = async (payload: { date: Date; title: string }): Promise<Todo> => {
+    const response = await axiosInstance.post(`/todo/create`, payload);
     return response.data.data;
 };
 
-const updateTodo = async (id: number, date: string, data: TodoFormInputType): Promise<Todo> => {
-    const response = await axiosInstance.patch(`/todo/${id}`, {
-        date,
-        title: data.title,
-    });
+const updateTodo = async (id: number, payload: { date: Date; title: string }): Promise<Todo> => {
+    const response = await axiosInstance.patch(`/todo/${id}`, payload);
     return response.data.data;
 };
 
