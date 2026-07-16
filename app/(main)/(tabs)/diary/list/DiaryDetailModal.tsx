@@ -1,8 +1,10 @@
-import { Modal, View, Image, Pressable, ScrollView } from "react-native";
+import { Modal, View, Image, Pressable, ScrollView, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Diary } from "@/types/diary";
 import TextComponent from "@/components/common/text/TextComponent";
 import Button from "@/components/common/button/Button";
+import diaryApi from "@/api/user/diaryApi";
+import { router } from "expo-router";
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 
@@ -11,9 +13,10 @@ type Props = {
     visible: boolean;
     onClose: () => void;
     onRefresh: () => void;
+    onEdit: (diary: Diary) => void;
 };
 
-export default function DiaryDetailModal({ diary, visible, onClose }: Props) {
+export default function DiaryDetailModal({ diary, visible, onClose, onRefresh, onEdit, }: Props) {
     if (!diary) return null;
 
     const getImageUrl = (path?: string | null) => {
@@ -21,6 +24,7 @@ export default function DiaryDetailModal({ diary, visible, onClose }: Props) {
 
         return path.startsWith("http") ? path : `${BACKEND_URL}${path}`;
     };
+
 
     const formatDate = (dateString: string) => {
         const d = new Date(dateString);
@@ -32,6 +36,29 @@ export default function DiaryDetailModal({ diary, visible, onClose }: Props) {
         }월 ${d.getDate()}일 ${days[d.getDay()]}요일`;
     };
 
+    const handleDelete = async () => {
+        Alert.alert("일기 삭제", "정말 삭제하시겠습니까?", [
+            {
+                text: "취소",
+                style: "cancel",
+            },
+            {
+                text: "삭제",
+                style: "destructive",
+                onPress: async () => {
+                    try {
+                        await diaryApi.deleteDiary(diary.id);
+
+                        onClose();
+                        onRefresh();
+                    } catch {
+                        Alert.alert("오류", "삭제에 실패했습니다.");
+                    }
+                },
+            },
+        ]);
+    };
+
     return (
         <Modal
             visible={visible}
@@ -39,31 +66,37 @@ export default function DiaryDetailModal({ diary, visible, onClose }: Props) {
             animationType="fade"
             statusBarTranslucent
             onRequestClose={onClose}>
+            {/* 배경 */}
             <Pressable
-                className="flex-1 bg-black/40 items-center justify-center px-5"
+                className="flex-1 bg-black/40 items-center justify-center px-4 py-6"
                 onPress={onClose}>
+                {/* 모달 */}
                 <Pressable
                     onPress={e => e.stopPropagation()}
-                    className="w-full max-w-[700px] bg-background-paper rounded-[32px] p-6">
-                    {/* 헤더 */}
-                    <View className="flex-row items-center justify-between">
-                        <TextComponent className="text-[26px] font-bold flex-1 pr-3">
-                            {diary.title}
+                    className="w-full max-w-[700px] max-h-[90%] bg-background-paper rounded-[32px] overflow-hidden">
+                    {/* 스크롤 영역 */}
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{
+                            padding: 24,
+                        }}>
+                        {/* 헤더 */}
+                        <View className="flex-row items-center justify-between">
+                            <TextComponent className="text-[26px] font-bold flex-1 pr-3">
+                                {diary.title}
+                            </TextComponent>
+
+                            <Pressable onPress={onClose}>
+                                <Ionicons name="close" size={28} color="#444" />
+                            </Pressable>
+                        </View>
+
+                        {/* 날짜 */}
+                        <TextComponent className="text-text-secondary mt-3 mb-6">
+                            {formatDate(diary.date)}
                         </TextComponent>
 
-                        <Pressable onPress={onClose}>
-                            <Ionicons name="close" size={28} color="#444" />
-                        </Pressable>
-                    </View>
-
-                    {/* 날짜 */}
-                    <TextComponent className="text-text-secondary mt-3 mb-6">
-                        {formatDate(diary.date)}
-                    </TextComponent>
-
-                    <ScrollView showsVerticalScrollIndicator={false} className="max-h-[500px]">
                         {/* 사진 */}
-
                         {diary.diaryImage ? (
                             <Image
                                 source={{
@@ -83,7 +116,6 @@ export default function DiaryDetailModal({ diary, visible, onClose }: Props) {
                         )}
 
                         {/* 내용 */}
-
                         <View className="mt-7">
                             <TextComponent className="text-[19px] font-bold mb-3">
                                 오늘의 일기
@@ -97,16 +129,22 @@ export default function DiaryDetailModal({ diary, visible, onClose }: Props) {
                         </View>
                     </ScrollView>
 
-                    {/* 버튼 */}
+                    {/* 하단 버튼 */}
+                    <View className="border-t border-gray-100 px-6 py-5">
+                        <View className="flex-row gap-3">
+                            <Button variant="outlined" className="flex-1" onPress={handleDelete}>
+                                삭제
+                            </Button>
 
-                    <View className="flex-row gap-3 mt-8">
-                        <Button
-                            className="flex-1 bg-[#F7C9C7]"
-                            textClassName="text-red-600 font-bold">
-                            삭제
-                        </Button>
-
-                        <Button className="flex-1">수정</Button>
+                            <Button
+                                className="flex-1"
+                                onPress={() => {
+                                    onClose();
+                                    onEdit(diary);
+                                }}>
+                                수정
+                            </Button>
+                        </View>
                     </View>
                 </Pressable>
             </Pressable>

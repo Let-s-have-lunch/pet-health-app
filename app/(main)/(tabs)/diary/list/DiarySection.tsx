@@ -12,9 +12,10 @@ type Props = {
     diaryList: Diary[];
     date: string;
     onPressDiary: (diary: Diary) => void;
+    onCreateDiary: () => void;
 };
 
-export default function DiarySection({ diaryList = [], date, onPressDiary }: Props) {
+export default function DiarySection({ diaryList = [], date, onPressDiary, onCreateDiary }: Props) {
     const getImageUrl = (path?: string | null) => {
         if (!path) return undefined;
         return path.startsWith("http") ? path : `${BACKEND_URL}${path}`;
@@ -26,17 +27,11 @@ export default function DiarySection({ diaryList = [], date, onPressDiary }: Pro
         return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 ${days[d.getDay()]}요일`;
     };
 
-
     // 일기가 하나도 없는 경우
     if (!diaryList || diaryList.length === 0) {
         return (
             <Pressable
-                onPress={() =>
-                    router.push({
-                        pathname: "/(main)/(tabs)/diary/create",
-                        params: { date },
-                    })
-                }
+                onPress={onCreateDiary}
                 className={twMerge(
                     "bg-background-paper",
                     "rounded-[28px]",

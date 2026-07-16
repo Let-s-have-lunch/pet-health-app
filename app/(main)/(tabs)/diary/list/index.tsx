@@ -10,6 +10,7 @@ import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
 import DiarySection from "@/app/(main)/(tabs)/diary/list/DiarySection";
 import TodoSection from "@/app/(main)/(tabs)/diary/list/TodoSection";
+import CreateDiaryModal from "@/app/(main)/(tabs)/diary/create";
 
 export default function DailyDetailScreen() {
     const { date } = useLocalSearchParams<{ date: string }>();
@@ -17,6 +18,8 @@ export default function DailyDetailScreen() {
     const [diaries, setDiaries] = useState<Diary[]>([]);
     const [todos, setTodos] = useState<Todo[]>([]);
     const [selectedDiary, setSelectedDiary] = useState<Diary | null>(null);
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [editingDiary, setEditingDiary] = useState<Diary | null>(null);
 
     const loadDailyData = useCallback(async () => {
         if (!date) return;
@@ -55,7 +58,15 @@ export default function DailyDetailScreen() {
         <View className="flex-1">
             <ScrollView className={"flex-1"}>
                 <ContentContainer className={"p-0"}>
-                    <DiarySection diaryList={diaries} date={date} onPressDiary={setSelectedDiary} />
+                    <DiarySection
+                        diaryList={diaries}
+                        date={date}
+                        onPressDiary={setSelectedDiary}
+                        onCreateDiary={() => {
+                            setEditingDiary(null);
+                            setShowCreateModal(true);
+                        }}
+                    />
 
                     <TodoSection todos={todos} targetDate={date} onRefresh={loadDailyData} />
 
@@ -64,6 +75,26 @@ export default function DailyDetailScreen() {
                         visible={!!selectedDiary}
                         onClose={() => setSelectedDiary(null)}
                         onRefresh={loadDailyData}
+                        onEdit={diary => {
+                            setSelectedDiary(null);
+                            setEditingDiary(diary);
+                            setShowCreateModal(true);
+                        }}
+                    />
+
+                    <CreateDiaryModal
+                        visible={showCreateModal}
+                        diary={editingDiary}
+                        date={date}
+                        onClose={() => {
+                            setShowCreateModal(false);
+                            setEditingDiary(null);
+                        }}
+                        onRefresh={async () => {
+                            await loadDailyData();
+                            setShowCreateModal(false);
+                            setEditingDiary(null);
+                        }}
                     />
                 </ContentContainer>
             </ScrollView>
