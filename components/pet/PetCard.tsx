@@ -61,8 +61,15 @@ export default function PetCard({ pet, onPressEdit }: Props) {
                 paddingHorizontal: isSmall ? 23 : 35,
                 paddingVertical: 24,
             }}>
-            {/* 제목 */}
-            <View className={twMerge(["flex-row", "items-center", "justify-between", "mb-6"])}>
+            <View
+                className={twMerge([
+                    "flex-row",
+                    "items-center",
+                    "justify-between",
+                    "mb-6",
+                    "px-4",
+                    "pt-2",
+                ])}>
                 <TextComponent
                     className={twMerge(["font-bold", "text-text-default"])}
                     style={{
@@ -85,10 +92,10 @@ export default function PetCard({ pet, onPressEdit }: Props) {
             </View>
 
             {isSmall ? (
-                <>
-                    {/* 작은 화면 */}
-
-                    <View className={twMerge(["items-center", "mt-2", "mb-8"])}>{renderImage()}</View>
+                <View className={"pt-1"}>
+                    <View className={twMerge(["items-center", "mt-2", "mb-8", "px-3"])}>
+                        {renderImage()}
+                    </View>
 
                     <View>
                         <InfoRow label="이름" value={pet.name} />
@@ -101,12 +108,10 @@ export default function PetCard({ pet, onPressEdit }: Props) {
                         <InfoRow label="품종" value={pet.breed || "-"} />
                         <InfoRow label="중성화" value={pet.neutered ? "완료" : "미완료"} />
                     </View>
-                </>
+                </View>
             ) : (
-                <>
-                    {/* 큰 화면 */}
-
-                    <View className={twMerge(["flex-row", "items-center"])}>
+                <View className={"pt-1"}>
+                    <View className={twMerge(["flex-row", "items-center", "px-3"])}>
                         {renderImage()}
 
                         <View className={twMerge(["flex-1", "ml-8"])}>
@@ -121,7 +126,7 @@ export default function PetCard({ pet, onPressEdit }: Props) {
                             <InfoRow label="중성화" value={pet.neutered ? "완료" : "미완료"} />
                         </View>
                     </View>
-                </>
+                </View>
             )}
         </Card>
     );

@@ -3,16 +3,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
     FlatList,
     LayoutChangeEvent,
-    NativeScrollEvent,
-    NativeSyntheticEvent,
     View,
     ViewToken,
+    TouchableOpacity,
 } from "react-native";
 import PetCard from "@/components/pet/PetCard";
 import AddPetCard from "@/components/pet/AddPetCard";
 import { twMerge } from "tailwind-merge";
 import { router } from "expo-router";
 import { usePetStore } from "@/stores/usePetStore";
+import { Feather } from "@expo/vector-icons";
 
 type Props = {
     pets: Pet[];
@@ -21,21 +21,19 @@ type Props = {
 
 type CarouselItem =
     | {
-    type: "pet";
-    pet: Pet;
-}
+          type: "pet";
+          pet: Pet;
+      }
     | {
-    type: "add";
-};
+          type: "add";
+      };
 
 const HORIZONTAL_PADDING = 6;
 
 const handleEditPet = (petId: number) => {
     router.push({
         pathname: "/pets/create",
-        params: {
-            petId,
-        },
+        params: { petId },
     });
 };
 
@@ -48,14 +46,12 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
 
     const onViewableItemsChanged = useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
         const firstItem = viewableItems[0];
-
         if (!firstItem) return;
 
         const index = firstItem.index ?? 0;
         setCurrentIndex(index);
 
         const item = data[index];
-
         if (item?.type === "pet") {
             setSelectedPet(item.pet);
             setIsAddCardSelected(false);
@@ -84,13 +80,31 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
         setContainerWidth(e.nativeEvent.layout.width);
     };
 
+    const handleNext = () => {
+        if (currentIndex < data.length - 1) {
+            flatListRef.current?.scrollToIndex({
+                index: currentIndex + 1,
+                animated: true,
+            });
+        }
+    };
+
+    const handlePrev = () => {
+        if (currentIndex > 0) {
+            flatListRef.current?.scrollToIndex({
+                index: currentIndex - 1,
+                animated: true,
+            });
+        }
+    };
+
     const CARD_WIDTH = Math.max(0, containerWidth - HORIZONTAL_PADDING * 2);
+
     useEffect(() => {
         flatListRef.current?.scrollToOffset({
             offset: 0,
             animated: false,
         });
-
         setCurrentIndex(0);
     }, [pets.length]);
 
@@ -99,7 +113,7 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
     }
 
     return (
-        <View onLayout={handleLayout}>
+        <View onLayout={handleLayout} style={{ position: "relative" }}>
             <FlatList
                 ref={flatListRef}
                 data={data}
@@ -132,6 +146,40 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                 )}
             />
 
+            {currentIndex > 0 && (
+                <TouchableOpacity
+                    onPress={handlePrev}
+                    style={{
+                        position: "absolute",
+                        left: 16, // 왼쪽에 배치
+                        top: "40%",
+                        width: 40,
+                        height: 40,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 10,
+                    }}>
+                    <Feather name="chevron-left" size={28} color="#BACFCD" />
+                </TouchableOpacity>
+            )}
+
+            {currentIndex < data.length - 1 && (
+                <TouchableOpacity
+                    onPress={handleNext}
+                    style={{
+                        position: "absolute",
+                        right: 16, // 오른쪽에 배치
+                        top: "40%",
+                        width: 40,
+                        height: 40,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 10,
+                    }}>
+                    <Feather name="chevron-right" size={28} color="#BACFCD" />
+                </TouchableOpacity>
+            )}
+
             <View className={twMerge(["mt-7"], ["flex-row", "justify-center"])}>
                 {data.map((_, index) => (
                     <View
@@ -149,4 +197,3 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
         </View>
     );
 }
-
