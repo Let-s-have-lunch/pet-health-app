@@ -1,7 +1,5 @@
 import axiosInstance from "@/api/axiosInstance";
-import { RegisterPetInputType } from "@/schemas/user/pet/registerPetSchema";
 import { Pet } from "@/types/pet";
-import { PetUpdateInputType } from "@/schemas/user/pet/updatePetSchema";
 
 const getPet = async (id: number): Promise<Pet> => {
     const response = await axiosInstance.get(`/pet/list/${id}`);

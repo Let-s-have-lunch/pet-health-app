@@ -43,12 +43,12 @@ export default function CreateDiaryModal({ visible, diary, date, onClose, onRefr
                 setImageUri(null);
             }
 
-            setImageFile(null); // 추가
+            setImageFile(null);
         } else {
             setTitle("");
             setContent("");
             setImageUri(null);
-            setImageFile(null); // 추가
+            setImageFile(null);
         }
     }, [visible, diary]);
 
@@ -164,7 +164,7 @@ export default function CreateDiaryModal({ visible, diary, date, onClose, onRefr
                 <Pressable
                     onPress={e => e.stopPropagation()}
                     className="w-full max-w-[720px] max-h-[90%] bg-background-paper rounded-[30px] overflow-hidden">
-                    {/* 내용 */}
+
                     <ScrollView
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={{
@@ -183,7 +183,7 @@ export default function CreateDiaryModal({ visible, diary, date, onClose, onRefr
 
                         <Pressable
                             onPress={pickImage}
-                            className="h-[230px] rounded-[24px] border border-dashed border-primary-main justify-center items-center overflow-hidden">
+                            className="h-[230px] rounded-[28px] border border-dashed border-primary-main justify-center items-center overflow-hidden">
                             {imageUri ? (
                                 <Image
                                     source={{ uri: imageUri }}
@@ -228,14 +228,13 @@ export default function CreateDiaryModal({ visible, diary, date, onClose, onRefr
                         />
                     </ScrollView>
 
-                    {/* 하단 버튼 */}
                     <View className="border-t border-gray-100 px-6 py-5">
                         <View className="flex-row gap-4">
-                            <Button variant="outlined" className="flex-1" onPress={onClose}>
+                            <Button variant="outlined" className="flex-1 h-[54px]" onPress={onClose}>
                                 취소
                             </Button>
 
-                            <Button className="flex-1" disabled={loading} onPress={handleSave}>
+                            <Button className="flex-1 h-[54px]" disabled={loading} onPress={handleSave}>
                                 {diary ? "수정" : "등록"}
                             </Button>
                         </View>

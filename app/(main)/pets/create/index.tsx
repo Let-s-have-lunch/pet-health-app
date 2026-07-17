@@ -27,6 +27,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { ImagePickerAsset } from "expo-image-picker";
 import { twMerge } from "tailwind-merge";
 
+// 기존 사진을 보여주기 위해 BASE_URL 추가
+const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
+
 function PetCreatePage() {
     const router = useRouter();
     const { petId } = useLocalSearchParams<{ petId: string }>();
@@ -56,7 +59,8 @@ function PetCreatePage() {
     const [neuteredModalVisible, setNeuteredModalVisible] = useState(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
-    const [image, setImage] = useState<ImagePickerAsset | null>(null);
+
+    const [image, setImage] = useState<ImagePickerAsset | string | null>(null);
 
     const handleDelete = async () => {
         if (!petId) return;
@@ -90,7 +94,6 @@ function PetCreatePage() {
         console.log(result);
 
         if (!result.canceled) {
-            console.log(result.assets[0]);
             setImage(result.assets[0]);
         }
     };
@@ -114,6 +117,10 @@ function PetCreatePage() {
                     registrationNumber: pet.registrationNumber ?? "",
                     profileImage: pet.profileImage ?? "",
                 });
+
+                if (pet.profileImage) {
+                    setImage(`${BASE_URL}${pet.profileImage}`);
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -145,7 +152,7 @@ function PetCreatePage() {
                 formData.append("registrationNumber", data.registrationNumber);
             }
 
-            if (image) {
+            if (image && typeof image !== "string") {
                 if (Platform.OS === "web") {
                     if (image.file) {
                         console.log(image.file);
@@ -188,37 +195,41 @@ function PetCreatePage() {
             <ScrollView>
                 <ContentContainer className="bg-transparent p-0">
                     <FormContainer>
-                        <View className="mb-6">
-                            <TextComponent className="mb-2 font-medium">
+                        <View className="mb-8 mt-2">
+                            <TextComponent className="text-[18px] font-bold mb-3">
                                 반려동물 사진
                             </TextComponent>
 
                             <Pressable
                                 onPress={handlePickImage}
                                 className={twMerge(
-                                    ["h-32"],
+                                    ["h-[230px]"],
                                     ["items-center", "justify-center"],
-                                    ["rounded-xl"],
-                                    ["border", "border-dashed", "border-divider"],
+                                    ["rounded-[28px]"],
+                                    ["border", "border-dashed", "border-primary-main"],
                                     ["bg-white"],
                                     ["overflow-hidden"],
                                 )}>
+
                                 {image ? (
                                     <Image
-                                        source={{ uri: image.uri }}
+                                        source={{
+                                            uri: typeof image === "string" ? image : image.uri,
+                                        }}
                                         className="w-full h-full"
                                         resizeMode="cover"
                                     />
                                 ) : (
                                     <>
-                                        <Ionicons name="camera-outline" size={34} color="#7F8C8D" />
-                                        <TextComponent className="mt-2 text-text-secondary font-medium">
+                                        <Ionicons name="image-outline" size={44} color="#999" />
+                                        <TextComponent className="mt-4 text-text-default">
                                             사진 선택
                                         </TextComponent>
                                     </>
                                 )}
                             </Pressable>
                         </View>
+
                         <Controller
                             control={control}
                             name="name"
@@ -359,7 +370,7 @@ function PetCreatePage() {
 
             <Modal visible={genderModalVisible} transparent animationType="fade">
                 <View className="flex-1 justify-center items-center white bg-black/40">
-                    <View className="w-80 rounded-xl bg-white p-5">
+                    <View className="w-80 rounded-[28px] bg-white p-5">
                         <TextComponent className="text-lg font-semibold mb-4">
                             성별 선택
                         </TextComponent>
@@ -395,7 +406,7 @@ function PetCreatePage() {
 
             <Modal visible={neuteredModalVisible} transparent animationType="fade">
                 <View className="flex-1 justify-center items-center bg-black/40">
-                    <View className="w-80 rounded-xl bg-white p-5">
+                    <View className="w-80 rounded-[28px] bg-white p-5">
                         <TextComponent className="text-lg font-semibold mb-4">
                             중성화 여부
                         </TextComponent>
@@ -442,7 +453,7 @@ function PetCreatePage() {
                         </View>
 
                         <View className="py-10 items-center">
-                            <TextComponent className="text-red-400 text-center text-[17px]">
+                            <TextComponent className="text-error-point text-center text-[17px]">
                                 정말로{"\n"} 삭제하시겠습니까?
                             </TextComponent>
                         </View>
@@ -456,7 +467,7 @@ function PetCreatePage() {
                             </Button>
 
                             <Button
-                                className="flex-1 bg-[#F2C6C2]"
+                                className="flex-1"
                                 onPress={handleDelete}
                                 disabled={isDeleting}
                                 variant={"text"}>
