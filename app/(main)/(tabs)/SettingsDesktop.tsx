@@ -1,5 +1,5 @@
 import { Modal, Pressable, View } from "react-native";
-import { useRouter } from "expo-router";
+import { Href, useRouter } from "expo-router";
 import { twMerge } from "tailwind-merge";
 import TextComponent from "@/components/common/text/TextComponent";
 import { SETTINGS_MENU_LIST } from "@/constants/menu";
@@ -12,7 +12,7 @@ interface SettingsDropdownProps {
 export default function SettingsDesktop({ visible, onClose }: SettingsDropdownProps) {
     const router = useRouter();
 
-    const handleNavigation = (path: string) => {
+    const handleNavigation = (path: Href) => {
         onClose();
         router.push(path);
     };
@@ -36,17 +36,17 @@ export default function SettingsDesktop({ visible, onClose }: SettingsDropdownPr
                             ],
                             ["border", "border-divider", "overflow-hidden"],
                         )}>
-                        {/* ✨ map 함수를 사용하여 메뉴 렌더링 */}
+
                         {SETTINGS_MENU_LIST.map((menu, index) => {
                             const isLast = index === SETTINGS_MENU_LIST.length - 1;
 
                             return (
                                 <Pressable
                                     key={menu.path}
-                                    onPress={() => handleNavigation(menu.path)}
+                                    onPress={() => handleNavigation(menu.path as Href)}
                                     className={twMerge([
                                         "p-4",
-                                        !isLast && "border-b border-divider", // 마지막 항목이 아닐 때만 밑줄 추가
+                                        !isLast && "border-b border-divider",
                                         "active:bg-background-default",
                                         "hover:bg-background-default",
                                         "cursor-pointer",
