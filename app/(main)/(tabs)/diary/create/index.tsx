@@ -172,7 +172,7 @@ export default function CreateDiaryModal({ visible, diary, date, onClose, onRefr
                             paddingBottom: 32,
                         }}>
                         <View className="flex-row justify-between items-center">
-                            <TextComponent className="text-[28px] font-bold">
+                            <TextComponent className="text-[28px] font-bold pt-2">
                                 {diary ? "일기 수정" : "오늘의 일기 작성"}
                             </TextComponent>
                         </View>
