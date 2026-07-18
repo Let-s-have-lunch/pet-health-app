@@ -70,7 +70,7 @@ function CreateCommunityPostPage() {
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             className={twMerge("flex-1", "bg-background-paper")}>
-            <Title title={"등록"} showBackButton={true} onBackPress={() => router.push("/posts")} />
+            <Title title={"등록"} showBackButton={true} onBackPress={() => router.push("/post")} />
             <ScrollView>
                 <ContentContainer className={"bg-transparent p-0"}>
                     <TextComponent
@@ -120,7 +120,7 @@ function CreateCommunityPostPage() {
                                 className={twMerge(["min-w-20", "flex-1", "md:flex-none"])}
                                 variant={"outlined"}
                                 size={"small"}
-                                onPress={() => router.push("/posts")}>
+                                onPress={() => router.push("/post")}>
                                 취소
                             </Button>
                             <Button

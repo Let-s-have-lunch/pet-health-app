@@ -98,7 +98,7 @@ function TodoHistorySection({
                     <Card
                         shadow={"sm"}
                         className={twMerge("text-center text-text-secondary py-6 text-sm")}>
-                        등록된 일정이 없습니다.
+                        <TextComponent>등록된 일정이 없습니다.</TextComponent>
                     </Card>
                 )}
             </View>

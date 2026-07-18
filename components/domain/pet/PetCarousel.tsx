@@ -7,12 +7,12 @@ import {
     ViewToken,
     TouchableOpacity,
 } from "react-native";
-import PetCard from "@/components/pet/PetCard";
-import AddPetCard from "@/components/pet/AddPetCard";
 import { twMerge } from "tailwind-merge";
 import { router } from "expo-router";
-import { usePetStore } from "@/stores/usePetStore";
 import { Feather } from "@expo/vector-icons";
+import { usePetStore } from "@/stores/pet/usePetStore";
+import PetCard from "@/components/domain/pet/PetCard";
+import AddPetCard from "@/components/domain/pet/AddPetCard";
 
 type Props = {
     pets: Pet[];
