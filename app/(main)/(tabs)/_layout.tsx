@@ -15,7 +15,7 @@ function MainLayout() {
         <View className={"flex-1 bg-background-default"}>
             {isDiaryListPage ? (
                 <Title
-                    title="일기 목록"
+                    title="다이어리 목록"
                     showBackButton={true}
                     onBackPress={() => router.back()}
                     className="bg-white"

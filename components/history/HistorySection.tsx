@@ -70,7 +70,7 @@ export default function HistorySection() {
     const cardConfig = [
         {
             id: "walk",
-            title: "산책",
+            title: "오늘의 산책",
             dateLabel: data ? data.walk.date : "-",
             onPress: () => router.push("/health/walk-logs"),
             renderBottom: () => (
@@ -84,7 +84,7 @@ export default function HistorySection() {
         },
         {
             id: "weight",
-            title: "몸무게",
+            title: "최근 몸무게",
             dateLabel: data?.weight?.date ? format(new Date(data.weight.date), "yyyy-MM-dd") : "-",
             onPress: () => router.push("/(main)/health/weight-logs"),
             renderBottom: () =>
@@ -100,15 +100,15 @@ export default function HistorySection() {
                     // 💡 기록이 없을 때 (병원 '기록 없음'과 완벽히 동일한 스타일)
                     <View className="flex-row justify-end items-center gap-1">
                         <Ionicons name="fitness" size={20} color="#D1D1D1" />
-                        <TextComponent className="text-sm" style={{ color: "#7F8C8D" }}>
-                            기록 없음
+                        <TextComponent className="text-xs" style={{ color: "#7F8C8D" }}>
+                            등록된 몸무게 기록이 없습니다.
                         </TextComponent>
                     </View>
                 ),
         },
         {
             id: "water",
-            title: "물",
+            title: "오늘의 음수량",
             dateLabel: data ? data.water.date : "-",
             onPress: () => router.push("/(main)/health/water-logs"),
             renderBottom: () => (
@@ -123,7 +123,7 @@ export default function HistorySection() {
         },
         {
             id: "vet",
-            title: "병원",
+            title: "병원 예약",
             dateLabel: data?.vetRecord?.time
                 ? format(new Date(data.vetRecord.time), "yyyy-MM-dd")
                 : "-",
@@ -145,8 +145,8 @@ export default function HistorySection() {
                 ) : (
                     <View className="flex-row justify-end items-center gap-1">
                         <Ionicons name="medkit" size={20} color="#D1D1D1" />
-                        <TextComponent className="text-sm" style={{ color: "#7F8C8D" }}>
-                            기록 없음
+                        <TextComponent className="text-xs" style={{ color: "#7F8C8D" }}>
+                            다가오는 예약이 없습니다.
                         </TextComponent>
                     </View>
                 ),

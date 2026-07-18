@@ -3,18 +3,17 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InquiryInputType, inquirySchema } from "@/schemas/inquiry/inquirySchema";
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
+import { Alert, KeyboardAvoidingView, Platform, View } from "react-native";
 import inquiryApi from "@/api/user/inquiryApi";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import { twMerge } from "tailwind-merge";
 import Title from "@/components/common/title/Title";
-import Card from "@/components/common/card/Card";
 import InputGroup from "@/components/common/input/InputGroup";
 import TextareaGroup from "@/components/common/textarea/TextareaGroup";
-import ErrorMessage from "@/components/common/label/ErrorMessage";
 import Button from "@/components/common/button/Button";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
 import FormContainer from "@/components/layouts/common/FormContainer";
+import ErrorMessage from "@/components/common/label/ErrorMessage";
 
 function MyInquiryUpdatePage() {
     const router = useRouter();
@@ -128,6 +127,8 @@ function MyInquiryUpdatePage() {
                             );
                         }}
                     />
+
+                    {errors.root?.message && <ErrorMessage>{errors.root.message}</ErrorMessage>}
 
                     <View className={"md:flex-row mt-9 gap-3"}>
                         <Button
