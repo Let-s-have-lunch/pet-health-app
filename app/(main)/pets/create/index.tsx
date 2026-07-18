@@ -210,7 +210,6 @@ function PetCreatePage() {
                                     ["bg-white"],
                                     ["overflow-hidden"],
                                 )}>
-
                                 {image ? (
                                     <Image
                                         source={{
@@ -467,10 +466,10 @@ function PetCreatePage() {
                             </Button>
 
                             <Button
-                                className="flex-1"
+                                variant="contained"
+                                className="flex-1 bg-error-main border-none"
                                 onPress={handleDelete}
-                                disabled={isDeleting}
-                                variant={"text"}>
+                                disabled={isDeleting}>
                                 삭제
                             </Button>
                         </View>
