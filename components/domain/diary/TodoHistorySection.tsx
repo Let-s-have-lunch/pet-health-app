@@ -27,7 +27,7 @@ function TodoHistorySection({
     return (
         <View className={twMerge("mb-6 mt-2")}>
             <View className={twMerge("flex-row justify-between items-center mb-2")}>
-                <TextComponent className={twMerge("text-xl font-bold")}> 일정등록</TextComponent>
+                <TextComponent className={twMerge("text-xl font-bold")}>할일 등록</TextComponent>
                 <Button
                     size={"small"}
                     onPress={onAddPress}

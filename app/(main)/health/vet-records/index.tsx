@@ -7,7 +7,8 @@ import TextComponent from "../../../../components/common/text/TextComponent";
 import { vetLogApi } from "../../../../api/user/vetLogApi";
 import { VetLogState, VetRecord } from "../../../../types/vetRecord";
 import Title from "../../../../components/common/title/Title";
-import { usePetStore } from "@/stores/usePetStore";
+import { usePetStore } from "@/stores/pet/usePetStore";
+import { useAuthStore } from "@/stores/auth/useAuthStore"; // 💡 AuthStore 임포트
 import ContentContainer from "@/components/layouts/common/ContentContainer";
 import VetRecordDetailModal from "@/components/common/vetRecord/VetRecordDetailModal";
 import VetRecordLogCreateModal from "@/components/common/vetRecord/VetRecordLogCreateModal";
@@ -16,6 +17,8 @@ import { Plus } from "lucide-react-native";
 import Button from "@/components/common/button/Button";
 
 export default function VetLogPage() {
+    // 💡 로그인 상태 가져오기
+    const isLoggedIn = useAuthStore(state => state.isLoggedIn);
     const selectedPet = usePetStore(state => state.selectedPet);
     const petId = selectedPet?.id;
     const BACKEND_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
@@ -37,7 +40,30 @@ export default function VetLogPage() {
         setIsDetailModalOpen(true);
     };
 
-    const openCreateModal = () => setIsCreateModalOpen(true);
+    // 💡 기록 추가 방어 로직 (로그인/펫 체크)
+    const handleCreatePress = () => {
+        if (!isLoggedIn) {
+            if (Platform.OS === "web") {
+                alert("로그인이 필요한 서비스입니다.");
+                router.push("/auth/login");
+            } else {
+                Alert.alert("알림", "로그인이 필요한 서비스입니다.", [
+                    {
+                        text: "확인",
+                        onPress: () => router.push("/auth/login"),
+                    },
+                ]);
+            }
+            return;
+        }
+        if (!petId) {
+            if (Platform.OS === "web") alert("반려동물을 먼저 등록해주세요.");
+            else Alert.alert("알림", "반려동물을 먼저 등록해주세요.");
+            return;
+        }
+        setIsCreateModalOpen(true);
+    };
+
     const openUpdateModal = (id: number) => {
         setUpdateRecordId(id);
         setIsUpdateModalOpen(true);
@@ -49,7 +75,12 @@ export default function VetLogPage() {
     };
 
     const loadData = useCallback(async () => {
-        if (!petId) return;
+        // 💡 로그인 안 했거나 펫이 없으면 API 호출 막고 빈 데이터 세팅
+        if (!isLoggedIn || !petId) {
+            setData({ upcoming: null, history: [] });
+            return;
+        }
+
         try {
             const res = await vetLogApi.getByPetId(petId);
             const records: VetRecord[] = res?.data?.data || [];
@@ -65,7 +96,7 @@ export default function VetLogPage() {
         } catch (e) {
             console.error("데이터 로딩 중 에러:", e);
         }
-    }, [petId]);
+    }, [isLoggedIn, petId]); // 💡 의존성 배열 추가
 
     useFocusEffect(
         useCallback(() => {
@@ -115,13 +146,14 @@ export default function VetLogPage() {
         return `${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
     };
 
-    if (!petId) return <View className={twMerge("flex-1 bg-background-default")} />;
+    // 💡 기존에 있던 if (!petId) 반환문을 완전히 제거하여 레이아웃이 항상 렌더링되게 함
 
     return (
         <View className={twMerge("flex-1 bg-background-default")}>
             <View className={twMerge("bg-background-paper")}>
+                {/* 💡 펫이 없으면 기본 텍스트 보여주기 */}
                 <Title
-                    title={`${selectedPet?.name} 병원방문기록`}
+                    title={selectedPet ? `${selectedPet.name} 병원방문기록` : "병원방문기록"}
                     showBackButton={true}
                     onBackPress={() => router.push("/")}
                 />
@@ -181,7 +213,7 @@ export default function VetLogPage() {
                         </Pressable>
                     ) : (
                         <Pressable
-                            onPress={openCreateModal}
+                            onPress={handleCreatePress} // 💡 추가 클릭 시 방어 로직 타도록 변경
                             className={twMerge(
                                 "bg-background-paper rounded-[20px] h-[150px] items-center justify-center mb-8 border-2 border-dashed border-gray-300",
                             )}>
@@ -197,7 +229,7 @@ export default function VetLogPage() {
                         </TextComponent>
                         <Button
                             size={"small"}
-                            onPress={openCreateModal}
+                            onPress={handleCreatePress} // 💡 방어 로직 반영
                             className={"px-0 py-0 w-[48px] h-[48px]"}>
                             <Plus size={20} className={twMerge(["text-text-default"])} />
                         </Button>
@@ -257,7 +289,7 @@ export default function VetLogPage() {
             <VetRecordLogCreateModal
                 visible={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
-                petId={petId}
+                petId={petId!} // 💡 TS 에러 방지. 어차피 버튼에서 예외처리 하므로 안전함
                 petName={selectedPet?.name}
                 reload={loadData}
             />

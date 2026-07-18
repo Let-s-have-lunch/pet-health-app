@@ -8,10 +8,10 @@ import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
 import { WalkLog, WalkLogStats } from "@/types/walkLog";
 import walkLogApi from "@/api/user/walkLogApi";
-import WalkLogModal from "@/app/(main)/health/walk-logs/WalkLogModal";
-import WalkLogHistorySection from "@/app/(main)/health/walk-logs/WalkLogHistorySection";
-import WalkLogChartSection from "@/app/(main)/health/walk-logs/WalkLogChartSection";
-import { usePetStore } from "@/stores/usePetStore";
+import WalkLogModal from "@/components/domain/walk-logs/WalkLogModal";
+import WalkLogHistorySection from "@/components/domain/walk-logs/WalkLogHistorySection";
+import WalkLogChartSection from "@/components/domain/walk-logs/WalkLogChartSection";
+import { usePetStore } from "@/stores/pet/usePetStore";
 // 💡 1. Auth 스토어 임포트
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 

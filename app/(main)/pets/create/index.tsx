@@ -20,7 +20,7 @@ import InputGroup from "@/components/common/input/InputGroup";
 import Button from "@/components/common/button/Button";
 import ErrorMessage from "@/components/common/label/ErrorMessage";
 import petApi from "@/api/user/petApi";
-import { RegisterPetInputType, registerPetSchema } from "@/schemas/user/pet/registerPetSchema";
+import { RegisterPetInputType, registerPetSchema } from "@/schemas/pet/registerPetSchema";
 import TextComponent from "@/components/common/text/TextComponent";
 import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";

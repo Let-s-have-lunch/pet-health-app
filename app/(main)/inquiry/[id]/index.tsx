@@ -42,7 +42,7 @@ function MyInquiryDetailPage() {
     }, [inquiryId, router]);
 
     const handleDeleteInquiry = async () => {
-        const excuteDelete = async () => {
+        const executeDelete = async () => {
             try {
                 await inquiryApi.deleteInquiry(inquiryId);
 
@@ -66,10 +66,10 @@ function MyInquiryDetailPage() {
 
         if (Platform.OS === "web") {
             if (confirm("정말 이 문의글을 삭제하시겠습니까?")) {
-                excuteDelete().then(() => {});
+                executeDelete().then(() => {});
             } else {
                 Alert.alert("문의글 삭제", "정말 이 문의글을 삭제하시겠습니까?", [
-                    { text: "확인", style: "destructive", onPress: excuteDelete },
+                    { text: "확인", style: "destructive", onPress: executeDelete },
                     { text: "취소", style: "cancel" },
                 ]);
             }

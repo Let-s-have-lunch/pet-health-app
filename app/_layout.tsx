@@ -5,7 +5,7 @@ import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import AuthProvider from "@/components/auth/AuthProvider";
+import AuthProvider from "@/components/domain/auth/AuthProvider";
 
 export default function RootLayout() {
     const { theme } = useThemeStore();

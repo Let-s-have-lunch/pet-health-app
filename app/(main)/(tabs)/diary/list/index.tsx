@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import DiaryDetailModal from "./DiaryDetailModal";
+import DiaryDetailModal from "@/components/domain/diary/DiaryDetailModal";
 import { View, ScrollView } from "react-native";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import todoApi from "@/api/user/todoApi";
@@ -8,8 +8,8 @@ import { Diary } from "@/types/diary";
 import { Todo } from "@/types/todo";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
-import DiarySection from "@/app/(main)/(tabs)/diary/list/DiarySection";
-import TodoSection from "@/app/(main)/(tabs)/diary/list/TodoSection";
+import DiarySection from "@/components/domain/diary/DiarySection";
+import TodoSection from "@/components/domain/diary/TodoSection";
 import CreateDiaryModal from "@/app/(main)/(tabs)/diary/create";
 
 export default function DailyDetailScreen() {
