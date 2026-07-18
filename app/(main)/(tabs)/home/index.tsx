@@ -1,12 +1,12 @@
-import PetCardSection from "@/components/pet/PetCardSection";
+import PetCardSection from "@/components/domain/pet/PetCardSection";
 import { useFocusEffect, useRouter } from "expo-router";
 import { ScrollView } from "react-native";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
-import { usePetStore } from "@/stores/usePetStore";
+import { usePetStore } from "@/stores/pet/usePetStore";
 import petApi from "@/api/user/petApi";
 import { useCallback, useState } from "react";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
-import HistorySection from "@/components/history/HistorySection";
+import HistorySection from "@/components/domain/history/HistorySection";
 import { twMerge } from "tailwind-merge";
 
 function HomeScreen() {

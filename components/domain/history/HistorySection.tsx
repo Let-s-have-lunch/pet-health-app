@@ -7,7 +7,7 @@ import { DashboardData, getHomeDashboard } from "@/api/user/dashboardApi";
 import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import { format } from "date-fns";
-import { usePetStore } from "@/stores/usePetStore";
+import { usePetStore } from "@/stores/pet/usePetStore";
 
 const getTodayString = () => {
     const today = new Date();

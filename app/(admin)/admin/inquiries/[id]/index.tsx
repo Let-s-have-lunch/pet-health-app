@@ -8,8 +8,8 @@ import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import { twMerge } from "tailwind-merge";
 import Title from "@/components/common/title/Title";
 import Card from "@/components/common/card/Card";
-import AdminInquiryAnswerBox from "@/app/(admin)/admin/inquiries/[id]/AdminInquiryAnswerBox";
-import AdminInquiryAnswerForm from "@/app/(admin)/admin/inquiries/[id]/AdminInquiryAnswerForm";
+import AdminInquiryAnswerBox from "@/components/domain/admin/inquiries/AdminInquiryAnswerBox";
+import AdminInquiryAnswerForm from "@/components/domain/admin/inquiries/AdminInquiryAnswerForm";
 import Button from "@/components/common/button/Button";
 
 function AdminInquiryDetailPage() {

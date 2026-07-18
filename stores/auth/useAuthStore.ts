@@ -3,7 +3,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 import { User } from "@/types/user";
-import { usePetStore } from "@/stores/usePetStore";
+import { usePetStore } from "@/stores/pet/usePetStore";
 
 type AuthState = {
     isInitialized: boolean;

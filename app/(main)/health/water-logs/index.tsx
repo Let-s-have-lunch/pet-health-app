@@ -4,14 +4,14 @@ import { useCallback, useState } from "react";
 import Title from "../../../../components/common/title/Title";
 
 import { WaterIntakeLog } from "@/types/waterIntakeLog";
-import WaterLogChartSection from "@/app/(main)/health/water-logs/WaterLogChartSection";
+import WaterLogChartSection from "@/components/domain/water-logs/WaterLogChartSection";
 import { twMerge } from "tailwind-merge";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
-import WaterLogModal from "@/app/(main)/health/water-logs/WaterLogModal";
+import WaterLogModal from "@/components/domain/water-logs/WaterLogModal";
 import waterIntakeApi from "@/api/user/waterIntakeApi";
-import WaterLogHistorySection from "@/app/(main)/health/water-logs/WaterLogHistorySection";
-import { usePetStore } from "@/stores/usePetStore";
+import WaterLogHistorySection from "@/components/domain/water-logs/WaterLogHistorySection";
+import { usePetStore } from "@/stores/pet/usePetStore";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 export default function WaterLogListPage() {

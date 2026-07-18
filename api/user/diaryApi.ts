@@ -1,6 +1,6 @@
 import axiosInstance from "@/api/axiosInstance";
-import { CreateDiaryInputType } from "@/schemas/user/diary/createDiarySchema";
-import { UpdateDiaryInputType } from "@/schemas/user/diary/updateDiarySchema";
+import { CreateDiaryInputType } from "@/schemas/diary/createDiarySchema";
+import { UpdateDiaryInputType } from "@/schemas/diary/updateDiarySchema";
 import { Diary } from "@/types/diary";
 import { Platform } from "react-native";
 

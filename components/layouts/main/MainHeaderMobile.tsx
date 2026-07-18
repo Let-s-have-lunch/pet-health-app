@@ -6,10 +6,10 @@ import TextComponent from "@/components/common/text/TextComponent";
 import { useThemeStore } from "@/stores/theme/useThemeStore";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { Role } from "@/types/user";
-import { usePetStore } from "@/stores/usePetStore";
-import SettingsDesktop from "@/app/(main)/(tabs)/SettingsDesktop";
+import { usePetStore } from "@/stores/pet/usePetStore";
+import SettingsDesktop from "@/components/layouts/main/SettingsDesktop";
 import { useState } from "react";
-import SettingsMobile from "@/app/(main)/(tabs)/SettingMobile";
+import SettingsMobile from "@/components/layouts/main/SettingMobile";
 
 function MainHeaderMobile() {
     const router = useRouter();

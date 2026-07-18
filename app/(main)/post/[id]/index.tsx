@@ -13,7 +13,7 @@ import postApi from "@/api/user/postApi";
 import replyApi from "@/api/user/replyApi";
 import Button from "@/components/common/button/Button";
 import { Ionicons } from "@expo/vector-icons";
-import CommunityPostDetailReply from "@/app/(main)/post/[id]/CommunityPostDetailReply";
+import CommunityPostDetailReply from "@/components/domain/post/CommunityPostDetailReply";
 
 function CommunityPostDetailPage() {
     const router = useRouter();

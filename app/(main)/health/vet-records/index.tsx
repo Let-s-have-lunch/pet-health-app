@@ -7,7 +7,7 @@ import TextComponent from "../../../../components/common/text/TextComponent";
 import { vetLogApi } from "../../../../api/user/vetLogApi";
 import { VetLogState, VetRecord } from "../../../../types/vetRecord";
 import Title from "../../../../components/common/title/Title";
-import { usePetStore } from "@/stores/usePetStore";
+import { usePetStore } from "@/stores/pet/usePetStore";
 import { useAuthStore } from "@/stores/auth/useAuthStore"; // 💡 AuthStore 임포트
 import ContentContainer from "@/components/layouts/common/ContentContainer";
 import VetRecordDetailModal from "@/components/common/vetRecord/VetRecordDetailModal";

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Alert, Platform } from "react-native";
 import { Todo } from "@/types/todo";
 import todoApi from "@/api/user/todoApi";
-import TodoFormModal from "@/app/(main)/(tabs)/diary/list/TodoFormModal";
+import TodoFormModal from "@/components/domain/diary/TodoFormModal";
 import ContentContainer from "@/components/layouts/common/ContentContainer";
 import TodoHistorySection from "./TodoHistorySection";
 

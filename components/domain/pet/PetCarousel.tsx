@@ -1,11 +1,11 @@
 import { Pet } from "@/types/pet";
 import { useEffect, useMemo, useRef, useState, MouseEvent } from "react";
 import { FlatList, LayoutChangeEvent, View, ViewToken, Platform } from "react-native";
-import PetCard from "@/components/pet/PetCard";
-import AddPetCard from "@/components/pet/AddPetCard";
+import PetCard from "@/components/domain/pet/PetCard";
+import AddPetCard from "@/components/domain/pet/AddPetCard";
 import { twMerge } from "tailwind-merge";
 import { router } from "expo-router";
-import { usePetStore } from "@/stores/usePetStore";
+import { usePetStore } from "@/stores/pet/usePetStore";
 
 type Props = { pets: Pet[]; onPressAdd: () => void };
 type CarouselItem = { type: "pet"; pet: Pet } | { type: "add" };

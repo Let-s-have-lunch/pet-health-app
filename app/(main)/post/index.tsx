@@ -1,13 +1,12 @@
-import { Alert, Platform, Pressable, ScrollView, TouchableOpacity, View } from "react-native";
+import { Alert, Platform, ScrollView, TouchableOpacity, View } from "react-native";
 import TextComponent from "@/components/common/text/TextComponent";
 import { twMerge } from "tailwind-merge";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { isLoading } from "expo-font";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import { useCallback, useEffect, useState } from "react";
 import postApi from "@/api/user/postApi";
 import Button from "@/components/common/button/Button";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { PostListItemType } from "@/types/post";
 import Pagination from "@/components/common/pagination/Pagination";
 import PostPageHeader from "@/components/layouts/main/PostPageHeader";
@@ -16,8 +15,7 @@ import ContentContainer from "@/components/layouts/common/ContentContainer";
 
 function CommunityPostListPage() {
     const router = useRouter();
-    const { id, page, size } = useLocalSearchParams<{ id: string; page: string; size: string }>();
-    const categoryId = Number(id);
+    const { page, size } = useLocalSearchParams<{ id: string; page: string; size: string }>();
     const currentPage = Number(page) || 1;
     const pageSize = Number(size) || 15;
 
