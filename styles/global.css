@@ -44,35 +44,42 @@
     }
 
     .dark {
-        /* 웹에서 클래스 기반으로 테마가 바뀔 때 (html에 class="dark"가 붙었을 때) */
-        --bg-default: #F6EFE9;    /* 바닐라 밀크 (따뜻하고 포근한 배경) */
-        --bg-paper: #FFFFFF;      /* 카드나 컴포넌트용 백색 */
+        /* 1. 배경 색상 (블루 색감을 20% 더 선명하게 끌어올림) */
+        --bg-default: #E2ECF5;    /* 톤업된 클라우드 블루 (푸른빛이 한층 돋보이는 포근한 배경) */
+        --bg-paper: #FFFFFF;      /* 카드나 컴포넌트용 순백색 */
+        --bg-light: #F0F4F8;      /* hover 에 사용할 라이트 블루 (기존의 옅은 배경색을 hover용으로 활용) */
 
-        --text-default: #3A3532;  /* 딥 에스프레소 */
-        --text-secondary: #8A807A; /* 옅은 브라운 그레이 */
+        /* 2. 텍스트 색상 (가독성을 챙기되 너무 딱딱하지 않게) */
+        --text-default: #2A363B;  /* 딥 네이비 그레이 (검은색 대신 푸른빛이 도는 다크 톤) */
+        --text-secondary: #82929B; /* 뮤트 블루 그레이 (부제목, 설명용) */
 
-        --divider: #E8B7B0;       /* 소프트 코랄 블러시 */
+        /* 3. 경계선 및 디바이더 */
+        --divider: #DCE5ED;       /* 라이트 페일 블루 (경계선도 튀지 않는 연한 파스텔 블루) */
 
-        --primary-main: #D9B49A;  /* 카페 라떼 */
-        --primary-contrast: #3A3532;
+        /* 4. 브랜드 메인 컬러 (가장 시선이 많이 가는 곳) */
+        --primary-main: #A8C7DF;  /* 코튼 블루 (포근하고 부드러운 느낌의 메인 블루) */
+        --primary-contrast: #2A363B; /* 블루 위에 올라갈 어두운 글씨 */
+        --primary-light: #A8C7DF4D; /* 👇 20% 투명도가 적용된 메인 컬러 */
 
-        --secondary-main: #A3BCD6; /* 차분한 더스티 블루 */
-        --secondary-contrast: #2C2C2C;
-        --secondary-point: #2D94D7;  /* text 로만 사용 포인트 아이콘으로 */
+        /* 5. 보조 컬러 (서브 메뉴나 강조용) */
+        --secondary-main: #C0D3E0; /* 더스티 스카이 (메인보다 한 톤 더 차분하고 연한 블루) */
+        --secondary-contrast: #2A363B;
+        --secondary-point: #4A83A8;  /* text 로만 사용, 깊이감 있는 소프트 오션 블루 */
 
-        --success-main: #BACFCD;
-        --success-contrast: #2C2C2C;
-        --success-point: #35B18C; /* text 로만 사용 */
+        /* 6. 알림 및 상태 컬러 (블루 톤과 조화롭게 어우러지는 소프트 톤) */
+        --success-main: #B3D8C8;   /* 소프트 멜론 그린 */
+        --success-contrast: #2A363B;
+        --success-point: #43A07A; /* text 로만 사용 */
 
-        --error-main: #E8B7B0;
-        --error-contrast: #3A3532;
-        --error-point: #E95244;  /* text 로만 사용 */
+        --error-main: #EAC6CB;     /* 페일 로즈 (블루와 어울리는 부드러운 핑크빛 경고) */
+        --error-contrast: #2A363B;
+        --error-point: #D15B6E;  /* text 로만 사용 */
 
-        --warning-main: #E9D2A9;
-        --warning-contrast: #3A3532;
+        --warning-main: #E8D7BE;   /* 소프트 오트밀 (튀지 않는 부드러운 베이지/옐로우) */
+        --warning-contrast: #2A363B;
 
-        --info-main: #D1CEE2;
-        --info-contrast: #3A3532;
+        --info-main: #A1CDE3;      /* 맑은 스카이 블루 (인포메이션용) */
+        --info-contrast: #2A363B;
     }
 } /* 👈 원래 제일 밑에 있던 @layer base의 닫는 괄호를 여기로 올렸어! */
 

@@ -30,46 +30,52 @@ export default function LandingScreen() {
             <ContentContainer className="justify-center items-center">
                 {/* 상단 로고 및 타이틀 영역 */}
                 <View className="items-center mb-10">
-                    <View className="relative flex-row items-center justify-center mb-2">
-                        <Ionicons
-                            name="paw"
-                            size={55}
-                            className="absolute text-warning-main"
-                            style={{ top: -55, left: -15, transform: [{ rotate: "15deg" }] }}
-                        />
-                        <Ionicons
-                            name="paw"
-                            size={45}
-                            className="absolute text-error-main opacity-80"
-                            style={{ top: -10, left: -60, transform: [{ rotate: "-25deg" }] }}
-                        />
-                        <TextComponent className="text-[32px] font-extrabold text-success-point tracking-tight">
-                            마이
-                        </TextComponent>
-                        <TextComponent className="text-[32px] font-extrabold text-error-point tracking-tight">
-                            펫
-                        </TextComponent>
-                        <TextComponent className="text-[32px] font-extrabold text-text-default tracking-tight">
-                            다이어리
-                        </TextComponent>
-                    </View>
-                    <TextComponent className="text-[26px] font-bold text-text-default mt-1">
-                        오신 것을 환영합니다.
-                    </TextComponent>
-                </View>
+                    <View className="items-center justify-center mb-2">
+                        <View className={twMerge("flex-row", "relative")}>
+                            <Ionicons
+                                name="paw"
+                                size={65}
+                                className="absolute text-success-main"
+                                style={{ top: -55, left: -15, transform: [{ rotate: "15deg" }] }}
+                            />
+                            <Ionicons
+                                name="paw"
+                                size={55}
+                                className="absolute text-error-main opacity-80"
+                                style={{ top: -10, left: -60, transform: [{ rotate: "-25deg" }] }}
+                            />
+                        </View>
 
-                {/* 서브 타이틀 영역 */}
-                <View className="mb-16">
-                    <TextComponent className="text-lg text-text-default text-center">
-                        반려동물의 건강과 성장을 기록하세요
-                    </TextComponent>
+                        {/*<TextComponent className="text-[32px] font-extrabold text-success-point tracking-tight">*/}
+                        {/*    마이*/}
+                        {/*</TextComponent>*/}
+                        {/*<TextComponent className="text-[32px] font-extrabold text-error-point tracking-tight">*/}
+                        {/*    펫*/}
+                        {/*</TextComponent>*/}
+                        {/*<TextComponent className="text-[32px] font-extrabold text-text-default tracking-tight">*/}
+                        {/*    다이어리*/}
+                        {/*</TextComponent>*/}
+                    </View>
+                    {/*<TextComponent className="text-[26px] font-bold text-text-default mt-1">*/}
+                    {/*    오신 것을 환영합니다.*/}
+                    {/*</TextComponent>*/}
                 </View>
+                <TextComponent
+                    className={twMerge(["mb-10", "pb-10", "pt-4"], ["text-text-secondary", "text-[32px]", "font-bold"])}>
+                    마이 펫 다이어리
+                </TextComponent>
+                {/* 서브 타이틀 영역 */}
+                {/*<View className="mb-16">*/}
+                {/*    <TextComponent className="text-lg text-text-default text-center">*/}
+                {/*        반려동물의 건강과 성장을 기록하세요*/}
+                {/*    </TextComponent>*/}
+                {/*</View>*/}
 
                 {/* 버튼 영역 */}
                 <View className="w-full items-center">
-                    <TextComponent className="text-sm text-text-secondary text-center mb-8">
-                        계속하려면 로그인해 주세요
-                    </TextComponent>
+                    {/*<TextComponent className="text-sm text-text-secondary text-center mb-8">*/}
+                    {/*    계속하려면 로그인해 주세요*/}
+                    {/*</TextComponent>*/}
 
                     {/* 로그인 버튼 */}
                     <Pressable
