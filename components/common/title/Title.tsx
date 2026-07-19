@@ -22,7 +22,7 @@ function Title({
     className,
 }: Props) {
     return (
-        // 1. 바깥쪽 View: 전체 너비(w-full), 배경색, 하단 테두리 역할만 담당합니다.
+
         <View
             className={twMerge(
                 "w-full h-20 justify-center border-b border-divider bg-transparent",
@@ -30,7 +30,6 @@ function Title({
             )}>
             {/* 2. 안쪽 View: ContentContainer와 완벽히 동일하게 max-w-7xl, self-center, 가로 패딩(px-[25px])을 줍니다. */}
             <View className="w-full max-w-7xl self-center px-[25px] flex-row items-center justify-between">
-                {/* 왼쪽 영역: 뒤로가기 버튼과 제목 */}
                 <View className="flex-row items-center gap-4 flex-1">
                     {showBackButton && (
                         <TouchableOpacity

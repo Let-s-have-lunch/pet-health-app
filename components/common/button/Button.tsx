@@ -23,7 +23,7 @@ interface Props extends Omit<PressableProps, "children"> {
 function Button({
     color = "primary",
     variant = "contained",
-    size = "medium", // 기본값이 medium
+    size = "medium",
     fullWidth = false,
     showChevron = false,
     wrap = false,
@@ -31,7 +31,7 @@ function Button({
     isCircle = false,
     className,
     textClassName,
-    textColor, // 구조 분해 할당에 추가
+    textColor,
     children,
     ...props
 }: Props) {
@@ -54,7 +54,7 @@ function Button({
         <Pressable
             className={twMerge(
                 "flex-row items-center justify-center",
-                isCircle ? "rounded-full" : "rounded-[10px]",
+                isCircle ? "rounded-full" : "rounded-[28px]",
 
                 isCircle ? "w-[48px] h-[48px] p-0" : BUTTON_SIZE_STYLE[size],
                 showChevron && !isCircle ? "justify-between" : "justify-center",
@@ -68,12 +68,11 @@ function Button({
                 className,
             )}
             {...props}>
-            {/* 글자 및 아이콘 영역 */}
+
             {typeof children === "string" ? (
                 <TextComponent
                     className={twMerge(
                         "leading-none text-center font-normal",
-                        // 👇 textColor가 있으면 사용하고, 없으면 기본값인 text-text-default 사용
                         textColor || "text-text-default",
                         size === "mini"
                             ? "text-xs"
@@ -94,7 +93,6 @@ function Button({
                 <Feather
                     name="chevron-right"
                     size={size === "mini" ? 16 : size === "small" ? 18 : 24}
-                    // 👇 아이콘 색상도 텍스트 색상과 동일하게 맞춰줌 (통일성 유지)
                     className={twMerge(textColor || "text-text-default")}
                 />
             )}

@@ -1,5 +1,4 @@
 import { Image, Pressable, View } from "react-native";
-import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { twMerge } from "tailwind-merge";
 
@@ -27,7 +26,6 @@ export default function DiarySection({ diaryList = [], date, onPressDiary, onCre
         return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 ${days[d.getDay()]}요일`;
     };
 
-    // 일기가 하나도 없는 경우
     if (!diaryList || diaryList.length === 0) {
         return (
             <Pressable
@@ -41,7 +39,7 @@ export default function DiarySection({ diaryList = [], date, onPressDiary, onCre
                     "py-10",
                     "min-h-[320px]",
                 )}>
-                {/* 아이콘 */}
+
                 <View
                     className={twMerge(
                         "w-[72px]",
@@ -55,7 +53,6 @@ export default function DiarySection({ diaryList = [], date, onPressDiary, onCre
                     <Ionicons name="add" size={36} color="#FFFFFF" />
                 </View>
 
-                {/* 제목 */}
                 <TextComponent
                     className={twMerge(
                         "mt-8",
@@ -67,7 +64,6 @@ export default function DiarySection({ diaryList = [], date, onPressDiary, onCre
                     오늘의 일기 작성하기
                 </TextComponent>
 
-                {/* 설명 */}
                 <TextComponent
                     className={twMerge(
                         "mt-4",
@@ -83,7 +79,6 @@ export default function DiarySection({ diaryList = [], date, onPressDiary, onCre
         );
     }
 
-    // 일기 목록
     return (
         <View className="gap-4">
             {diaryList.map(diary => (

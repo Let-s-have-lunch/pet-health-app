@@ -28,7 +28,7 @@ export default function Card({
         <View
             className={twMerge(
                 "bg-background-paper",
-                "rounded-[10px]",
+                "rounded-[28px]",
                 "p-5",
                 wrap && "flex-1",
                 getShadowStyles[shadow],

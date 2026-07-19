@@ -135,7 +135,8 @@ function MyProfilePage() {
                                     onPress={() => router.push("/profile/withdraw")}
                                     variant={"text"}
                                     size={"large"}
-                                    textColor={"text-text-secondary"}>
+                                    textColor={"text-text-secondary"}
+                                className={"mb-10"}>
                                     회원탈퇴
                                 </Button>
                             </View>
