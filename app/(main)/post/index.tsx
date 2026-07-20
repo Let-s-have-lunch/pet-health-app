@@ -234,9 +234,9 @@ function CommunityPostListPage() {
                     </View>
                 </ScrollView>
                 <Button
+                    color={"error"}
                     isFloating
                     isCircle
-                    color={"success"}
                     onPress={() => router.push("/post/create")}>
                     <Feather name={"plus"} size={22} />
                 </Button>
