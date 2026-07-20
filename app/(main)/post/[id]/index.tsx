@@ -239,22 +239,25 @@ function CommunityPostDetailPage() {
                     ["w-full", "max-w-7xl", "mx-auto"],
                     ["bg-background-paper border-t border-divider px-5 pt-4 pb-6 rounded-t-[30px]"],
                 )}>
-                <View className="items-center mb-5">
-                    <View className="w-12 h-1.5 bg-background-default rounded-full" />
-                </View>
-
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => setIsReplyModalOpen(true)}
-                    className="bg-gray rounded-[28px] p-3.5 flex-row items-center justify-between border border-secondary-main">
-                    <View className="flex-row items-center gap-2 text-text-default">
-                        <Ionicons name="chatbubble-ellipses-outline" size={18} />
-                        <TextComponent className="text-sm font-medium">
-                            댓글{" "}
-                            <text className={twMerge(["text-success-point"])}>{replyCount}</text>
-                        </TextComponent>
+                    className="w-full"
+                >
+                    <View className="items-center mb-5">
+                        <View className="w-12 h-1.5 bg-background-default rounded-full" />
                     </View>
-                    <Ionicons name="chevron-up" size={16} color="#4B5563" />
+
+                    <View className="bg-gray rounded-[28px] p-3.5 flex-row items-center justify-between border border-secondary-main">
+                        <View className="flex-row items-center gap-2 text-text-default">
+                            <Ionicons name="chatbubble-ellipses-outline" size={18} />
+                            <TextComponent className="text-sm font-medium">
+                                댓글{" "}
+                                <text className={twMerge(["text-success-point"])}>{replyCount}</text>
+                            </TextComponent>
+                        </View>
+                        <Ionicons name="chevron-up" size={16} color="#4B5563" />
+                    </View>
                 </TouchableOpacity>
             </View>
 
