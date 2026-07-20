@@ -115,7 +115,7 @@ function MyProfilePage() {
                             )}
                         </Card>
 
-                        <View className={twMerge("md:flex-row mt-9 gap-3")}>
+                        <View className={twMerge("md:flex-row md:items-center mt-9 gap-3 mb-10")}>
                             <Button
                                 wrap={true}
                                 onPress={() => router.push("/profile/password")}
@@ -130,13 +130,14 @@ function MyProfilePage() {
                                 variant={"text"}>
                                 로그아웃
                             </Button>
-                            <View className="mt-8 md:mt-0 md:ml-auto flex-1">
+
+                            <View className="flex-none mt-8 md:mt-0 md:flex-1">
                                 <Button
+                                    wrap={true}
                                     onPress={() => router.push("/profile/withdraw")}
                                     variant={"text"}
                                     size={"large"}
-                                    textColor={"text-text-secondary"}
-                                className={"mb-10"}>
+                                    textColor={"text-text-secondary"}>
                                     회원탈퇴
                                 </Button>
                             </View>
