@@ -11,6 +11,7 @@ interface Props {
     description?: string;
     children?: ReactNode;
     className?: string;
+    innerClassName?: string;
 }
 
 function Title({
@@ -20,15 +21,19 @@ function Title({
     description,
     children,
     className,
+    innerClassName,
 }: Props) {
     return (
-
         <View
             className={twMerge(
                 "w-full h-20 justify-center border-b border-divider bg-transparent",
                 className,
             )}>
-            <View className="w-full max-w-7xl self-center px-[25px] flex-row items-center justify-between">
+            <View
+                className={twMerge(
+                    "w-full max-w-7xl self-center px-[25px] flex-row items-center justify-between",
+                    innerClassName,
+                )}>
                 <View className="flex-row items-center gap-4 flex-1">
                     {showBackButton && (
                         <TouchableOpacity

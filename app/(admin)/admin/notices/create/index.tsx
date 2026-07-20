@@ -53,6 +53,7 @@ function AdminNoticeCreatePage() {
                 title={"공지사항 등록"}
                 description={"서비스에 새로운 공지사항을 등록합니다."}
                 className={"mt-[-25px] px-0 mb-6"}
+                innerClassName={"px-0"}
             />
             <ScrollView className={"flex-1"}>
                 <Card>

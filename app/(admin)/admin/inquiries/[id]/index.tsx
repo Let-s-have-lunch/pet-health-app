@@ -54,6 +54,9 @@ function AdminInquiryDetailPage() {
                 title={"문의글 상세"}
                 description={"등록된 문의글의 내용을 확인합니다."}
                 className={"mt-[-25px] px-0 mb-6"}
+                showBackButton={true}
+                innerClassName={"px-0"}
+                onBackPress={() => router.back()}
             />
 
             <ScrollView className={"flex-1"}>
@@ -82,11 +85,15 @@ function AdminInquiryDetailPage() {
 
                     <View
                         className={twMerge(
-                            ["mt-8", "p-5", "md:p-6" , "bg-background-default"],
+                            ["mt-8", "p-5", "md:p-6", "bg-background-default"],
                             ["rounded-[28px]"],
                         )}>
                         {inquiry.answer && !isEdit ? (
-                            <AdminInquiryAnswerBox inquiry={inquiry} reload={loadInquiry} setIsEdit={setIsEdit}/>
+                            <AdminInquiryAnswerBox
+                                inquiry={inquiry}
+                                reload={loadInquiry}
+                                setIsEdit={setIsEdit}
+                            />
                         ) : (
                             <AdminInquiryAnswerForm
                                 inquiry={inquiry}

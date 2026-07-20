@@ -84,6 +84,7 @@ function AdminNoticeUpdatePage() {
                 title={"공지사항 수정"}
                 description={"기존에 등록된 공지사항을 수정합니다."}
                 className={"mt-[-25px] px-0 mb-6"}
+                innerClassName={"px-0"}
             />
             <ScrollView className={"flex-1"}>
                 <Card>

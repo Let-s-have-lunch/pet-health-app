@@ -5,7 +5,7 @@ export type StyleSizeType = "mini" | "small" | "medium" | "large";
 export const BUTTON_SIZE_STYLE = {
     mini: "px-2.5 py-1",
     small: "px-3 py-2",
-    medium: "px-5 py-3",
+    medium: "px-5 py-4",
     large: "px-8 py-5",
 };
 

@@ -10,9 +10,9 @@ import Title from "../../../../components/common/title/Title";
 import { usePetStore } from "@/stores/pet/usePetStore";
 import { useAuthStore } from "@/stores/auth/useAuthStore"; // 💡 AuthStore 임포트
 import ContentContainer from "@/components/layouts/common/ContentContainer";
-import VetRecordDetailModal from "@/components/common/vetRecord/VetRecordDetailModal";
-import VetRecordLogCreateModal from "@/components/common/vetRecord/VetRecordLogCreateModal";
-import VetRecordLogUpdateModal from "@/components/common/vetRecord/VetRecordLogUpdateModal";
+import VetRecordDetailModal from "@/components/domain/vetRecord/VetRecordDetailModal";
+import VetRecordLogCreateModal from "@/components/domain/vetRecord/VetRecordLogCreateModal";
+import VetRecordLogUpdateModal from "@/components/domain/vetRecord/VetRecordLogUpdateModal";
 import { Plus } from "lucide-react-native";
 import Button from "@/components/common/button/Button";
 

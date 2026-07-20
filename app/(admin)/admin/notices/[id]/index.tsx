@@ -82,6 +82,9 @@ function AdminNoticeDetailPage() {
                 title={"공지사항 상세"}
                 description={"등록된 공지사항의 내용을 확인합니다."}
                 className={"mt-[-25px] px-0 mb-6"}
+                showBackButton={true}
+                innerClassName={"px-0"}
+                onBackPress={() => router.back()}
             />
 
             <ScrollView className={"flex-1"}>

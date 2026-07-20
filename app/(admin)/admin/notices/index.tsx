@@ -54,7 +54,7 @@ function AdminNoticeListPage() {
             <Title
                 title={"공지사항 관리"}
                 description={"서비스의 주요 소식 및 공지사항을 관리합니다."}
-                className={"mt-[-20px] px-0 mb-6"}>
+                className={"mt-[-20px] px-0 mb-6"} innerClassName={"px-0"}>
                 <Button
                     size={"small"}
                     variant={"contained"}
