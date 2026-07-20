@@ -77,7 +77,7 @@ function AdminInquiryDetailPage() {
 
                     <View className={"min-h-60"}>
                         <TextComponent className={twMerge("leading-relaxed")}>
-                            {inquiry.title}
+                            {inquiry.content}
                         </TextComponent>
                     </View>
 
