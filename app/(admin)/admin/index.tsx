@@ -67,7 +67,7 @@ function AdminDashboard() {
                             </TextComponent>
                             <TextComponent
                                 className={twMerge(
-                                    ["w-24"],
+                                    ["w-24", "flex-1", "md:flex-none"],
                                     ["font-bold", "text-text-secondary", "px-2"],
                                 )}>
                                 닉네임
@@ -138,7 +138,7 @@ function AdminDashboard() {
                                     <TextComponent
                                         numberOfLines={1}
                                         className={twMerge(
-                                            ["w-24"],
+                                            ["w-24","flex-1", "md:flex-none"],
                                             ["font-bold", "text-text-secondary", "px-2"],
                                         )}>
                                         {item.nickname}
