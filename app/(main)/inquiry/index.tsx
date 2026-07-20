@@ -206,7 +206,7 @@ function MyInquiryListPage() {
                 <Button
                     isFloating
                     isCircle
-                    color={"success"}
+                    color={"error"}
                     onPress={() => router.push("/inquiry/create")}>
                     <Feather name={"plus"} size={22} />
                 </Button>
