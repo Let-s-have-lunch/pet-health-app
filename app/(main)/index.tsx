@@ -41,7 +41,7 @@ export default function LandingScreen() {
                             <Ionicons
                                 name="paw"
                                 size={55}
-                                className="absolute text-error-main opacity-80"
+                                className="absolute text-[#F8A69B] opacity-80"
                                 style={{ top: -10, left: -60, transform: [{ rotate: "-25deg" }] }}
                             />
                         </View>
@@ -60,10 +60,25 @@ export default function LandingScreen() {
                     {/*    오신 것을 환영합니다.*/}
                     {/*</TextComponent>*/}
                 </View>
-                <TextComponent
-                    className={twMerge(["mb-10", "pb-10", "pt-4"], ["text-text-secondary", "text-[32px]", "font-bold"])}>
-                    마이 펫 다이어리
-                </TextComponent>
+                <View
+                    className={twMerge(
+                        ["flex-row", "justify-center"],
+                        [["mb-10", "pb-10", "pt-4"]],
+                    )}>
+                    <TextComponent
+                        className={twMerge(["text-text-secondary", "text-[28px]", "font-bold"])}>
+                        마이
+                    </TextComponent>
+                    <TextComponent
+                        className={twMerge(["text-[#F8A69B]", "text-[28px]", "font-bold"])}>
+                        펫
+                    </TextComponent>
+                    <TextComponent
+                        className={twMerge(["text-text-secondary", "text-[28px]", "font-bold"])}>
+                        다이어리
+                    </TextComponent>
+                </View>
+
                 {/* 서브 타이틀 영역 */}
                 {/*<View className="mb-16">*/}
                 {/*    <TextComponent className="text-lg text-text-default text-center">*/}
