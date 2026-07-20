@@ -80,6 +80,12 @@ export default function VetRecordLogCreateModal({
             return;
         }
 
+        if (cost && !/^\d+$/.test(cost.trim())) {
+            Alert.alert("알림", "진료 비용은 숫자만 입력해주세요.");
+            setCost("");
+            return;
+        }
+
         setIsSubmitting(true);
 
         try {
@@ -89,8 +95,9 @@ export default function VetRecordLogCreateModal({
             formData.append("visitDate", visitDate);
             formData.append("hospitalName", hospitalName);
             formData.append("visitPurpose", visitPurpose);
-
-            if (cost) formData.append("cost", String(Number(cost) || 0));
+            if (cost) {
+                formData.append("cost", cost);
+            }
             if (memo) formData.append("memo", memo);
 
             if (image) {
@@ -139,7 +146,7 @@ export default function VetRecordLogCreateModal({
                 <Pressable
                     onPress={Keyboard.dismiss}
                     className="flex-1 justify-center items-center bg-black/50 p-6">
-                                       <Pressable
+                    <Pressable
                         onPress={e => e.stopPropagation()}
                         className="bg-background-paper w-full max-w-xl rounded-3xl overflow-hidden shadow-xl max-h-[90%]">
                         <ScrollView
@@ -212,9 +219,10 @@ export default function VetRecordLogCreateModal({
                                     id="cost"
                                     label="진료 비용"
                                     placeholder="숫자만 입력"
-                                    keyboardType="number-pad"
+                                    // 웹에서는 default로 둬서 한글 입력을 온전히 받고, 모바일에서는 숫자 패드를 띄웁니다.
+                                    keyboardType={Platform.OS === "web" ? "default" : "number-pad"}
                                     value={cost}
-                                    onChangeText={setCost}
+                                    onChangeText={setCost} // 정규식을 빼고 입력값을 그대로 State에 넣습니다.
                                 />
 
                                 <InputGroup
