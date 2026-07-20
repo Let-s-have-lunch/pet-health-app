@@ -78,7 +78,8 @@ function AdminUserListPage() {
             <Title
                 title={"회원 관리"}
                 description={"서비스에 가입한 유저 목록을 조회하고 관리합니다."}
-                className={"mt-[-20px] px-0 mb-6"}>
+                className={"mt-[-20px] px-0 mb-6"}
+                innerClassName={"px-0"}>
                 <Button
                     size={"small"}
                     variant={"contained"}

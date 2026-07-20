@@ -38,7 +38,7 @@ function Select({
             <Pressable
                 className={twMerge(
                     "w-full flex-row justify-between items-center",
-                    "rounded-lg border bg-background-paper",
+                    "rounded-[28px] border bg-background-paper",
                     BUTTON_SIZE_STYLE[size],
                     hasError ? "border-error-main" : "border-primary-main",
                     className,

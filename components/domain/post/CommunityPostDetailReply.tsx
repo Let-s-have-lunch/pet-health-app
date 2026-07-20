@@ -20,7 +20,6 @@ import TextareaGroup from "@/components/common/textarea/TextareaGroup";
 import Button from "@/components/common/button/Button";
 import TextComponent from "@/components/common/text/TextComponent";
 
-
 import { ReplyItem } from "./CommunityPostDetailReplyListPage";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { useRouter } from "expo-router";
@@ -170,12 +169,12 @@ function CommunityPostDetailReply({ postId, isOpen, onClose, onTotalChange }: Pr
                             behavior={Platform.OS === "ios" ? "padding" : "height"}
                             className="flex-1"
                             keyboardVerticalOffset={Platform.OS === "ios" ? 40 : 0}>
-
-                            <View className="items-center pt-3 pb-1 bg-background-paper">
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                onPress={onClose}
+                                className="w-full items-center pt-3 pb-1 bg-background-paper">
                                 <View className="w-12 h-1.5 bg-background-default rounded-full" />
-                            </View>
-
-
+                            </TouchableOpacity>
 
                             <View className="flex-row items-center justify-between px-5 pt-2 pb-4 border-b border-background-default bg-background-paper">
                                 <View className="flex-row items-center gap-1.5">

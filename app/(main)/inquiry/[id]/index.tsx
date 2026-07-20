@@ -162,21 +162,33 @@ function MyInquiryDetailPage() {
                                 onPress={() => router.push("/inquiry")}>
                                 목록
                             </Button>
-                            <Button
-                                className={twMerge(["flex-1", "md:flex-none"], ["min-w-20"])}
-                                size={"small"}
-                                variant={"contained"}
-                                color={"error"}
-                                onPress={handleDeleteInquiry}>
-                                삭제
-                            </Button>
-                            <Button
-                                className={twMerge(["flex-1", "md:flex-none"], ["min-w-20"])}
-                                size={"small"}
-                                variant={"contained"}
-                                onPress={() => router.push(`/inquiry/${inquiry.id}/update`)}>
-                                수정
-                            </Button>
+                            {!inquiry.answer && (
+                                <>
+                                    <Button
+                                        className={twMerge(
+                                            ["flex-1", "md:flex-none"],
+                                            ["min-w-20"],
+                                        )}
+                                        size={"small"}
+                                        variant={"contained"}
+                                        color={"error"}
+                                        onPress={handleDeleteInquiry}>
+                                        삭제
+                                    </Button>
+                                    <Button
+                                        className={twMerge(
+                                            ["flex-1", "md:flex-none"],
+                                            ["min-w-20"],
+                                        )}
+                                        size={"small"}
+                                        variant={"contained"}
+                                        onPress={() =>
+                                            router.push(`/inquiry/${inquiry.id}/update`)
+                                        }>
+                                        수정
+                                    </Button>
+                                </>
+                            )}
                         </View>
                     </Card>
                 </ContentContainer>
