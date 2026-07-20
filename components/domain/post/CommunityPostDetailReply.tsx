@@ -247,7 +247,7 @@ function CommunityPostDetailReply({ postId, isOpen, onClose, onTotalChange }: Pr
                                                     onChangeText={onChange}
                                                     onBlur={onBlur}
                                                     errorMessage={errors.content?.message}
-                                                    textInputClassName="min-h-[60px] bg-background-paper border border-primary-main rounded-xl p-3 text-sm"
+                                                    textInputClassName="min-h-[60px] bg-background-paper border border-primary-main rounded-[28px] p-5 text-sm"
                                                 />
                                             )}
                                         />

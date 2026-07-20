@@ -246,7 +246,7 @@ function CommunityPostDetailPage() {
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => setIsReplyModalOpen(true)}
-                    className="bg-gray rounded-xl p-3.5 flex-row items-center justify-between border border-secondary-main">
+                    className="bg-gray rounded-[28px] p-3.5 flex-row items-center justify-between border border-secondary-main">
                     <View className="flex-row items-center gap-2 text-text-default">
                         <Ionicons name="chatbubble-ellipses-outline" size={18} />
                         <TextComponent className="text-sm font-medium">

@@ -173,9 +173,9 @@ export function ReplyItem({ item, onRefresh, isLast }: ReplyItemProps) {
                         value={editContent}
                         onChangeText={setEditContent}
                         placeholder="수정할 내용을 입력하세요"
-                        textInputClassName="min-h-[60px] bg-white border border-gray-200 rounded-xl p-2.5 text-sm"
+                        textInputClassName="min-h-[60px] bg-white border border-gray-200 rounded-[28px] p-4 text-sm"
                     />
-                    <View className="flex-row justify-end gap-2 mt-2">
+                    <View className="flex-row justify-end gap-1.5">
                         <Button
                             variant={"outlined"}
                             size={"mini"}

@@ -82,8 +82,8 @@ function AdminInquiryDetailPage() {
 
                     <View
                         className={twMerge(
-                            ["mt-8", "p-4", "md:p-6" , "bg-background-default"],
-                            ["rounded-xl"],
+                            ["mt-8", "p-5", "md:p-6" , "bg-background-default"],
+                            ["rounded-[28px]"],
                         )}>
                         {inquiry.answer && !isEdit ? (
                             <AdminInquiryAnswerBox inquiry={inquiry} reload={loadInquiry} setIsEdit={setIsEdit}/>
