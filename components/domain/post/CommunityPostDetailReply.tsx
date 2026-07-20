@@ -20,7 +20,7 @@ import TextareaGroup from "@/components/common/textarea/TextareaGroup";
 import Button from "@/components/common/button/Button";
 import TextComponent from "@/components/common/text/TextComponent";
 
-// 💡 여기서 두 번째 파일의 ReplyItem을 가져옵니다. (경로는 실제 프로젝트 환경에 맞게 수정해주세요!)
+
 import { ReplyItem } from "./CommunityPostDetailReplyListPage";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { useRouter } from "expo-router";
@@ -40,13 +40,11 @@ function CommunityPostDetailReply({ postId, isOpen, onClose, onTotalChange }: Pr
     const [total, setTotal] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
 
-    // 무한 스크롤 관련 상태
     const [page, setPage] = useState(1);
     const [isFetchingMore, setIsFetchingMore] = useState(false);
     const [hasMore, setHasMore] = useState(true);
-    const pageSize = 15; // 한 번에 15개씩 로드
+    const pageSize = 15;
 
-    // 첫 페이지 로드
     const loadFirstReplies = useCallback(async () => {
         try {
             setIsLoading(true);
@@ -62,7 +60,6 @@ function CommunityPostDetailReply({ postId, isOpen, onClose, onTotalChange }: Pr
         }
     }, [postId]);
 
-    // 스크롤 하단 도달 시 추가 데이터 로드
     const loadMoreReplies = async () => {
         if (isFetchingMore || !hasMore) return;
 
@@ -85,7 +82,6 @@ function CommunityPostDetailReply({ postId, isOpen, onClose, onTotalChange }: Pr
         }
     };
 
-    // 모달이 열릴 때만 첫 데이터를 불러옴
     useEffect(() => {
         if (isOpen) {
             loadFirstReplies().then(() => {});
@@ -131,7 +127,7 @@ function CommunityPostDetailReply({ postId, isOpen, onClose, onTotalChange }: Pr
         try {
             await replyApi.createReply(postId, data.content);
             reset();
-            await loadFirstReplies(); // 댓글 작성 완료 시 리스트 맨 위부터 재정렬 로드
+            await loadFirstReplies();
         } catch (error) {
             console.error(error);
             const msg = "댓글 등록에 실패했습니다.";
@@ -146,7 +142,6 @@ function CommunityPostDetailReply({ postId, isOpen, onClose, onTotalChange }: Pr
     return (
         <Modal visible={isOpen} animationType="slide" transparent={true} onRequestClose={onClose}>
             <View className="flex-1 bg-transparent">
-                {/* 상단 30% 영역 (터치 시 닫힘) */}
                 <TouchableOpacity
                     className="h-[30%] bg-transparent"
                     activeOpacity={1}
@@ -175,13 +170,13 @@ function CommunityPostDetailReply({ postId, isOpen, onClose, onTotalChange }: Pr
                             behavior={Platform.OS === "ios" ? "padding" : "height"}
                             className="flex-1"
                             keyboardVerticalOffset={Platform.OS === "ios" ? 40 : 0}>
-                            {/* 👇 추가된 라인 아이콘 (드래그 핸들) 👇 */}
+
                             <View className="items-center pt-3 pb-1 bg-background-paper">
                                 <View className="w-12 h-1.5 bg-background-default rounded-full" />
                             </View>
-                            {/* 👆 ---------------------------- 👆 */}
 
-                            {/* 간격 조정을 위해 기존 py-4 를 pt-2 pb-4 로 변경했습니다 */}
+
+
                             <View className="flex-row items-center justify-between px-5 pt-2 pb-4 border-b border-background-default bg-background-paper">
                                 <View className="flex-row items-center gap-1.5">
                                     <Ionicons

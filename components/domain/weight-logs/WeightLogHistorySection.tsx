@@ -5,10 +5,10 @@ import { Edit2, Plus, Trash2 } from "lucide-react-native";
 import TextComponent from "@/components/common/text/TextComponent";
 import Button from "@/components/common/button/Button";
 import Card from "@/components/common/card/Card";
-import Badge from "@/components/common/badge/Badge"; // 👈 Badge 컴포넌트 추가
+import Badge from "@/components/common/badge/Badge";
 import { WeightLog } from "@/types/weightLog";
 import { format } from "date-fns";
-import { StyleColorType } from "@/types/style"; // 👈 타입 추가
+import { StyleColorType } from "@/types/style";
 
 interface Props {
     history: WeightLog[];
@@ -45,20 +45,19 @@ function WeightLogHistorySection({ history, onAddPress, onEditPress, onDeletePre
                             }
                         }
 
-                        // 💡 Badge 컴포넌트에 넘겨줄 Props 세팅
                         let badgeColor: StyleColorType | undefined = undefined;
                         let badgeTextClass = "text-gray-500 font-bold";
-                        let badgeCustomClass = "bg-gray-100 border-transparent"; // 변화량 0일 때 기본 배경
+                        let badgeCustomClass = "bg-gray-100 border-transparent";
                         let changeLabel = "0.0";
 
                         if (calcChange > 0) {
-                            badgeColor = "error"; // bg-error-main (#F2C6C2)
-                            badgeTextClass = "text-text-default"; // 포인트 텍스트 (#E95244)
+                            badgeColor = "error";
+                            badgeTextClass = "text-text-default";
                             badgeCustomClass = "";
                             changeLabel = `+${calcChange}`;
                         } else if (calcChange < 0) {
-                            badgeColor = "success"; // bg-success-main (#A3D9C9)
-                            badgeTextClass = "text-text-default"; // 포인트 텍스트 (#35B18C)
+                            badgeColor = "success";
+                            badgeTextClass = "text-text-default";
                             badgeCustomClass = "";
                             changeLabel = `${calcChange}`;
                         }
@@ -75,7 +74,6 @@ function WeightLogHistorySection({ history, onAddPress, onEditPress, onDeletePre
                                             {log.weight}kg
                                         </TextComponent>
 
-                                        {/* 💡 둥글게 깎기 위해 rounded-full 적용! */}
                                         <Badge
                                             color={badgeColor}
                                             className={twMerge("rounded-full", badgeCustomClass)}

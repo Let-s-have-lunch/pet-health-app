@@ -17,7 +17,6 @@ import { Plus } from "lucide-react-native";
 import Button from "@/components/common/button/Button";
 
 export default function VetLogPage() {
-    // 💡 로그인 상태 가져오기
     const isLoggedIn = useAuthStore(state => state.isLoggedIn);
     const selectedPet = usePetStore(state => state.selectedPet);
     const petId = selectedPet?.id;
@@ -40,7 +39,6 @@ export default function VetLogPage() {
         setIsDetailModalOpen(true);
     };
 
-    // 💡 기록 추가 방어 로직 (로그인/펫 체크)
     const handleCreatePress = () => {
         if (!isLoggedIn) {
             if (Platform.OS === "web") {
@@ -75,7 +73,6 @@ export default function VetLogPage() {
     };
 
     const loadData = useCallback(async () => {
-        // 💡 로그인 안 했거나 펫이 없으면 API 호출 막고 빈 데이터 세팅
         if (!isLoggedIn || !petId) {
             setData({ upcoming: null, history: [] });
             return;
@@ -96,7 +93,7 @@ export default function VetLogPage() {
         } catch (e) {
             console.error("데이터 로딩 중 에러:", e);
         }
-    }, [isLoggedIn, petId]); // 💡 의존성 배열 추가
+    }, [isLoggedIn, petId]);
 
     useFocusEffect(
         useCallback(() => {
@@ -146,12 +143,10 @@ export default function VetLogPage() {
         return `${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
     };
 
-    // 💡 기존에 있던 if (!petId) 반환문을 완전히 제거하여 레이아웃이 항상 렌더링되게 함
 
     return (
         <View className={twMerge("flex-1 bg-background-default")}>
             <View className={twMerge("bg-background-paper")}>
-                {/* 💡 펫이 없으면 기본 텍스트 보여주기 */}
                 <Title
                     title={selectedPet ? `${selectedPet.name} 병원방문기록` : "병원방문기록"}
                     showBackButton={true}
@@ -161,7 +156,6 @@ export default function VetLogPage() {
 
             <ScrollView className={twMerge("flex-1 bg-background-main")}>
                 <ContentContainer className="flex-1 py-5 pb-10 px-5">
-                    {/* 1. 상단 카드 */}
                     {data.upcoming ? (
                         <Pressable
                             onPress={() => openDetailModal(data.upcoming!.id)}
@@ -213,7 +207,7 @@ export default function VetLogPage() {
                         </Pressable>
                     ) : (
                         <Pressable
-                            onPress={handleCreatePress} // 💡 추가 클릭 시 방어 로직 타도록 변경
+                            onPress={handleCreatePress}
                             className={twMerge(
                                 "bg-background-paper rounded-[20px] h-[150px] items-center justify-center mb-8 border-2 border-dashed border-gray-300",
                             )}>
@@ -222,14 +216,14 @@ export default function VetLogPage() {
                         </Pressable>
                     )}
 
-                    {/* 2. 방문기록 리스트 */}
+
                     <View className={twMerge("flex-row items-center justify-between mb-4")}>
                         <TextComponent className={twMerge("text-[18px] font-bold")}>
                             방문기록
                         </TextComponent>
                         <Button
                             size={"small"}
-                            onPress={handleCreatePress} // 💡 방어 로직 반영
+                            onPress={handleCreatePress}
                             className={"px-0 py-0 w-[48px] h-[48px]"}>
                             <Plus size={20} className={twMerge(["text-text-default"])} />
                         </Button>
@@ -276,7 +270,7 @@ export default function VetLogPage() {
                 </ContentContainer>
             </ScrollView>
 
-            {/* 기존 상세 모달 */}
+
             {isDetailModalOpen && (
                 <VetRecordDetailModal
                     visible={isDetailModalOpen}
@@ -289,7 +283,7 @@ export default function VetLogPage() {
             <VetRecordLogCreateModal
                 visible={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
-                petId={petId!} // 💡 TS 에러 방지. 어차피 버튼에서 예외처리 하므로 안전함
+                petId={petId!}
                 petName={selectedPet?.name}
                 reload={loadData}
             />

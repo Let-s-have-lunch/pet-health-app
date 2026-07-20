@@ -25,7 +25,7 @@ interface VetLogCreateModalProps {
     onClose: () => void;
     petId: number | undefined;
     petName?: string;
-    reload: () => Promise<void>; // 등록 후 목록 새로고침을 위한 함수
+    reload: () => Promise<void>;
 }
 
 export default function VetRecordLogCreateModal({
@@ -43,7 +43,7 @@ export default function VetRecordLogCreateModal({
     const [image, setImage] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // 모달이 열릴 때마다 폼 초기화
+
     useEffect(() => {
         if (visible) {
             setHospitalName("");
@@ -58,7 +58,6 @@ export default function VetRecordLogCreateModal({
 
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
-            //  이전 버전 mediaTypes: ImagePicker.MediaTypeOptions.Images,
             mediaTypes: ["images"],
             allowsEditing: true,
             aspect: [4, 3],
@@ -118,8 +117,8 @@ export default function VetRecordLogCreateModal({
                 Alert.alert("성공", "기록이 등록되었습니다.");
             }
 
-            await reload(); // 리스트 새로고침
-            onClose(); // 모달 닫기
+            await reload();
+            onClose();
         } catch (error) {
             console.log("업로드 에러:", error);
             if (Platform.OS === "web") {
@@ -140,8 +139,7 @@ export default function VetRecordLogCreateModal({
                 <Pressable
                     onPress={Keyboard.dismiss}
                     className="flex-1 justify-center items-center bg-black/50 p-6">
-                    {/* 모달 컨테이너: max-w-xl 통일 */}
-                    <Pressable
+                                       <Pressable
                         onPress={e => e.stopPropagation()}
                         className="bg-background-paper w-full max-w-xl rounded-3xl overflow-hidden shadow-xl max-h-[90%]">
                         <ScrollView
@@ -154,7 +152,6 @@ export default function VetRecordLogCreateModal({
                             />
 
                             <View className={"gap-4"}>
-                                {/* 사진 등록 영역 */}
                                 <View>
                                     <TextComponent className="text-sm mb-2 text-text-primary">
                                         반려동물 사진

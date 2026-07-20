@@ -102,7 +102,6 @@ function CommunityPostListPage() {
                                 작성일
                             </TextComponent>
                         </View>
-                        {/* 내용 */}
                         <View>
                             {isLoading && (
                                 <View className={"py-20"}>

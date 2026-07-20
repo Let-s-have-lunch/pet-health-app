@@ -77,7 +77,6 @@ function MyWithdrawPage() {
                         정말 탈퇴하시겠습니까?
                     </TextComponent>
 
-                    {/* 💡 사용자가 실수하지 않도록 경고 문구를 하나 추가했습니다. */}
                     <TextComponent className="text-center text-gray-500 mt-2 mb-6">
                         탈퇴 시 모든 반려동물 정보와 기록이 삭제되며{"\n"}
                         복구할 수 없습니다. 진행을 위해 비밀번호를 입력해주세요.

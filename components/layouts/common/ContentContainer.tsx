@@ -1,4 +1,4 @@
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 import { twMerge } from "tailwind-merge";
 import { ReactNode } from "react";
 

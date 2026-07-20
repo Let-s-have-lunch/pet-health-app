@@ -19,12 +19,10 @@ export default function LandingScreen() {
         );
     }
 
-    // 2. 로그인된 사용자라면 홈으로 즉시 이동
     if (isLoggedIn) {
         return <Redirect href="/home" />;
     }
 
-    // 3. 로그인/회원가입 랜딩 페이지 UI
     return (
         <View className={twMerge("flex-1", "bg-background-default")}>
             <ContentContainer className="justify-center items-center">
@@ -46,19 +44,7 @@ export default function LandingScreen() {
                             />
                         </View>
 
-                        {/*<TextComponent className="text-[32px] font-extrabold text-success-point tracking-tight">*/}
-                        {/*    마이*/}
-                        {/*</TextComponent>*/}
-                        {/*<TextComponent className="text-[32px] font-extrabold text-error-point tracking-tight">*/}
-                        {/*    펫*/}
-                        {/*</TextComponent>*/}
-                        {/*<TextComponent className="text-[32px] font-extrabold text-text-default tracking-tight">*/}
-                        {/*    다이어리*/}
-                        {/*</TextComponent>*/}
                     </View>
-                    {/*<TextComponent className="text-[26px] font-bold text-text-default mt-1">*/}
-                    {/*    오신 것을 환영합니다.*/}
-                    {/*</TextComponent>*/}
                 </View>
                 <View
                     className={twMerge(
@@ -79,20 +65,8 @@ export default function LandingScreen() {
                     </TextComponent>
                 </View>
 
-                {/* 서브 타이틀 영역 */}
-                {/*<View className="mb-16">*/}
-                {/*    <TextComponent className="text-lg text-text-default text-center">*/}
-                {/*        반려동물의 건강과 성장을 기록하세요*/}
-                {/*    </TextComponent>*/}
-                {/*</View>*/}
 
-                {/* 버튼 영역 */}
                 <View className="w-full items-center">
-                    {/*<TextComponent className="text-sm text-text-secondary text-center mb-8">*/}
-                    {/*    계속하려면 로그인해 주세요*/}
-                    {/*</TextComponent>*/}
-
-                    {/* 로그인 버튼 */}
                     <Pressable
                         onPress={() => router.push("/auth/login")}
                         className="bg-background-paper w-full max-w-[200px] py-3 items-center justify-center rounded-full shadow-sm mb-3">
@@ -105,7 +79,6 @@ export default function LandingScreen() {
                         OR
                     </TextComponent>
 
-                    {/* 회원가입 버튼 */}
                     <Pressable
                         onPress={() => router.push("/auth/register")}
                         className="bg-background-paper w-full max-w-[200px] py-3 items-center justify-center rounded-full shadow-sm mb-6">
@@ -114,7 +87,6 @@ export default function LandingScreen() {
                         </TextComponent>
                     </Pressable>
 
-                    {/* 게스트 입장 */}
                     <Pressable onPress={() => router.push("/home")} className="p-2">
                         <TextComponent className="text-sm text-text-secondary underline underline-offset-4">
                             게스트로 입장하기

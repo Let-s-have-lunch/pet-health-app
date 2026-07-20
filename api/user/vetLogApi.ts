@@ -6,7 +6,7 @@ import { VetRecord } from "@/types/vetRecord";
 const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 
 export const vetLogApi = {
-    // 1. 병원 기록 생성 (POST /vet-records)
+
     create: async (formData: FormData) => {
         console.log(formData);
         const { token } = useAuthStore.getState();
@@ -26,12 +26,12 @@ export const vetLogApi = {
         return await response.json();
     },
 
-    // 2. 특정 반려동물의 전체 기록 조회 (GET /vet-records/pet/:petId)
+
     getByPetId: async (petId: number) => {
         return await axiosInstance.get(`/vet-records/pet/${petId}`);
     },
 
-    // 3. 특정 병원 기록 상세 조회 (GET /vet-records/:id)
+
     getById: async (id: number): Promise<VetRecord> => {
         const response = await axiosInstance.get(`/vet-records/${id}`, {
             data: { id: id },
@@ -39,12 +39,12 @@ export const vetLogApi = {
         return response.data.data;
     },
 
-    // 4. 병원 기록 수정 (PUT /vet-records/:id)
+
     update: async (id: number, data: FormData) => {
         return await axiosInstance.put(`/vet-records/${id}`, data);
     },
 
-    // 5. 병원 기록 삭제 (DELETE /vet-records/:id)
+
     delete: (id: number) => axiosInstance.delete(`/vet-records/${id}`),
 
     updateWithImage: (id: number, formData: FormData) =>

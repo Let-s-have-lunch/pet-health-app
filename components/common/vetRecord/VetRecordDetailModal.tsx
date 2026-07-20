@@ -89,10 +89,9 @@ export default function VetRecordDetailModal({
                     onPress={onClose}>
                     <Pressable
                         className={twMerge(
-                            "bg-white w-full max-w-xl rounded-[24px] overflow-hidden max-h-[85%]",
+                            "bg-background-paper w-full max-w-xl rounded-[24px] overflow-hidden max-h-[85%]",
                         )}
                         onPress={e => e.stopPropagation()}>
-                        {/* 헤더 */}
                         <View
                             className={twMerge(
                                 "flex-row items-center justify-between px-6 pt-6 pb-2",
@@ -114,7 +113,6 @@ export default function VetRecordDetailModal({
                             <ScrollView
                                 className={twMerge("px-6 pb-6")}
                                 showsVerticalScrollIndicator={false}>
-                                {/* 날짜 */}
                                 <TextComponent
                                     className={twMerge(
                                         "text-[15px] text-text-default font-bold mb-4 text-right",
@@ -122,7 +120,6 @@ export default function VetRecordDetailModal({
                                     {formatLongDate(record.visitDate)}
                                 </TextComponent>
 
-                                {/* 이미지 */}
                                 {record.receiptImage ? (
                                     <Image
                                         source={{ uri: getImageUrl(record.receiptImage) || "" }}
@@ -138,7 +135,6 @@ export default function VetRecordDetailModal({
                                     </View>
                                 )}
 
-                                {/* 정보 리스트 */}
                                 <View className={twMerge("gap-3 mb-6")}>
                                     <View className={twMerge("flex-row items-center gap-3")}>
                                         <View
@@ -180,7 +176,6 @@ export default function VetRecordDetailModal({
 
                                 <View className={twMerge("h-[1px] bg-divider mb-6")} />
 
-                                {/* 메모 박스 */}
                                 <View
                                     className={twMerge(
                                         "bg-bg-light p-4 rounded-[16px] border border-divider mb-8",
@@ -199,7 +194,6 @@ export default function VetRecordDetailModal({
                                     </TextComponent>
                                 </View>
 
-                                {/* 버튼 영역 */}
                                 <View className={twMerge("flex-row gap-3")}>
                                     <Button
                                         variant={"outlined"}

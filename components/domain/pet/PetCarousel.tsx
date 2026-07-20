@@ -169,7 +169,7 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                     onPress={handleNext}
                     style={{
                         position: "absolute",
-                        right: 16, // 오른쪽에 배치
+                        right: 16,
                         top: "40%",
                         width: 40,
                         height: 40,

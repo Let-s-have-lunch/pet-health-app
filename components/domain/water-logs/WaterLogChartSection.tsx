@@ -19,7 +19,6 @@ interface WaterLogChartSectionProps {
 export default function WaterLogChartSection({ historyData }: WaterLogChartSectionProps) {
     const [chartWidth, setChartWidth] = useState(300);
 
-    // 💡 팀원분이 작성하신 로직을 그대로 유지했습니다. 안전하고 잘 짜여진 코드입니다.
     const { chartData, yMax, yTickValues, dateRangeText } = useMemo(() => {
         if (!historyData || historyData.length === 0) {
             return {
@@ -100,7 +99,6 @@ export default function WaterLogChartSection({ historyData }: WaterLogChartSecti
                                 grid: { stroke: "#D1D5DB", strokeDasharray: "4, 4" },
                             }}
                         />
-                        {/* 🎨 색상을 파란색 계열로 수정했습니다. */}
                         <VictoryArea
                             data={chartData}
                             interpolation="catmullRom"

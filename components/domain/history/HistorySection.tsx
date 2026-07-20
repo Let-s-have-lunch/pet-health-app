@@ -47,7 +47,7 @@ export default function HistorySection() {
         } finally {
             setIsLoading(false);
         }
-    }, [petId, todayDate]); // 의존성 배열도 깔끔하게 유지
+    }, [petId, todayDate]);
 
     useEffect(() => {
         if (isAddCardSelected) {
@@ -66,7 +66,6 @@ export default function HistorySection() {
         }, [loadDashboard]),
     );
 
-    // 🎨 카드 설정 데이터
     const cardConfig = [
         {
             id: "walk",
@@ -89,7 +88,6 @@ export default function HistorySection() {
             onPress: () => router.push("/(main)/health/weight-logs"),
             renderBottom: () =>
                 data?.weight?.value ? (
-                    // 💡 기록이 있을 때 (원래 스타일)
                     <View className="flex-row justify-end items-center gap-1">
                         <Ionicons name="fitness" size={22} color="#D9A05B" />
                         <TextComponent className="font-bold text-2xl text-text-default">
@@ -97,7 +95,6 @@ export default function HistorySection() {
                         </TextComponent>
                     </View>
                 ) : (
-                    // 💡 기록이 없을 때 (병원 '기록 없음'과 완벽히 동일한 스타일)
                     <View className="flex-row justify-end items-center gap-1">
                         <Ionicons name="fitness" size={20} color="#D1D1D1" />
                         <TextComponent className="text-xs" style={{ color: "#7F8C8D" }}>

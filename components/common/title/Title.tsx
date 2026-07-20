@@ -28,7 +28,6 @@ function Title({
                 "w-full h-20 justify-center border-b border-divider bg-transparent",
                 className,
             )}>
-            {/* 2. 안쪽 View: ContentContainer와 완벽히 동일하게 max-w-7xl, self-center, 가로 패딩(px-[25px])을 줍니다. */}
             <View className="w-full max-w-7xl self-center px-[25px] flex-row items-center justify-between">
                 <View className="flex-row items-center gap-4 flex-1">
                     {showBackButton && (
@@ -64,7 +63,6 @@ function Title({
                     </View>
                 </View>
 
-                {/* 오른쪽 영역: 추가 컴포넌트(children)를 max-w-7xl 안으로 들여옵니다. */}
                 <View className="flex-row items-center shrink-0 pl-4">{children}</View>
             </View>
         </View>

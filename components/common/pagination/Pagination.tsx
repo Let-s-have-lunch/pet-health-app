@@ -46,7 +46,6 @@ export default function Pagination({
 
     return (
         <View className="flex-row items-center justify-center gap-2 pt-4">
-            {/* 이전 페이지 버튼 */}
             <TouchableOpacity
                 onPress={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
@@ -59,7 +58,6 @@ export default function Pagination({
                 <Text className="text-lg font-medium text-gray-800">‹</Text>
             </TouchableOpacity>
 
-            {/* 페이지 번호 버튼들 */}
             {pageNumbers.map(page => {
                 const isActive = page === currentPage;
                 return (
@@ -69,7 +67,7 @@ export default function Pagination({
                         activeOpacity={0.7}
                         className={twMerge(
                             "w-10 h-10 rounded-[10px] border flex items-center justify-center",
-                            "bg-white border-text-secondary",
+                            "bg-background-paper border-text-secondary",
                             isActive && "bg-primary-main border-transparent",
                             className,
                         )}>
@@ -84,7 +82,6 @@ export default function Pagination({
                 );
             })}
 
-            {/* 다음 페이지 버튼 */}
             <TouchableOpacity
                 onPress={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}

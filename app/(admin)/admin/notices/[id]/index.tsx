@@ -78,7 +78,6 @@ function AdminNoticeDetailPage() {
 
     return (
         <View className={twMerge("flex-1", "w-full")}>
-            {/* 1. 타이틀은 로딩과 상관없이 무조건 먼저 보여줍니다 */}
             <Title
                 title={"공지사항 상세"}
                 description={"등록된 공지사항의 내용을 확인합니다."}
@@ -87,13 +86,11 @@ function AdminNoticeDetailPage() {
 
             <ScrollView className={"flex-1"}>
                 <Card>
-                    {/* 2. 데이터를 불러오는 중이거나 데이터가 없을 때는 카드 안에서만 로딩을 띄웁니다 */}
                     {isLoading || !notice ? (
                         <View className="min-h-60 justify-center items-center">
                             <LoadingIndicator />
                         </View>
                     ) : (
-                        /* 3. 로딩이 끝나면 실제 공지사항 내용을 보여줍니다 */
                         <>
                             <View
                                 className={twMerge(

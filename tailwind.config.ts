@@ -2,7 +2,7 @@
 import { Config } from "tailwindcss";
 
 export default {
-    // 1. 다크모드를 클래스 기준(html 태그에 .dark가 붙었을 때)으로 켤 것인지 결정
+    // 다크모드를 클래스 기준(html 태그에 .dark가 붙었을 때)으로 켤 것인지 결정
     darkMode: "class",
 
     content: [

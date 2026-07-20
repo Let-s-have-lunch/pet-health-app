@@ -1,4 +1,3 @@
-// ✅ 1. React 임포트 추가!
 import React, { useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import Card from "@/components/common/card/Card";
@@ -26,7 +25,6 @@ function WalkLogChartSection({ stats, last7Days, displayDateRange }: Props) {
         const data = last7Days.map(dateStr => {
             const [, month, day] = dateStr.split("-");
             const label = `${parseInt(month, 10)}/${parseInt(day, 10)}`;
-            // ✅ 2. graphData 뒤에도 ?를 붙여서 안전하게 접근
             const found = stats?.graphData?.find(d => d.date?.startsWith(dateStr));
             return { x: label, y: found ? found.duration : 0 };
         });
@@ -50,7 +48,6 @@ function WalkLogChartSection({ stats, last7Days, displayDateRange }: Props) {
                     </TextComponent>
                 </View>
                 <View className={twMerge("items-end")}>
-                    {/* ✅ 3. summary 뒤에도 ?를 붙여서 에러 방지 */}
                     <TextComponent className={twMerge("text-sm font-bold text-[#e87c71]")}>
                         총 {stats?.summary?.totalWalks || 0}회
                     </TextComponent>
@@ -67,7 +64,6 @@ function WalkLogChartSection({ stats, last7Days, displayDateRange }: Props) {
                     const { width } = event.nativeEvent.layout;
                     setChartWidth(width - 40);
                 }}>
-                {/* 차트 영역은 동일하게 유지 */}
                 <VictoryChart
                     width={chartWidth}
                     height={220}

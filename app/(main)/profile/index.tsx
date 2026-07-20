@@ -18,10 +18,8 @@ function MyProfilePage() {
 
     const { user, logout } = useAuthStore();
 
-    // 💡 백엔드 URL 설정 (이미지 경로 처리용)
     const BACKEND_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 
-    // 💡 이미지 경로를 절대 경로로 바꿔주는 함수
     const getImageUrl = (path?: string | null) => {
         if (!path) return null;
         return path.startsWith("http") ? path : `${BACKEND_URL}${path}`;
@@ -83,7 +81,6 @@ function MyProfilePage() {
                                 </TextComponent>
                             ) : (
                                 pets.map((pet, index) => {
-                                    // 💡 마지막 인덱스인지 확인
                                     const isLast = index === pets.length - 1;
 
                                     return (
@@ -91,7 +88,6 @@ function MyProfilePage() {
                                             key={pet.id}
                                             className={twMerge(
                                                 "flex-row items-center",
-                                                // 💡 마지막 항목이 아니면 아래 여백, 안쪽 여백, 그리고 밑줄을 추가합니다.
                                                 !isLast && "mb-4 pb-4 border-b border-divider",
                                             )}>
                                             {pet.profileImage ? (

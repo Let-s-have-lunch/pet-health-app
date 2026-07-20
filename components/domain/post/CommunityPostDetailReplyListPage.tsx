@@ -71,7 +71,6 @@ interface ReplyItemProps {
     isLast: boolean;
 }
 
-// 💡 여기서 export를 추가했습니다!
 export function ReplyItem({ item, onRefresh, isLast }: ReplyItemProps) {
     const { user } = useAuthStore();
     const isAuthor = item.user.id === user?.id;

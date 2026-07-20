@@ -16,7 +16,7 @@ import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 export default function WaterLogListPage() {
     const router = useRouter();
-    // 💡 2. 로그인 여부 가져오기
+
     const isLoggedIn = useAuthStore(state => state.isLoggedIn);
     const { selectedPet } = usePetStore();
     const petId = selectedPet?.id;
@@ -28,7 +28,6 @@ export default function WaterLogListPage() {
     const [selectedLogData, setSelectedLogData] = useState<WaterIntakeLog | null>(null);
 
     const fetchData = useCallback(async () => {
-        // 💡 3. 핵심 방어막! 로그인을 안 했거나 펫이 없으면 API 호출 막고 빈 화면 렌더링
         if (!isLoggedIn || !petId) {
             setHistoryData([]);
             setIsLoading(false);
@@ -46,9 +45,9 @@ export default function WaterLogListPage() {
         } finally {
             setIsLoading(false);
         }
-    }, [isLoggedIn, petId]); // 💡 의존성 배열에 isLoggedIn 추가
+    }, [isLoggedIn, petId]);
 
-    // 💡 4. 추가 버튼 클릭 시 방어 로직
+
     const handleCreatePress = () => {
         if (!isLoggedIn) {
             if (Platform.OS === "web") {
@@ -70,7 +69,7 @@ export default function WaterLogListPage() {
             return;
         }
 
-        setSelectedLogData(null); // 신규 작성이므로 비워줍니다.
+        setSelectedLogData(null);
         setIsModalOpen(true);
     };
 

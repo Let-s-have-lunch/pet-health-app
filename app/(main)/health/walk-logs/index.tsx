@@ -12,12 +12,12 @@ import WalkLogModal from "@/components/domain/walk-logs/WalkLogModal";
 import WalkLogHistorySection from "@/components/domain/walk-logs/WalkLogHistorySection";
 import WalkLogChartSection from "@/components/domain/walk-logs/WalkLogChartSection";
 import { usePetStore } from "@/stores/pet/usePetStore";
-// 💡 1. Auth 스토어 임포트
+
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 function WalkLogListPage() {
     const router = useRouter();
-    // 💡 2. 로그인 여부 가져오기
+
     const isLoggedIn = useAuthStore(state => state.isLoggedIn);
     const { selectedPet } = usePetStore();
     const petId = selectedPet?.id;
@@ -40,18 +40,16 @@ function WalkLogListPage() {
         return Array.from({ length: 7 }, (_, i) => format(subDays(today, 6 - i), "yyyy-MM-dd"));
     }, [today]);
 
-    // API 데이터 페칭
     const fetchWalkLogData = useCallback(async () => {
-        // 💡 3. 핵심 방어막! 로그인을 안 했거나 펫이 없으면 API 호출 막기
         if (!isLoggedIn || !petId) {
-            setStats(null); // 통계 빈 데이터 처리
-            setHistory([]); // 히스토리 빈 배열 처리
-            setIsLoading(false); // 로딩 해제 (빈 화면 렌더링)
+            setStats(null);
+            setHistory([]);
+            setIsLoading(false);
             return;
         }
 
         try {
-            setIsLoading(true); // 💡 다시 로딩 시작 (새로고침 등 펫이 바뀔 때를 대비)
+            setIsLoading(true);
             const statsData = await walkLogApi.getWalkLogStats(petId, startDate, endDate);
             const historyData = await walkLogApi.getWalkLogs(petId);
             setStats(statsData);
@@ -69,13 +67,13 @@ function WalkLogListPage() {
         } finally {
             setIsLoading(false);
         }
-    }, [isLoggedIn, petId, startDate, endDate, router]); // 💡 의존성 배열에 isLoggedIn 추가
+    }, [isLoggedIn, petId, startDate, endDate, router]);
 
     useEffect(() => {
         fetchWalkLogData().then();
     }, [fetchWalkLogData]);
 
-    // 💡 4. 추가 버튼 클릭 시 방어 로직
+
     const handleAddPress = () => {
         if (!isLoggedIn) {
             if (Platform.OS === "web") {
@@ -154,14 +152,14 @@ function WalkLogListPage() {
             ) : (
                 <ScrollView>
                     <ContentContainer className={"overflow-hidden flex-1"}>
-                        {/* 📊 통계 섹션 */}
+
                         <WalkLogChartSection
                             stats={stats}
                             last7Days={last7Days}
                             displayDateRange={displayDateRange}
                         />
 
-                        {/* 모달 팝업 컴포넌트 */}
+
                         <WalkLogModal
                             visible={isModalVisible}
                             onClose={handleCloseModal}
@@ -170,7 +168,7 @@ function WalkLogListPage() {
                             initialData={selectedLog}
                         />
 
-                        {/* 히스토리 섹션 */}
+
                         <WalkLogHistorySection
                             history={history}
                             onAddPress={handleAddPress}
