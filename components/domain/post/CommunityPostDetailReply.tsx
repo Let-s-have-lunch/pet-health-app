@@ -157,7 +157,7 @@ function CommunityPostDetailReply({ postId, isOpen, onClose, onTotalChange }: Pr
                     className={twMerge(
                         ["h-[70%] bg-background-paper rounded-t-[30px] overflow-hidden shadow-2xl"],
                         ["border-t border-divider"],
-                        ["mx-auto", "w-full", "max-w-7xl"]
+                        ["mx-auto", "w-full", "max-w-7xl"],
                     )}
                     style={Platform.select({
                         ios: {
@@ -175,7 +175,14 @@ function CommunityPostDetailReply({ postId, isOpen, onClose, onTotalChange }: Pr
                             behavior={Platform.OS === "ios" ? "padding" : "height"}
                             className="flex-1"
                             keyboardVerticalOffset={Platform.OS === "ios" ? 40 : 0}>
-                            <View className="flex-row items-center justify-between px-5 py-4 border-b border-background-default bg-background-paper">
+                            {/* 👇 추가된 라인 아이콘 (드래그 핸들) 👇 */}
+                            <View className="items-center pt-3 pb-1 bg-background-paper">
+                                <View className="w-12 h-1.5 bg-background-default rounded-full" />
+                            </View>
+                            {/* 👆 ---------------------------- 👆 */}
+
+                            {/* 간격 조정을 위해 기존 py-4 를 pt-2 pb-4 로 변경했습니다 */}
+                            <View className="flex-row items-center justify-between px-5 pt-2 pb-4 border-b border-background-default bg-background-paper">
                                 <View className="flex-row items-center gap-1.5">
                                     <Ionicons
                                         name="chatbubble-ellipses-outline"

@@ -240,8 +240,13 @@ function CommunityPostDetailPage() {
             <View
                 className={twMerge(
                     ["w-full", "max-w-7xl", "mx-auto"],
-                    ["bg-background-paper border-t border-divider px-5 py-10 pb-6 rounded-t-[30px]"]
+                    ["bg-background-paper border-t border-divider px-5 pt-4 pb-6 rounded-t-[30px]"],
                 )}>
+                {/* 라인 아이콘 (드래그 핸들) */}
+                <View className="items-center mb-5">
+                    <View className="w-12 h-1.5 bg-background-default rounded-full" />
+                </View>
+
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => setIsReplyModalOpen(true)}
