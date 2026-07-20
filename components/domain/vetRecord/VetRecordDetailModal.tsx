@@ -7,7 +7,7 @@ import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { vetLogApi } from "@/api/user/vetLogApi";
 import { VetRecord } from "@/types/vetRecord";
 import TextComponent from "@/components/common/text/TextComponent";
-import VetRecordLogUpdateModal from "@/components/common/vetRecord/VetRecordLogUpdateModal";
+import VetRecordLogUpdateModal from "@/components/domain/vetRecord/VetRecordLogUpdateModal";
 import Button from "@/components/common/button/Button";
 
 interface Props {

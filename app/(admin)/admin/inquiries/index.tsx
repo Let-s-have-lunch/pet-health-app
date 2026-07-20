@@ -53,7 +53,8 @@ function AdminInquiryListPage() {
             <Title
                 title={"1:1 문의 관리"}
                 description={"사용자의 문의글을 관리합니다."}
-                className={"mt-[-20px] px-0 mb-6"}></Title>
+                className={"mt-[-20px] px-0 mb-6"}
+                innerClassName={"px-0"}></Title>
 
             <Card className={"overflow-hidden p-0"}>
                 <View
