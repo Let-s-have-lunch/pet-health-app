@@ -29,7 +29,7 @@ function MainHeaderMobile() {
     return (
         <View
             className={twMerge(
-                ["w-full", "h-20", "bg-background-default"],
+                ["pl-4 pr-2 w-full", "h-20", "bg-background-default"],
                 ["justify-center", "items-center"],
                 ["border-b", "border-divider"],
             )}>
