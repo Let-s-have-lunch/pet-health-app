@@ -33,7 +33,7 @@ function TextArea({
             textAlignVertical={"top"}
             className={twMerge(
                 ["w-full", "p-4", "min-h-32"],
-                ["bg-background-paper", "rounded-[10px]", "border", "text-text-default"],
+                ["bg-background-paper", "rounded-[28px]", "border", "text-text-default"],
                 getTextSizeClasses(),
                 hasError ? "border-error-main" : "border-primary-main focus:border-primary-point",
                 Platform.OS === "web" && "outline-none",

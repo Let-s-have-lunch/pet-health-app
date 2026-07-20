@@ -8,7 +8,6 @@ import Title from "@/components/common/title/Title";
 function MainLayout() {
     const pathname = usePathname();
     const router = useRouter();
-
     const isDiaryListPage = pathname.includes("/diary/list");
 
     return (

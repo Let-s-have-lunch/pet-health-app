@@ -127,11 +127,11 @@ export default function TodoFormModal({
                                         newDate.setHours(hours, minutes);
                                         setValue("date", newDate);
                                     }}
-                                    className="w-full p-2 border border-gray-300 rounded-lg text-lg"
+                                    className="w-full p-2 border border-gray-300 rounded-[28px] text-lg"
                                 />
                             ) : (
                                 <>
-                                    <Button variant="outlined" onPress={() => setShowPicker(true)}>
+                                    <Button variant="outlined" onPress={() => setShowPicker(true)} className="rounded-[28px]">
                                         {format(selectedDate, "a hh:mm")}
                                     </Button>
                                     {showPicker && (
