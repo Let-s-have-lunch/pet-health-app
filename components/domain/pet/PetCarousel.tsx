@@ -133,6 +133,7 @@ export default function PetCarousel({ pets, onPressAdd }: Props) {
                         style={{
                             width: CARD_WIDTH,
                             marginHorizontal: HORIZONTAL_PADDING,
+                            flex: 1,
                         }}>
                         {item.type === "pet" ? (
                             <PetCard

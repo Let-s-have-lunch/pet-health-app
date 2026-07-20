@@ -5,6 +5,8 @@ import { twMerge } from "tailwind-merge";
 import TextComponent from "@/components/common/text/TextComponent";
 import { Ionicons } from "@expo/vector-icons";
 import InfoRow from "@/components/common/infoRow/InfoRow";
+import { SMALL_CARD_HEIGHT, LARGE_CARD_HEIGHT } from "@/components/constants/petCardHeight";
+
 
 type Props = {
     pet: Pet;
@@ -57,7 +59,7 @@ export default function PetCard({ pet, onPressEdit }: Props) {
             shadow="none"
             style={{
                 width: "100%",
-                minHeight: isSmall ? 430 : 320,
+                minHeight: isSmall ? SMALL_CARD_HEIGHT : LARGE_CARD_HEIGHT,
                 paddingHorizontal: isSmall ? 23 : 35,
                 paddingVertical: 24,
             }}>
@@ -85,7 +87,7 @@ export default function PetCard({ pet, onPressEdit }: Props) {
                         paddingHorizontal: 14,
                         paddingVertical: 6,
                     }}>
-                    <TextComponent className={twMerge(["font-semibold", "text-success-point"])}>
+                    <TextComponent className={twMerge(["font-semibold", "text-success-main"])}>
                         수정
                     </TextComponent>
                 </Pressable>
