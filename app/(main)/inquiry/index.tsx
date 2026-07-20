@@ -82,7 +82,7 @@ function MyInquiryListPage() {
                 className={"bg-background-paper"}></Title>
             <ContentContainer className={"overflow-hidden flex-1"}>
                 <ScrollView className={"flex-1"}>
-                    <View className={twMerge(["pt-[25px]"])}>
+                    <View >
                         <View
                             className={twMerge(
                                 ["hidden", "md:flex"],

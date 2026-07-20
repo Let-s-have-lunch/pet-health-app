@@ -93,6 +93,7 @@ function AdminCreateUserPage() {
                 title={"유저 생성"}
                 description={"새로운 관리자 또는 일반 유저를 등록합니다."}
                 className={"mt-[-25px] px-0 mb-6"}
+                innerClassName={"px-0"}
             />
             <ScrollView className={"flex-1"}>
                 <Card>

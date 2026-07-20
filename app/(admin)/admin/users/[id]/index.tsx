@@ -133,6 +133,7 @@ function AdminUserUpdatePage() {
                 title={"유저 정보 수정"}
                 description={"가입된 유저의 정보를 수정합니다."}
                 className={"mt-[-25px] px-0 mb-6"}
+                innerClassName={"px-0"}
             />
             <ScrollView className={"flex-1"}>
                 <Card>
