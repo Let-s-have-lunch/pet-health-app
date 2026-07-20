@@ -45,7 +45,6 @@ function TodoHistorySection({
                             <Card
                                 key={todo.id}
                                 className={twMerge("elevation-1 flex-row items-center p-4 gap-4")}>
-                                {/* 1. 체크 아이콘 (완료 여부에 따라 색상 변경) */}
                                 <Button
                                     variant={"icon"}
                                     className="mr-1 p-0"
@@ -57,12 +56,10 @@ function TodoHistorySection({
                                     )}
                                 </Button>
 
-                                {/* 2. 내용 및 날짜/시간 */}
                                 <View className="flex-1">
                                     <TextComponent
                                         className={twMerge(
                                             "font-semibold text-[15px] mb-1",
-                                            // 완료 시 회색 텍스트 & 취소선 적용
                                             isCompleted
                                                 ? "text-text-secondary line-through"
                                                 : "text-text-default",
@@ -71,7 +68,6 @@ function TodoHistorySection({
                                     </TextComponent>
                                     <TextComponent
                                         className={twMerge("text-xs text-text-secondary")}>
-                                        {/* date-fns 포맷 적용 (소문자 am/pm 출력을 위해 toLowerCase() 체이닝) */}
                                         {format(
                                             new Date(todo.date),
                                             "yy.MM.dd a hh:mm",
@@ -79,9 +75,7 @@ function TodoHistorySection({
                                     </TextComponent>
                                 </View>
 
-                                {/* 3. 액션 버튼 (수정, 삭제) */}
                                 <View className={twMerge("flex-row items-center ml-2")}>
-                                    {/* 완료된 항목은 사진 디자인처럼 수정(Edit2) 버튼을 숨김 */}
                                     {!isCompleted && (
                                         <Button variant={"icon"} onPress={() => onEditPress(todo)}>
                                             <Edit2 size={16} color="#000000" />

@@ -95,7 +95,6 @@ export default function VetRecordLogUpdateModal({
 
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
-            // 이전 버전 곧 못쓰게 됨 mediaTypes: ImagePicker.MediaTypeOptions.Images,
             mediaTypes: ["images"],
             allowsEditing: true,
             aspect: [4, 3],
@@ -124,10 +123,8 @@ export default function VetRecordLogUpdateModal({
             formData.append("visitPurpose", visitPurpose);
 
             if (cost) formData.append("cost", String(Number(cost) || 0));
-            // 메모가 빈 칸이면 빈 스트링이나 빈 값을 보낼 수 있게 세팅
             formData.append("memo", memo);
 
-            // 새로 선택한 이미지(local uri)가 있을 때만 업로드
             if (image && !image.startsWith("http")) {
                 if (Platform.OS === "web") {
                     const response = await fetch(image);
@@ -152,8 +149,8 @@ export default function VetRecordLogUpdateModal({
                 Alert.alert("성공", "기록이 수정되었습니다.");
             }
 
-            await reload(); // 리스트 갱신
-            onClose(); // 모달 닫기
+            await reload();
+            onClose();
         } catch (error) {
             console.log("업로드 에러:", error);
             if (Platform.OS === "web") {
@@ -178,7 +175,6 @@ export default function VetRecordLogUpdateModal({
                         onPress={e => e.stopPropagation()}
                         className="bg-background-paper w-full max-w-xl rounded-3xl overflow-hidden shadow-xl max-h-[90%]">
                         {isLoading ? (
-                            // 로딩 중일 때 모달 내부 레이아웃 유지하며 스피너 표시
                             <View className="p-10 items-center justify-center min-h-[300px]">
                                 <ActivityIndicator size="large" color="#7F8C8D" />
                                 <TextComponent className="mt-4 text-text-secondary">
@@ -203,7 +199,6 @@ export default function VetRecordLogUpdateModal({
                                 </Title>
 
                                 <View className={twMerge(["gap-4", "px-4"])}>
-                                    {/* 사진 영역 */}
                                     <View>
                                         <TextComponent
                                             className={twMerge(
@@ -287,7 +282,6 @@ export default function VetRecordLogUpdateModal({
                                     />
                                 </View>
 
-                                {/* 버튼 영역 */}
                                 <View className="flex-row mt-6 gap-3 px-4">
                                     <Button
                                         className={twMerge(["flex-1"])}

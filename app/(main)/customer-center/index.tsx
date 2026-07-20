@@ -24,7 +24,6 @@ export default function CustomerServiceScreen() {
 
     return (
         <View className="flex-1 bg-background-default">
-            {/* 1. 커스텀 Title 컴포넌트 적용 */}
             <Title
                 title="고객센터"
                 showBackButton={true}
@@ -33,10 +32,8 @@ export default function CustomerServiceScreen() {
             />
 
             <ScrollView>
-                {/* 2. MyProfilePage와 동일한 레이아웃 컨테이너 구조 적용 */}
                 <ContentContainer className="p-0">
                     <FormContainer className="bg-background-default">
-                        {/* 3. 메인 콘텐츠: 커스텀 Card 컴포넌트 활용 */}
                         <Card className="flex flex-col items-center py-10 mb-6 shadow-sm">
                             <View className="w-16 h-16 bg-primary-main rounded-full items-center justify-center mb-6">
                                 <Ionicons name="chatbubble-ellipses" size={30} color="white" />
@@ -51,10 +48,8 @@ export default function CustomerServiceScreen() {
                                 카카오채널 "펫헬쓰앱"으로 남겨주시면{"\n"}
                                 빠르게 답변드리겠습니다.
                             </TextComponent>
-                            {/* 💡 (요청 반영) 개발 단계이므로 카카오채널 이동 버튼은 제거했습니다. */}
                         </Card>
 
-                        {/* 4. 푸터 정보: 커스텀 Card 컴포넌트 활용 */}
                         <Card className="border border-divider bg-background-paper pt-6 pb-6">
                             <TextComponent className="text-xs text-text-secondary leading-[22px]">
                                 상호 : {mockCompanyInfo.name} | 대표자 : {mockCompanyInfo.ceo}

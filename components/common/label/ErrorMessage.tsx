@@ -8,6 +8,7 @@ interface ErrorMessageProps extends TextProps {
 
 function ErrorMessage({ size = "medium", className, children, ...props }: ErrorMessageProps) {
     const ERROR_SIZE_STYLES = {
+        mini: "text-[10px] mt-0.5",
         small: "text-[10px] mt-0.5",
         medium: "text-xs mt-1",
         large: "text-sm mt-2",

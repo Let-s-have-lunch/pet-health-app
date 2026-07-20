@@ -43,15 +43,12 @@ function MainFooter() {
                     const isActive =
                         item.path === "/" ? pathname === "/" : pathname.startsWith(item.path);
 
-                    // 마지막 아이템인지 확인 (마지막에는 우측 선을 넣지 않음)
                     const isLast = index === USER_NAV_LIST.length - 1;
 
                     return (
-                        // 기존에 있던 border-r 관련 클래스를 제거합니다.
                         <Link href={item.path} key={item.path} asChild className="w-[25%]">
                             <Pressable
                                 onPress={e => handleTabPress(e, item.path)}
-                                // absolute 요소를 기준으로 잡기 위해 relative를 추가하고 h-full로 꽉 채워줍니다.
                                 className={twMerge([
                                     "justify-center",
                                     "items-center",
@@ -73,10 +70,8 @@ function MainFooter() {
                                     {item.label}
                                 </TextComponent>
 
-                                {/* :after를 대신할 짧은 구분선 View 추가 */}
                                 {!isLast && (
                                     <View
-                                        // 우측 끝 중앙에 배치 (top-1/2로 50% 내리고, mt-[-5px]로 높이의 절반만큼 올려서 수직 중앙 정렬)
                                         className="absolute right-0 top-1/2 mt-[-8px] w-[1px] h-[16px] bg-[#000000]/15"
                                     />
                                 )}

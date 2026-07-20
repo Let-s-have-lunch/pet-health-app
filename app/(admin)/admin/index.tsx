@@ -9,7 +9,7 @@ import { twMerge } from "tailwind-merge";
 import Card from "@/components/common/card/Card";
 import TextComponent from "@/components/common/text/TextComponent";
 import Badge from "@/components/common/badge/Badge";
-import { Feather } from "@expo/vector-icons"; // 💡 아이콘 임포트 추가
+import { Feather } from "@expo/vector-icons";
 
 function AdminDashboard() {
     const router = useRouter();
@@ -41,7 +41,6 @@ function AdminDashboard() {
     return (
         <ScrollView className={twMerge("flex-1", "w-full")}>
             <View className={"gap-8"}>
-                {/* 1. 최근 가입한 사용자 목록 */}
                 <View>
                     <TextComponent className={"font-bold text-lg mb-2"}>
                         최근 가입한 사용자 목록
@@ -93,7 +92,6 @@ function AdminDashboard() {
                                 )}>
                                 생일
                             </TextComponent>
-                            {/* 💡 추가된 관리 컬럼 헤더 */}
                             <TextComponent
                                 className={twMerge(
                                     ["w-20"],
@@ -165,7 +163,6 @@ function AdminDashboard() {
                                         )}>
                                         {item.birthdate?.substring(0, 10) || "-"}
                                     </TextComponent>
-                                    {/* 💡 추가된 관리 액션 버튼들 */}
                                     <View
                                         className={twMerge([
                                             "w-20",
@@ -206,7 +203,6 @@ function AdminDashboard() {
                     </Card>
                 </View>
 
-                {/* 2. 최근 등록된 게시글 목록 */}
                 <View>
                     <TextComponent className={"font-bold text-lg mb-2"}>
                         최근 등록된 게시글 목록
@@ -345,7 +341,6 @@ function AdminDashboard() {
                     </Card>
                 </View>
 
-                {/* 3. 최근 등록된 문의글 목록 */}
                 <View>
                     <TextComponent className={"font-bold text-lg mb-2"}>
                         최근 등록된 문의글 목록

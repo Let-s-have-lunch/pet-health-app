@@ -17,7 +17,7 @@ function MainLayout() {
                     title="다이어리 목록"
                     showBackButton={true}
                     onBackPress={() => router.back()}
-                    className="bg-white"
+                    className="bg-background-paper"
                 />
             ) :  (
                 <MainHeaderMobile />

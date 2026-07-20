@@ -24,11 +24,8 @@ function WeightLogChartSection({ history }: Props) {
             return { chartData: [], yMax: 10, yMin: 0, dateRangeText: "DATE -", latestWeight: 0 };
         }
 
-        // 💡 1일 1기록이 보장되므로 중복 제거 로직(Map) 삭제
-        // 그냥 최근 7개 자르고 과거->최신(reverse)으로 뒤집기만 하면 끝!
         const recentLogs = [...history].slice(0, 7).reverse();
 
-        // 차트 라벨 및 데이터 포맷팅
         const data = recentLogs.map(item => {
             const dateParts = item.recordDate.split(/[-/]/);
             let label = item.recordDate;
@@ -47,7 +44,6 @@ function WeightLogChartSection({ history }: Props) {
         const actualMax = Math.max(...weights);
         const actualMin = Math.min(...weights);
 
-        // 차트 상하 여백 계산 (몸무게는 변화폭이 작을 수 있으므로 약간의 여백만)
         const yMax = Math.ceil(actualMax + 2);
         const yMin = Math.max(0, Math.floor(actualMin - 2));
 
@@ -57,7 +53,6 @@ function WeightLogChartSection({ history }: Props) {
                 ? `DATE ${labels[0]}`
                 : `DATE ${labels[0]} ~ ${labels[labels.length - 1]}`;
 
-        // 차트 상단의 최신 몸무게 텍스트용
         const latestWeight = recentLogs.length > 0 ? recentLogs[recentLogs.length - 1].weight : 0;
 
         return { chartData: data, yMax, yMin, dateRangeText, latestWeight };

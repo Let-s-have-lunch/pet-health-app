@@ -1,5 +1,3 @@
-
-
 import { Stack, Redirect } from "expo-router";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";

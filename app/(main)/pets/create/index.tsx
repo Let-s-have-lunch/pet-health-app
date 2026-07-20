@@ -27,7 +27,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { ImagePickerAsset } from "expo-image-picker";
 import { twMerge } from "tailwind-merge";
 
-// 기존 사진을 보여주기 위해 BASE_URL 추가
+
 const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 
 function PetCreatePage() {
@@ -207,7 +207,7 @@ function PetCreatePage() {
                                     ["items-center", "justify-center"],
                                     ["rounded-[28px]"],
                                     ["border", "border-dashed", "border-primary-main"],
-                                    ["bg-white"],
+                                    ["bg-background-paper"],
                                     ["overflow-hidden"],
                                 )}>
                                 {image ? (
@@ -369,7 +369,7 @@ function PetCreatePage() {
 
             <Modal visible={genderModalVisible} transparent animationType="fade">
                 <View className="flex-1 justify-center items-center white bg-black/40">
-                    <View className="w-80 rounded-[28px] bg-white p-5">
+                    <View className="w-80 rounded-[28px] bg-background-paper p-5">
                         <TextComponent className="text-lg font-semibold mb-4">
                             성별 선택
                         </TextComponent>

@@ -8,5 +8,5 @@ export const weightLogSchema = z.object({
     memo: z.string().max(20, "메모는 20자 이내로 입력해주세요.").optional(),
 });
 
-// 💡 z.infer 대신 z.input을 사용하면 빈 문자열("")도 타입 에러 없이 초기값으로 쓸 수 있습니다!
+
 export type WeightLogInputType = z.input<typeof weightLogSchema>;

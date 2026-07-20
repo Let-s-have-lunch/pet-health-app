@@ -37,7 +37,7 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
         resolver: zodResolver(weightLogSchema),
         defaultValues: {
             recordDate: format(new Date(), "yyyyMMdd"),
-            weight: "", // 💡 0 대신 빈 문자열로 변경
+            weight: "",
             memo: "",
         },
     });
@@ -47,13 +47,13 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
             if (initialData) {
                 reset({
                     recordDate: format(new Date(initialData.recordDate), "yyyyMMdd"),
-                    weight: initialData.weight, // 수정 모드일 때는 기존 몸무게 표시
+                    weight: initialData.weight,
                     memo: initialData.memo || "",
                 });
             } else {
                 reset({
                     recordDate: format(new Date(), "yyyyMMdd"),
-                    weight: "", // 💡 등록 모드일 때는 깔끔하게 비워두기
+                    weight: "",
                     memo: "",
                 });
             }
@@ -89,13 +89,12 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
             console.log(error);
             const errorActionText = initialData ? "수정하는" : "등록하는";
 
-            // 💡 몸무게는 1일 1기록이므로 409 에러 처리를 반드시 해야 합니다!
             if (isAxiosError(error)) {
                 if (error?.response?.status === 409) {
                     const msg =
                         "이미 해당 날짜에 기록된 몸무게가 있습니다. 리스트에서 기존 기록을 수정해 주세요.";
                     Platform.OS === "web" ? alert(msg) : Alert.alert("등록 실패", msg);
-                    return; // 에러 띄우고 종료
+                    return;
                 }
             }
 
@@ -157,7 +156,7 @@ function WeightLogModal({ visible, onClose, petId, reload, initialData }: Weight
                                             onChange(sanitized);
                                         }}
                                         errorMessage={errors.weight?.message}
-                                        keyboardType="decimal-pad" // 💡 numeric 보다는 소수점이 포함된 decimal-pad가 더 좋습니다.
+                                        keyboardType="decimal-pad"
                                         placeholder="예: 4.5"
                                         value={value?.toString() ?? ""}
                                     />

@@ -57,7 +57,6 @@ function Register() {
                 window.alert("회원가입이 완료되었습니다. 로그인을 진행해주세요.");
                 router.push("/auth/login");
             } else {
-                // 모바일 환경일 대에는 Alert.alert(제목, 내용, 버튼설정Array) 으로 경고창 출력
                 Alert.alert("가입 완료", "회원가입이 완료되었습니다. 로그인을 진행해주세요.", [
                     { text: "확인", onPress: () => router.push("/auth/login") },
                 ]);
@@ -93,7 +92,7 @@ function Register() {
                 <ContentContainer className={"bg-transparent p-0"}>
                     <TextComponent
                         className={twMerge("font-medium", "text-xl", "text-center", "mt-9")}>
-                        멍냥 나라에 오신것을 환영합니다.
+                        마이펫다이어리에 오신것을 환영합니다.
                     </TextComponent>
                     <FormContainer>
                         <Controller
@@ -107,7 +106,7 @@ function Register() {
                                         label={"이메일"}
                                         placeholder={"이메일을 입력해주세요."}
                                         keyboardType={"email-address"}
-                                        autoCapitalize={"none"} /* 첫글자 자동 대문자 전환 */
+                                        autoCapitalize={"none"}
                                         onBlur={onBlur}
                                         onChangeText={onChange}
                                         value={value}
@@ -127,7 +126,7 @@ function Register() {
                                         label={"닉네임"}
                                         placeholder={"닉네임을 입력해주세요."}
                                         onBlur={onBlur}
-                                        onChangeText={onChange} // HTML onChange 속성 => React-Native onChangeText 속성
+                                        onChangeText={onChange}
                                         value={value}
                                         errorMessage={errors.nickname?.message}
                                     />

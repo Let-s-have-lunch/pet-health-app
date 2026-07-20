@@ -9,6 +9,7 @@ interface LabelProps extends TextProps {
 
 function Label({ size = "medium", className, children, ...props }: LabelProps) {
     const LABEL_SIZE_STYLES = {
+        mini: "text-sm mb-1",
         small: "text-sm mb-1",
         medium: "text-lg mb-1.5",
         large: "text-xl mb-2",

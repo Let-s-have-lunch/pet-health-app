@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ViewProps } from "react-native"; // 💡 View와 ViewProps를 불러옵니다.
+import { View, ViewProps } from "react-native";
 import { twMerge } from "tailwind-merge";
 
 type ShadowSize = "none" | "sm" | "md" | "lg";

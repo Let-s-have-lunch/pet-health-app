@@ -12,11 +12,10 @@ interface Props extends Omit<PressableProps, "children"> {
     size?: StyleSizeType;
     wrap?: boolean;
     fullWidth?: boolean;
-    showChevron?: boolean; // > 아이콘 노출 여부
+    showChevron?: boolean;
     textClassName?: string;
-    isFloating?: boolean; // 화면에 고정(fixed/absolute) 여부
-    isCircle?: boolean; // 40x40 원형 아이콘 버튼 여부
-    // 👇 폰트 및 아이콘 색상을 변경할 수 있는 prop 추가
+    isFloating?: boolean;
+    isCircle?: boolean;
     textColor?: string;
 }
 

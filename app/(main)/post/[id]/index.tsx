@@ -55,12 +55,10 @@ function CommunityPostDetailPage() {
         }
     }, [postId, router]);
 
-    // 컴포넌트가 마운트되거나 postId가 바뀔 때 무조건 데이터를 새로 부릅니다.
     useEffect(() => {
         loadPostData().then(() => {});
     }, [postId, loadPostData]);
 
-    // 모달창이 닫힐 때 하단 바 댓글 개수 동기화
     const handleModalClose = () => {
         setIsReplyModalOpen(false);
         if (postId && !isNaN(postId)) {
@@ -117,7 +115,6 @@ function CommunityPostDetailPage() {
         }
     };
 
-    // 로딩 중일 때는 로딩 스피너를 보여주어 0이 깜빡거리는 현상을 원천 차단합니다.
     if (isLoading || !post) {
         return <LoadingIndicator fullScreen />;
     }
@@ -242,7 +239,6 @@ function CommunityPostDetailPage() {
                     ["w-full", "max-w-7xl", "mx-auto"],
                     ["bg-background-paper border-t border-divider px-5 pt-4 pb-6 rounded-t-[30px]"],
                 )}>
-                {/* 라인 아이콘 (드래그 핸들) */}
                 <View className="items-center mb-5">
                     <View className="w-12 h-1.5 bg-background-default rounded-full" />
                 </View>

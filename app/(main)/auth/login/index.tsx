@@ -68,7 +68,7 @@ function AuthLoginPage() {
             <Title title={"로그인"} showBackButton={true} onBackPress={() => router.back()} />
             <ContentContainer className={"bg-transparent p-0"}>
                 <TextComponent className={twMerge("font-medium", "text-xl", "text-center", "mt-9")}>
-                    멍냥 나라에 오신것을 환영합니다.
+                    마이펫다이어리에 오신것을 환영합니다.
                 </TextComponent>
                 <FormContainer>
                     <Controller

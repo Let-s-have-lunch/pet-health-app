@@ -4,19 +4,19 @@
 
 @layer base {
     :root {
-        /* 1. 배경 색상 */
+        /* 배경 색상 */
         --bg-default: #F1EBE4;
         --bg-paper: #FFFFFF;
         --bg-light: #F9F7F5;
 
-        /* 2. 텍스트 색상 */
+        /* 텍스트 색상 */
         --text-default: #2C2C2C;
         --text-secondary: #7F8C8D;
 
-        /* 3. 경계선 및 디바이더 */
+        /* 경계선 및 디바이더 */
         --divider: #E5D4CD;
 
-        /* 4. 브랜드 메인 컬러 */
+        /* 브랜드 메인 컬러 */
         --primary-main: #BACFCD;
         --primary-contrast: #2C2C2C;
         --primary-light: #BACFCD4D;
@@ -26,7 +26,7 @@
         --secondary-contrast: #2C2C2C;
         --secondary-point: #2D94D7;
 
-        /* 6. 알림 및 상태 컬러 */
+        /* 알림 및 상태 컬러 */
         --success-main: #A3D9C9;
         --success-contrast: #2C2C2C;
         --success-point: #35B18C;
@@ -43,29 +43,29 @@
     }
 
     .dark {
-        /* 1. 배경 색상 */
+        /* 배경 색상 */
         --bg-default: #E2ECF5;
         --bg-paper: #FFFFFF;
         --bg-light: #F0F4F8;
 
-        /* 2. 텍스트 색상 */
+        /* 텍스트 색상 */
         --text-default: #2A363B;
         --text-secondary: #82929B;
 
-        /* 3. 경계선 및 디바이더 */
+        /* 경계선 및 디바이더 */
         --divider: #DCE5ED;
 
-        /* 4. 브랜드 메인 컬러 */
+        /* 브랜드 메인 컬러 */
         --primary-main: #A8C7DF;
         --primary-contrast: #2A363B;
         --primary-light: #A8C7DF4D;
 
-        /* 5. 보조 컬러 */
+        /* 보조 컬러 */
         --secondary-main: #C0D3E0;
         --secondary-contrast: #2A363B;
         --secondary-point: #4A83A8;
 
-        /* 6. 알림 및 상태 컬러 */
+        /* 알림 및 상태 컬러 */
         --success-main: #B3D8C8;
         --success-contrast: #2A363B;
         --success-point: #43A07A;
@@ -83,7 +83,7 @@
 
     @media (prefers-color-scheme: dark) {
         :root {
-            /* 앱이나 OS 시스템 설정이 다크/두번째 테마 모드일 때 자동 적용되는 변수 */
+            /* 2번째 테마 변수 */
             --bg-default: #E2ECF5;
             --bg-paper: #FFFFFF;
             --bg-light: #F0F4F8;

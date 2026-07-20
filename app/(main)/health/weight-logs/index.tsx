@@ -24,9 +24,8 @@ function WeightLogListPage() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedLog, setSelectedLog] = useState<WeightLog | null>(null);
 
-    // API 데이터 페칭
+
     const fetchWeightLogData = useCallback(async () => {
-        // 💡 펫이 없으면 빈 배열 상태로 두고 로딩만 종료 (빈 화면 렌더링)
         if (!isLoggedIn || !petId) {
             setHistory([]);
             setIsLoading(false);
@@ -56,7 +55,6 @@ function WeightLogListPage() {
     );
 
     const handleAddPress = () => {
-        // 💡 펫이 없는데 추가 버튼을 누를 경우 방어 로직
         if (!isLoggedIn) {
             if (Platform.OS === "web") {
                 alert("로그인이 필요한 서비스입니다.");
@@ -133,19 +131,16 @@ function WeightLogListPage() {
             ) : (
                 <ScrollView>
                     <ContentContainer className={"overflow-hidden flex-1"}>
-                        {/* 💡 history가 빈 배열([])로 넘어가므로 자식 컴포넌트들에서 '기록이 없습니다' 등의 UI를 보여주게 됩니다. */}
                         <WeightLogChartSection history={history} />
 
-                        {/* 모달 팝업 컴포넌트 (petId가 undefined일 경우를 대비해 Number() 또는 as number 처리 가능, 여기선 모달이 안 열리게 막아둠) */}
                         <WeightLogModal
                             visible={isModalVisible}
                             onClose={handleCloseModal}
-                            petId={petId!} // ! (Non-null assertion) 사용: 어차피 petId 없으면 열리지 않음
+                            petId={petId!}
                             reload={fetchWeightLogData}
                             initialData={selectedLog}
                         />
 
-                        {/* 히스토리 섹션 */}
                         <WeightLogHistorySection
                             history={history}
                             onAddPress={handleAddPress}
