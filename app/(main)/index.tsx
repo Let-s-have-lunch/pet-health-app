@@ -12,11 +12,7 @@ export default function LandingScreen() {
     const { isLoggedIn, isInitialized } = useAuthStore();
 
     if (!isInitialized) {
-        return (
-            <LoadingIndicator
-                fullScreen={true}
-            />
-        );
+        return <LoadingIndicator fullScreen={true} />;
     }
 
     if (isLoggedIn) {
@@ -26,7 +22,6 @@ export default function LandingScreen() {
     return (
         <View className={twMerge("flex-1", "bg-background-default")}>
             <ContentContainer className="justify-center items-center">
-                {/* 상단 로고 및 타이틀 영역 */}
                 <View className="items-center mb-10">
                     <View className="items-center justify-center mb-2">
                         <View className={twMerge("flex-row", "relative")}>
@@ -43,7 +38,6 @@ export default function LandingScreen() {
                                 style={{ top: -10, left: -60, transform: [{ rotate: "-25deg" }] }}
                             />
                         </View>
-
                     </View>
                 </View>
                 <View
@@ -64,7 +58,6 @@ export default function LandingScreen() {
                         다이어리
                     </TextComponent>
                 </View>
-
 
                 <View className="w-full items-center">
                     <Pressable
