@@ -123,7 +123,7 @@ export default function HistorySection() {
         },
         {
             id: "vet",
-            title: "병원 예약",
+            title: "병원 방문기록",
             dateLabel: data?.vetRecord?.time
                 ? format(new Date(data.vetRecord.time), "yyyy-MM-dd")
                 : "-",
@@ -146,7 +146,7 @@ export default function HistorySection() {
                     <View className="flex-row justify-end items-center gap-1">
                         <Ionicons name="medkit" size={20} color="#D1D1D1" />
                         <TextComponent className="text-xs" style={{ color: "#7F8C8D" }}>
-                            다가오는 예약이 없습니다.
+                            마지막 방문 기록이 없습니다.
                         </TextComponent>
                     </View>
                 ),
