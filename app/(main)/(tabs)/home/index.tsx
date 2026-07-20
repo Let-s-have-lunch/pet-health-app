@@ -1,6 +1,6 @@
 import PetCardSection from "@/components/domain/pet/PetCardSection";
 import { useFocusEffect, useRouter } from "expo-router";
-import { ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { usePetStore } from "@/stores/pet/usePetStore";
 import petApi from "@/api/user/petApi";
@@ -64,11 +64,11 @@ function HomeScreen() {
     }
 
     return (
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <View>
                 <PetCardSection pets={pets} isLoggedIn={isLoggedIn} onPressAdd={handleAddPet} />
 
                 <HistorySection />
-        </ScrollView>
+        </View>
     );
 }
 

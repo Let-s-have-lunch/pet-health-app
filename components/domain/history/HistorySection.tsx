@@ -155,7 +155,7 @@ export default function HistorySection() {
     }
 
     return (
-        <ScrollView className="flex-1 pt-1.8 bg-background-default">
+        <View className="flex-1 pt-1.8 bg-background-default">
             <View className="flex-row flex-wrap justify-between mt-2">
                 {cardConfig.map(card => (
                     <Pressable
@@ -184,6 +184,6 @@ export default function HistorySection() {
                     </Pressable>
                 ))}
             </View>
-        </ScrollView>
+        </View>
     );
 }

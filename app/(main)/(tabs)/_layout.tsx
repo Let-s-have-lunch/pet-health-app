@@ -19,10 +19,10 @@ function MainLayout() {
                     onBackPress={() => router.back()}
                     className="bg-background-paper"
                 />
-            ) :  (
+            ) : (
                 <MainHeaderMobile />
             )}
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <ContentContainer>
                     <Slot />
                 </ContentContainer>
