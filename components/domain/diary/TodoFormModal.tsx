@@ -127,7 +127,7 @@ export default function TodoFormModal({
                                         newDate.setHours(hours, minutes);
                                         setValue("date", newDate);
                                     }}
-                                    className="w-full p-2 border border-gray-300 rounded-[28px] text-lg"
+                                    className="w-full px-5 py-4 border border-gray-300 rounded-[28px] text-lg"
                                 />
                             ) : (
                                 <>
