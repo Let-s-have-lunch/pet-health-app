@@ -102,22 +102,22 @@ function WeightLogChartSection({ history }: Props) {
                         <VictoryArea
                             data={chartData}
                             interpolation="catmullRom"
-                            style={{ data: { fill: "rgba(233, 82, 68, 0.15)" } }}
+                            style={{ data: { fill: "rgba(232, 124, 113, 0.15)" } }}
                         />
                         <VictoryLine
                             data={chartData}
                             interpolation="catmullRom"
-                            style={{ data: { stroke: "rgba(233, 82, 68, 0.3)", strokeWidth: 14 } }}
+                            style={{ data: { stroke: "rgba(232, 124, 113, 0.3)", strokeWidth: 14 } }}
                         />
                         <VictoryLine
                             data={chartData}
                             interpolation="catmullRom"
-                            style={{ data: { stroke: "#E95244", strokeWidth: 2 } }}
+                            style={{ data: { stroke: "#E87C71", strokeWidth: 2 } }}
                         />
                         <VictoryScatter
                             data={chartData}
                             size={6}
-                            style={{ data: { fill: "#E95244" } }}
+                            style={{ data: { fill: "#E87C71" } }}
                         />
                     </VictoryChart>
                 ) : (
