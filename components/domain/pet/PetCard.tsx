@@ -80,12 +80,12 @@ export default function PetCard({ pet, onPressEdit }: Props) {
 
                 <Pressable
                     onPress={onPressEdit}
-                    className={twMerge(["rounded-xl", "border", "border-[#A6DDD0]"])}
+                    className={twMerge(["rounded-[28px]", "border", "border-success-main"])}
                     style={{
                         paddingHorizontal: 14,
                         paddingVertical: 6,
                     }}>
-                    <TextComponent className={twMerge(["font-semibold", "text-[#5C9587]"])}>
+                    <TextComponent className={twMerge(["font-semibold", "text-success-point"])}>
                         수정
                     </TextComponent>
                 </Pressable>
