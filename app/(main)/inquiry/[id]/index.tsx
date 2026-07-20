@@ -122,7 +122,7 @@ function MyInquiryDetailPage() {
                         {inquiry.answer && (
                             <View
                                 className={twMerge(
-                                    "mt-4 p-6 rounded-lg border",
+                                    "mt-4 p-6 rounded-[28px] border",
                                     "bg-background-light border-divider",
                                 )}>
                                 <View
