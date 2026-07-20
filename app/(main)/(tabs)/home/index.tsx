@@ -21,7 +21,6 @@ function HomeScreen() {
 
     const [loading, setLoading] = useState(true);
 
-
     const loadPets = useCallback(async () => {
         if (!isLoggedIn) {
             setLoading(false);
@@ -55,7 +54,6 @@ function HomeScreen() {
             return;
         }
 
-
         router.push("/pets/create");
     };
 
@@ -65,9 +63,9 @@ function HomeScreen() {
 
     return (
         <View>
-                <PetCardSection pets={pets} isLoggedIn={isLoggedIn} onPressAdd={handleAddPet} />
+            <PetCardSection pets={pets} isLoggedIn={isLoggedIn} onPressAdd={handleAddPet} />
 
-                <HistorySection />
+            <HistorySection />
         </View>
     );
 }
