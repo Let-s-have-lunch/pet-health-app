@@ -206,20 +206,13 @@ export default function DiaryScreen() {
                                 {day.getDate()}
                             </TextComponent>
 
-                            <View className="mt-1 w-full items-center px-0.5 gap-y-0.5">
+                            <View className="flex-row justify-center items-center gap-1 mt-2">
                                 {hasTodo && (
-                                    <View className="bg-error-main rounded-full w-full py-[2px] items-center">
-                                        <TextComponent className="text-[9px] text-error-contrast font-bold leading-none">
-                                            할일
-                                        </TextComponent>
-                                    </View>
+                                    <View className="w-3 h-3 rounded-full bg-error-main" />
                                 )}
+
                                 {hasDiary && (
-                                    <View className="bg-secondary-main rounded-full w-full py-[2px] items-center">
-                                        <TextComponent className="text-[9px] text-secondary-contrast font-bold leading-none">
-                                            일기
-                                        </TextComponent>
-                                    </View>
+                                    <View className="w-3 h-3 rounded-full bg-secondary-main" />
                                 )}
                             </View>
                         </TouchableOpacity>
