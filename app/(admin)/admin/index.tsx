@@ -286,7 +286,7 @@ function AdminDashboard() {
                                             "border-b-0",
                                         ],
                                     )}
-                                    // onPress={() => router.push(`/post/${item.id}`)}
+                                    onPress={() => router.push(`/post/${item.id}`)}
                                 >
                                     <TextComponent
                                         className={twMerge(
